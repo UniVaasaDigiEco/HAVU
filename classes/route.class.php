@@ -28,7 +28,7 @@ class Route{
         $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, user_id, title, description FROM routes WHERE id = ?";
         $stmt = $db->prepare($sql);
 
-        $sql_nodes = "SELECT id, node_id, order_number FROM node_route_cross WHERE route_id = ? ORDER BY order_number ASC";
+        $sql_nodes = "SELECT id, node_id, order_number FROM node_route_cross WHERE route_id = ? ORDER BY order_number";
         $stmt_nodes = $db->prepare($sql_nodes);
 
         try{
