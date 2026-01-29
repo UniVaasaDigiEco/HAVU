@@ -1,5 +1,33 @@
 <?php
+// Security headers to protect against common web attacks
 
+// Prevent clickjacking - stops your site from being embedded in iframes
+header('X-Frame-Options: DENY');
+
+// Prevent MIME-sniffing - forces browser to respect declared content types
+header('X-Content-Type-Options: nosniff');
+
+// Enable browser's XSS filter (helps older browsers)
+header('X-XSS-Protection: 1; mode=block');
+
+// Control referrer information - prevents leaking sensitive URL data
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
+// Control browser features - only allow geolocation on your domain
+header('Permissions-Policy: geolocation=(self)');
+
+// Force HTTPS for future visits (only set when on HTTPS)
+// Since your server redirects to HTTPS, this ensures browsers remember to use it
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+}
+
+// Content Security Policy - most powerful XSS protection
+// Defines where resources can be loaded from
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;");
+
+// Hide PHP version for security through obscurity
+header_remove('X-Powered-By');
 ?>
 <!DOCTYPE html>
 <html lang="en">

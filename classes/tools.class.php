@@ -14,7 +14,7 @@ class Tools{
 
     public static function parseDateTime(?string $datetime): ?DateTime {
         if ($datetime === null){
-            return null;
+            Throw new InvalidArgumentException("Datetime string is null");
         }
 
         try {
