@@ -1,0 +1,13 @@
+// Progress container and bar
+.progress-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: $z-progress-container;
+    background: white;
+    padding: 15px 20px;
+    border-radius: $panel-border-radius;
+    box-shadow: $panel-shadow;
+    min-width: 300px;
+}

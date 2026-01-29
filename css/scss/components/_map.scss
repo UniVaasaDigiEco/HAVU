@@ -1,0 +1,15 @@
+// Map container styles
+#map {
+    height: 100vh;
+    width: 100%;
+}
+
+// Node popup styles
+.node-popup {
+    max-width: 300px;
+
+    h5 {
+        margin-top: 0;
+        color: #0066cc;
+    }
+}

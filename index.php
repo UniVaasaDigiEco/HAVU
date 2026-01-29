@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,128 +9,10 @@
     <title>HAVU Gamification - Campus Route</title>
 
     <!-- Bootstrap CSS -->
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bs-custom.css" rel="stylesheet">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
-
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
-        #map {
-            height: 100vh;
-            width: 100%;
-        }
-
-        .info-panel {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            max-width: 300px;
-        }
-
-        .gps-status {
-            position: absolute;
-            top: 10px;
-            left: 60px;
-            z-index: 1000;
-            background: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .gps-active {
-            color: #28a745;
-        }
-
-        .gps-inactive {
-            color: #dc3545;
-        }
-
-        .node-popup {
-            max-width: 300px;
-        }
-
-        .node-popup h5 {
-            margin-top: 0;
-            color: #0066cc;
-        }
-
-        .progress-container {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            min-width: 300px;
-        }
-
-        .visited-marker {
-            filter: hue-rotate(120deg);
-        }
-
-        .pulse-marker {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- GPS Status Indicator -->
-    <div class="gps-status">
-        <span id="gps-icon" class="gps-inactive">📍</span>
-        <span id="gps-text">GPS: Inactive</span>
-    </div>
-
-    <!-- Info Panel -->
-    <div class="info-panel">
-        <h5>📍 Campus Route</h5>
-        <p class="mb-2"><small>Walk the route and discover interesting locations at the University of Vaasa campus!</small></p>
-        <div id="distance-info"></div>
-    </div>
-
-    <!-- Progress Indicator -->
-    <div class="progress-container">
-        <div class="d-flex justify-content-between mb-2">
-            <span><strong>Progress</strong></span>
-            <span id="progress-text">0/0 nodes</span>
-        </div>
-        <div class="progress">
-            <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
-        </div>
-    </div>
-
-    <!-- Map Container -->
-    <div id="map"></div>
-
     <!-- jQuery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
 
@@ -144,7 +29,7 @@
 
         // Center of University of Vaasa campus
         const CAMPUS_CENTER = [63.1055, 21.5929];
-
+        let map = null;
         // Define the route nodes (waypoints) around University of Vaasa campus
         const routeNodes = [
             {
@@ -152,7 +37,7 @@
                 name: "Ankkuri - Palosaari", //63.104877198359176, 21.591938317666084
                 lat: 63.1049,
                 lng: 21.5919,
-                description: "Welcome to Ankkuri at Palosaari! This is the heart of student life at the University of Vaasa. Ankkuri houses student services, recreational facilities, and various student organization spaces. It's a vibrant hub where students gather, socialize, and access support services throughout their academic journey.",
+                description: "<b>Welcome to Ankkuri at Palosaari!</b><hr /> This is the heart of student life at the University of Vaasa. Ankkuri houses student services, recreational facilities, and various student organization spaces. It's a vibrant hub where students gather, socialize, and access support services throughout their academic journey.",
                 visited: false
             },
             {
@@ -178,17 +63,9 @@
                 lng: 21.593174837423316,
                 description: "Tervahovi is one of the main academic buildings at the University of Vaasa, primarily serving the faculties of business studies and humanities. This building features modern lecture halls, seminar rooms, and faculty offices. It's a central location for classes, academic meetings, and student activities throughout the academic year.",
                 visited: false
-            }
+            },
+
         ];
-
-        // Initialize map
-        const map = L.map('map').setView(CAMPUS_CENTER, 16);
-
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(map);
 
         // Store markers
         const markers = {};
@@ -229,6 +106,26 @@
             iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iIzAwNjZjYyIgb3BhY2l0eT0iMC4zIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNiIgZmlsbD0iIzAwNjZjYyIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9IndoaXRlIi8+PC9zdmc+',
             iconSize: [24, 24],
             iconAnchor: [12, 12]
+        });
+
+        // Initialize everything
+        $(document).ready(function() {
+            // Initialize map
+            map = L.map('map').setView(CAMPUS_CENTER, 16);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            drawRouteLine();
+            initializeMarkers();
+            updateProgress();
+            initGPS();
+
+            // Add scale control
+            L.control.scale().addTo(map);
         });
 
         // Draw route line
@@ -285,14 +182,14 @@
         // Calculate distance between two coordinates (Haversine formula)
         function calculateDistance(lat1, lon1, lat2, lon2) {
             const R = 6371e3; // Earth's radius in meters
-            const φ1 = lat1 * Math.PI / 180;
-            const φ2 = lat2 * Math.PI / 180;
-            const Δφ = (lat2 - lat1) * Math.PI / 180;
-            const Δλ = (lon2 - lon1) * Math.PI / 180;
+            const phi1 = lat1 * Math.PI / 180;
+            const phi2 = lat2 * Math.PI / 180;
+            const dPhi = (lat2 - lat1) * Math.PI / 180;
+            const dLambda = (lon2 - lon1) * Math.PI / 180;
 
-            const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-                      Math.cos(φ1) * Math.cos(φ2) *
-                      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+            const a = Math.sin(dPhi / 2) * Math.sin(dPhi / 2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(dLambda / 2) * Math.sin(dLambda / 2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
             return R * c; // Distance in meters
@@ -388,8 +285,21 @@
                 markers[nodeId].setIcon(visitedIcon);
                 updateProgress();
 
-                // Show celebration
+                // Close popup and show acorn animation
                 markers[nodeId].closePopup();
+
+                // Create acorn celebration element
+                const acornDiv = document.createElement('div');
+                acornDiv.className = 'acorn-celebration';
+                acornDiv.innerHTML = '<img src="images/acorn.png" alt="Acorn">';
+                document.body.appendChild(acornDiv);
+
+                // Remove acorn after animation completes
+                setTimeout(() => {
+                    acornDiv.remove();
+                }, 2000);
+
+                // Show celebration popup after acorn animation
                 setTimeout(() => {
                     const celebrationPopup = `
                         <div class="node-popup text-center">
@@ -398,7 +308,7 @@
                         </div>
                     `;
                     markers[nodeId].bindPopup(celebrationPopup).openPopup();
-                }, 100);
+                }, 2100);
             }
         };
 
@@ -410,6 +320,15 @@
 
             $('#progress-text').text(`${visitedNodes}/${totalNodes} nodes`);
             $('#progress-bar').css('width', percentage + '%');
+
+            // Update acorn count with animation
+            const $acornCount = $('#acorn-count');
+            const oldCount = parseInt($acornCount.text()) || 0;
+            if (visitedNodes > oldCount) {
+                $acornCount.addClass('bump');
+                setTimeout(() => $acornCount.removeClass('bump'), 500);
+            }
+            $acornCount.text(visitedNodes);
 
             if (visitedNodes === totalNodes) {
                 setTimeout(() => {
@@ -447,17 +366,38 @@
                 console.log('Geolocation is not supported by this browser.');
             }
         }
-
-        // Initialize everything
-        $(document).ready(function() {
-            drawRouteLine();
-            initializeMarkers();
-            updateProgress();
-            initGPS();
-
-            // Add scale control
-            L.control.scale().addTo(map);
-        });
     </script>
+</head>
+<body>
+    <!-- GPS Status Indicator -->
+    <div class="gps-status">
+        <span id="gps-icon" class="gps-inactive">📍</span>
+        <span id="gps-text">GPS: Inactive</span>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-panel">
+        <h5>📍 Campus Route</h5>
+        <p class="mb-2"><small>Walk the route and discover interesting locations at the University of Vaasa campus!</small></p>
+        <div class="mb-2">
+            <img src="images/acorn.png" alt="Acorns" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">
+            <strong style="font-size: 1.1em; vertical-align: middle;"><span id="acorn-count">0</span></strong>
+        </div>
+        <div id="distance-info"></div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-container">
+        <div class="d-flex justify-content-between mb-2">
+            <span><strong>Progress</strong></span>
+            <span id="progress-text">0/0 nodes</span>
+        </div>
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>
+        </div>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map"></div>
 </body>
 </html>

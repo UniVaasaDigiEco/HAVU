@@ -1,0 +1,8 @@
+// Marker styles
+.visited-marker {
+    filter: hue-rotate(120deg);
+}
+
+.pulse-marker {
+    animation: pulse 2s infinite;
+}
