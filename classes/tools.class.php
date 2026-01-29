@@ -1,5 +1,7 @@
 <?php
 require_once(__DIR__ . '/../config/constants.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
+use Ramsey\Uuid\Uuid;
 class Tools{
     public static function GetDB(): mysqli{
         try{
@@ -21,6 +23,14 @@ class Tools{
             return new DateTime($datetime);
         } catch (Exception $e) {
             throw new RuntimeException("Failed to parse datetime: '$datetime': " . $e->getMessage());
+        }
+    }
+
+    public static function parseUuidFromBytes(string $bytes): string {
+        try {
+            return Uuid::fromBytes($bytes)->toString();
+        } catch (Exception $exception) {
+            throw new RuntimeException("Failed to parse UUID from bytes: " . $exception->getMessage());
         }
     }
 }
