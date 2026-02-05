@@ -5,11 +5,18 @@ if (!file_exists(__DIR__ . '/../.env')) {
 }
 $env = require __DIR__ . '/../.env';
 
-const ROOT_DIR = '/InnoWind/';
+const ROOT_DIR = '/HavuGamification/';
 const ICON_PATH = ROOT_DIR . 'images/logos/InnoWind_icon.png';
 
-//Define session name, not needed but kept for reference
-//const SESSION_NAME = "InnoWindSession";
+//Define session name
+const SESSION_NAME = "HavuGamificationSession";
+
+const ERROR_CODES = [
+    1 => "Wrong username or password."
+];
+
+const USER_TYPE_REGULAR = 1;
+const USER_TYPE_ADMIN = 0;
 
 // Database configuration from environment file
 define('DB_HOST', $env['DB_HOST']);

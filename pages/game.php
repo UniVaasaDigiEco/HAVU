@@ -37,18 +37,18 @@ header_remove('X-Powered-By');
     <title>HAVU Gamification - Campus Route</title>
 
     <!-- Bootstrap CSS -->
-    <link href="css/bs-custom.css" rel="stylesheet">
+    <link href="../css/bs-custom.css" rel="stylesheet">
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
     <!-- jQuery -->
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
 
     <!-- Bootstrap JS -->
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Leaflet JS -->
-    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
 
     <script>
         // Configuration
@@ -319,7 +319,7 @@ header_remove('X-Powered-By');
                 // Create acorn celebration element
                 const acornDiv = document.createElement('div');
                 acornDiv.className = 'acorn-celebration';
-                acornDiv.innerHTML = '<img src="images/acorn.png" alt="Acorn">';
+                acornDiv.innerHTML = '<img src="../images/acorn.png" alt="Acorn">';
                 document.body.appendChild(acornDiv);
 
                 // Remove acorn after animation completes
@@ -408,7 +408,7 @@ header_remove('X-Powered-By');
         <h5>📍 Campus Route</h5>
         <p class="mb-2"><small>Walk the route and discover interesting locations at the University of Vaasa campus!</small></p>
         <div class="mb-2">
-            <img src="images/acorn.png" alt="Acorns" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">
+            <img src="../images/acorn.png" alt="Acorns" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">
             <strong style="font-size: 1.1em; vertical-align: middle;"><span id="acorn-count">0</span></strong>
         </div>
         <div id="distance-info"></div>

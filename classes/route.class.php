@@ -24,7 +24,7 @@ class Route{
             throw new InvalidArgumentException("Invalid route ID");
         }
 
-        $db = Tools::GetDB();
+        $db = Tools::getDb();
         $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, user_id, title, description FROM routes WHERE id = ?";
         $stmt = $db->prepare($sql);
 

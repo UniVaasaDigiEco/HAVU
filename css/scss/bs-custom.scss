@@ -1,13 +1,13 @@
-// Import Bootstrap
-@import "../../node_modules/bootstrap/scss/bootstrap";
-
 // Import custom variables
-@import "components/variables";
+@import "variables";
 
 // Import component styles
-@import "components/base";
+@import "base";
 @import "components/map";
 @import "components/panels";
-@import "components/progress";
+@import "effects/progress";
 @import "components/markers";
-@import "components/animations";
+@import "effects/animations";
+
+// Import Bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap";

@@ -25,7 +25,7 @@ class Node{
         if ($id <= 0) {
             throw new InvalidArgumentException("Invalid node ID");
         }
-        $db = Tools::GetDB();
+        $db = Tools::getDb();
         $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, title, content, latitude, longitude FROM nodes WHERE id = ?";
         $stmt = $db->prepare($sql);
 

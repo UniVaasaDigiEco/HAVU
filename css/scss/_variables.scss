@@ -1,0 +1,33 @@
+// Required
+@import "../../node_modules/bootstrap/scss/functions";
+
+// Z-index layers
+$z-info-panel: 1000;
+$z-gps-status: 1000;
+$z-progress-container: 1000;
+$z-acorn-celebration: 99999;
+
+// Shadows
+$panel-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+// Border radius
+$panel-border-radius: 8px;
+
+// Customization of Bootstrap variables
+// HAVU Brand Colors (nature/forest theme)
+$secondary: #286535; // Dark green - forest/pine color
+$primary: #7ba25a; // Light green - sage/leaf color
+
+// Custom light background - subtle green tint for nature theme
+$body-bg: rgb(245, 255, 245); // Very light green background
+$body-color: #212529; // Dark text for good contrast
+
+// Custom opacity for backgrounds
+$bg-opacity: 0.95; // Adjust this value to test different opacities (0.0 to 1.0)
+
+// Required
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
