@@ -36,7 +36,7 @@ try{
         $user = Tools::getUserWithPublicId($public_id);
         $user->updateLastLogin(new DateTime());
 
-        $_SESSION['user_public_id'] = $user->getPublicId();
+        $_SESSION['user_public_id'] = $user->getPublicIdString();
         $_SESSION['is_logged_in'] = true;
         $_SESSION['login_timestamp'] = time();
         $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR'];

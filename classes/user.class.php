@@ -87,7 +87,9 @@ class User{
     {
         return $this->public_id;
     }
-
+    public function getPublicIdString(): string{
+        return $this->public_id->toString();
+    }
     /**
      * @return string
      */

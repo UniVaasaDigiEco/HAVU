@@ -1,0 +1,286 @@
+// Admin Dashboard Styles
+
+// Admin Body
+body.admin-dashboard {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 50%, #81c784 100%);
+  min-height: 100vh;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(123, 162, 90, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+// Menu Styling
+#menu-content {
+  background: linear-gradient(135deg, $primary 0%, $secondary 100%) !important;
+  border: none;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transition: all 0.5s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3) !important;
+
+    &::before {
+      top: -60%;
+      right: -60%;
+    }
+  }
+
+  h3 {
+    color: white;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn {
+    margin-top: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+
+    &:hover {
+      transform: translateX(8px);
+      border-color: white;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    i {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// Content Area Styling
+#route-management {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 255, 245, 0.98) 100%) !important;
+  border: 3px solid rgba($primary, 0.4);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.18) !important;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba($primary, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+  }
+
+  &:hover {
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25) !important;
+    border-color: rgba($primary, 0.6);
+  }
+
+  h3 {
+    color: $secondary;
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.08);
+    border-bottom: 4px solid $primary;
+    padding-bottom: 0.75rem;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+
+    i {
+      color: $primary;
+      filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+    }
+  }
+
+  p.lead {
+    color: darken($secondary, 5%);
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    line-height: 1.6;
+  }
+
+  // Button Group
+  > div:nth-child(2) {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+
+    .btn {
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      padding: 0.85rem 1.75rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      border: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.5s, height 0.5s;
+      }
+
+      &:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      i {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      span {
+        position: relative;
+        z-index: 1;
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+
+      &:active {
+        transform: translateY(-2px);
+      }
+
+      &.btn-primary {
+        background: linear-gradient(135deg, lighten($primary, 5%) 0%, $secondary 100%);
+
+        &:hover {
+          background: linear-gradient(135deg, lighten($primary, 10%) 0%, lighten($secondary, 5%) 100%);
+        }
+      }
+
+      &.btn-danger {
+        background: linear-gradient(135deg, #ff4757 0%, #d32f2f 100%);
+
+        &:hover {
+          background: linear-gradient(135deg, #ff6b7a 0%, #e53935 100%);
+        }
+      }
+    }
+  }
+
+  // Future content area
+  > div:nth-child(3) {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Animation for page load
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#menu {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+#content {
+  animation: slideInRight 0.6s ease-out;
+}
+
+body.admin-dashboard {
+  animation: fadeIn 0.4s ease-out;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  #menu-content {
+    h3 {
+      font-size: 1.5rem;
+    }
+  }
+
+  #route-management {
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    > div:nth-child(2) {
+      .btn {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  }
+}
