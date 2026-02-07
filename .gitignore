@@ -28,6 +28,9 @@ build/
 *.min.js
 *.min.css
 
+# Data Backups
+_SQL-BACKUP/
+
 # Temporary files
 *.tmp
 *.temp
