@@ -103,6 +103,11 @@ else {
 
         let map = null;
 
+        if(!routeData){
+            console.error("Route data is null or undefined. Cannot initialize game.");
+             alert("Error loading route data. Please check the console for details.");
+             throw new Error("Route data is null or undefined");
+        }
         // Transform route data into the format expected by the game
         const routeNodes = routeData.nodes.map((nodeData, _index) => ({
             id: nodeData.node.id,
