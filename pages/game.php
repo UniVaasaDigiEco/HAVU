@@ -83,6 +83,10 @@ else {
 
         // Load route data from PHP
         const routeData = <?php echo $route->toJavaScript(); ?>;
+        if(!routeData){
+            alert("Error loading route data. Please check the console for details.");
+            throw new Error("Route data is null or undefined");
+        }
         console.log("Loaded route data:", routeData);
 
         // Center of University of Vaasa campus (default)
@@ -100,7 +104,7 @@ else {
         let map = null;
 
         // Transform route data into the format expected by the game
-        const routeNodes = routeData.nodes.map((nodeData, index) => ({
+        const routeNodes = routeData.nodes.map((nodeData, _index) => ({
             id: nodeData.node.id,
             name: nodeData.node.title,
             lat: parseFloat(nodeData.node.latitude),
