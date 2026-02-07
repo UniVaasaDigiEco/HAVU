@@ -36,11 +36,12 @@ header_remove('X-Powered-By');
 
 $default_route_public_id = "417bef1b-1b00-46f5-ac85-4774ff20d0ed";
 
+$route = null;
 if(isset($_GET['route']))
 {
     $route_public_id = $_GET['route'];
     try {
-        $route = Tools::getRouteIdByPublicId($route_public_id);
+        $route = Tools::getRouteByPublicId($route_public_id);
     } catch (Exception $e) {
         echo "<div class='alert alert-danger m-3'>Error: Route not found: ". $e->getMessage() ."<br>Please check the route ID and try again.</div>";
     }
@@ -48,7 +49,7 @@ if(isset($_GET['route']))
 else {
     // If no route specified, load the default route
     try {
-        $route = Tools::getRouteIdByPublicId($default_route_public_id);
+        $route = Tools::getRouteByPublicId($default_route_public_id);
     } catch (Exception $e) {
         echo "<div class='alert alert-danger m-3'>Error: Default route not found: " . $e->getMessage() . "<br>Please check the default route ID and try again.</div>";
     }
@@ -59,7 +60,7 @@ else {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU Gamification - Campus Route</title>
+    <title>HAVU Gamification - <?php echo htmlspecialchars($route->getTitle()); ?></title>
 
     <!-- Bootstrap CSS -->
     <link href="../css/bs-custom.css" rel="stylesheet">
@@ -80,45 +81,34 @@ else {
         const PROXIMITY_THRESHOLD = 50; // meters - distance to trigger node popup
         const UPDATE_INTERVAL = 3000; // ms - how often to check GPS position
 
-        // Center of University of Vaasa campus
-        const CAMPUS_CENTER = [63.1055, 21.5929];
-        let map = null;
-        // Define the route nodes (waypoints) around University of Vaasa campus
-        const routeNodes = [
-            {
-                id: 1,
-                name: "Ankkuri - Palosaari", //63.104877198359176, 21.591938317666084
-                lat: 63.1049,
-                lng: 21.5919,
-                description: "<b>Welcome to Ankkuri at Palosaari!</b><hr /> This is the heart of student life at the University of Vaasa. Ankkuri houses student services, recreational facilities, and various student organization spaces. It's a vibrant hub where students gather, socialize, and access support services throughout their academic journey.",
-                visited: false
-            },
-            {
-                id: 2,
-                name: "Technobothnia",
-                lat: 63.1045,
-                lng: 21.5945,
-                description: "Technobothnia is the state-of-the-art technology and engineering building at the University of Vaasa. This modern facility houses cutting-edge laboratories, research facilities, and collaborative workspaces. It's a center for innovation where students and researchers work on advanced projects in technology, automation, and energy systems.",
-                visited: false
-            },
-            {
-                id: 3,
-                name: "Tritonia Academic Library", //63.10569950452311, 21.594013438314224
-                lat: 63.10569950452311,
-                lng: 21.594013438314224,
-                description: "Tritonia is the modern academic library serving the University of Vaasa, Hanken School of Economics, and Novia University of Applied Sciences. This collaborative facility offers extensive study spaces, digital resources, and a vast collection of academic materials. It's a favorite spot for students to study, conduct research, and access learning resources.",
-                visited: false
-            },
-            {
-                id: 4,
-                name: "University of Vaasa, Tervahovi Building", //63.10552634759802, 21.593174837423316
-                lat: 63.10552634759802,
-                lng: 21.593174837423316,
-                description: "Tervahovi is one of the main academic buildings at the University of Vaasa, primarily serving the faculties of business studies and humanities. This building features modern lecture halls, seminar rooms, and faculty offices. It's a central location for classes, academic meetings, and student activities throughout the academic year.",
-                visited: false
-            },
+        // Load route data from PHP
+        const routeData = <?php echo $route->toJavaScript(); ?>;
+        console.log("Loaded route data:", routeData);
 
-        ];
+        // Center of University of Vaasa campus (default)
+        let CAMPUS_CENTER = [63.1055, 21.5929];
+
+        // Calculate center from route nodes if available
+        if (routeData.nodes && routeData.nodes.length > 0) {
+            const lats = routeData.nodes.map(n => parseFloat(n.node.latitude));
+            const lngs = routeData.nodes.map(n => parseFloat(n.node.longitude));
+            const avgLat = lats.reduce((a, b) => a + b, 0) / lats.length;
+            const avgLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
+            CAMPUS_CENTER = [avgLat, avgLng];
+        }
+
+        let map = null;
+
+        // Transform route data into the format expected by the game
+        const routeNodes = routeData.nodes.map((nodeData, index) => ({
+            id: nodeData.node.id,
+            name: nodeData.node.title,
+            lat: parseFloat(nodeData.node.latitude),
+            lng: parseFloat(nodeData.node.longitude),
+            description: nodeData.node.content,
+            visited: false,
+            order_number: nodeData.order_number
+        }));
 
         // Store markers
         const markers = {};
@@ -430,8 +420,8 @@ else {
 
     <!-- Info Panel -->
     <div class="info-panel">
-        <h5>📍 Campus Route</h5>
-        <p class="mb-2"><small>Walk the route and discover interesting locations at the University of Vaasa campus!</small></p>
+        <h5>📍 <?php echo htmlspecialchars($route->getTitle()); ?></h5>
+        <p class="mb-2"><small><?php echo htmlspecialchars($route->getDescription()); ?></small></p>
         <div class="mb-2">
             <img src="../images/acorn.png" alt="Acorns" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">
             <strong style="font-size: 1.1em; vertical-align: middle;"><span id="acorn-count">0</span></strong>

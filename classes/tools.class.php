@@ -68,6 +68,14 @@ class Tools{
         }
     }
 
+    public static function parseUuidFromString(string $uuidString): string {
+        try {
+            return Uuid::fromString($uuidString)->toString();
+        } catch (Exception $exception) {
+            throw new RuntimeException("Failed to parse UUID from string: " . $exception->getMessage());
+        }
+    }
+
     /** Fetch public_id and title of all routes from the database and return them as an array of associative arrays with keys 'public_id_string' and 'title'.
      * @return array
      */
@@ -95,7 +103,7 @@ class Tools{
      * @return Route
      * @throws Exception
      */
-    public static function getRouteIdByPublicId(string $public_id): Route {
+    public static function getRouteByPublicId(string $public_id): Route {
         $db = self::getDb();
         $sql = "SELECT id FROM routes WHERE public_id = ?";
         $stmt = $db->prepare($sql);

@@ -8,7 +8,7 @@ class Node{
     private string $public_id;
     private bool $is_published;
     private DateTime $publication_date;
-    private int $created_by;
+    private string $created_by;
     private DateTime $created_at;
     private DateTime $updated_at;
     private string $title;
@@ -53,7 +53,7 @@ class Node{
             $this->id = $id;
             $this->is_published = (bool)$is_published;
             try {
-                $this->public_id = Uuid::fromBytes($public_id)->toString();
+                $this->public_id = Uuid::fromString($public_id)->toString();
             } catch (Exception $exception) {
                 throw new RuntimeException("Failed to parse UUID from bytes: " . $exception->getMessage());
             }
@@ -154,5 +154,44 @@ class Node{
     public function getLongitude(): float
     {
         return $this->longitude;
+    }
+
+    /**
+     * Convert node to array format
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'public_id' => $this->public_id,
+            'is_published' => $this->is_published,
+            'publication_date' => $this->publication_date->format('Y-m-d'),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_by' => $this->created_by,
+            'title' => $this->title,
+            'content' => $this->content,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude
+        ];
+    }
+
+    /**
+     * Convert node to JSON string
+     * @param int $options JSON encoding options (default: JSON_PRETTY_PRINT)
+     * @return string
+     */
+    public function toJson(int $options = JSON_PRETTY_PRINT): string
+    {
+        return json_encode($this->toArray(), $options);
+    }
+
+    /**
+     * Get node data in JavaScript-ready format
+     * @return string JavaScript object literal
+     */
+    public function toJavaScript(): string
+    {
+        return $this->toJson(JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
     }
 }

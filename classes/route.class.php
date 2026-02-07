@@ -11,8 +11,8 @@ class Route{
     private ?DateTime $publication_date;
     private DateTime $created_at;
     private DateTime $updated_at;
-    private int $created_by;
-    private int $user_id;
+    private string $created_by;
+    private string $user_id;
     private string $title;
     private string $description;
 
@@ -54,7 +54,7 @@ class Route{
             $stmt->fetch();
             $this->id = $id;
             $this->is_published = (bool)$is_published;
-            $this->public_id = Tools::parseUuidFromBytes($public_id);
+            $this->public_id = Tools::parseUuidFromString($public_id);
             $this->publication_date = $publication_date ? Tools::parseDateTime($publication_date) : null;
             $this->created_by = $created_by;
             $this->created_at = Tools::parseDateTime($created_at);
@@ -180,5 +180,52 @@ class Route{
     public function getUserId(): int
     {
         return $this->user_id;
+    }
+
+    /**
+     * Convert route to array format
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $nodes_array = [];
+        foreach ($this->nodes as $node_data) {
+            $nodes_array[] = [
+                'order_number' => $node_data['order_number'],
+                'node' => $node_data['node']->toArray()
+            ];
+        }
+
+        return [
+            'public_id' => $this->public_id,
+            'is_published' => $this->is_published,
+            'publication_date' => $this->publication_date?->format('Y-m-d'),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_by' => $this->created_by,
+            'user_id' => $this->user_id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'nodes' => $nodes_array
+        ];
+    }
+
+    /**
+     * Convert route to JSON string
+     * @param int $options JSON encoding options (default: JSON_PRETTY_PRINT)
+     * @return string
+     */
+    public function toJson(int $options = JSON_PRETTY_PRINT): string
+    {
+        return json_encode($this->toArray(), $options);
+    }
+
+    /**
+     * Get route data in JavaScript-ready format
+     * @return string JavaScript object literal
+     */
+    public function toJavaScript(): string
+    {
+        return $this->toJson(JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
     }
 }
