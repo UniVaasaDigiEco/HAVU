@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 30, 2026 at 10:06 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Feb 07, 2026 at 05:25 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `nodes` (
   `id` int(10) UNSIGNED NOT NULL,
-  `public_id` binary(16) NOT NULL,
+  `public_id` char(36) NOT NULL,
   `is_published` tinyint(1) NOT NULL DEFAULT 0,
   `publication_date` date DEFAULT NULL,
-  `created_by` int(11) DEFAULT NULL,
+  `created_by` char(36) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `title` text NOT NULL,
@@ -62,10 +62,10 @@ CREATE TABLE `node_route_cross` (
 
 CREATE TABLE `routes` (
   `id` int(10) UNSIGNED NOT NULL,
-  `public_id` binary(16) NOT NULL,
+  `public_id` char(36) NOT NULL,
   `is_published` tinyint(1) NOT NULL DEFAULT 0,
   `publication_date` date DEFAULT NULL,
-  `created_by` int(11) DEFAULT NULL,
+  `created_by` char(36) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) NOT NULL,
@@ -97,14 +97,15 @@ CREATE TABLE `temp` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `public_id` binary(16) NOT NULL,
+  `public_id` char(36) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password_hash` text NOT NULL,
   `full_name` text NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `last_login` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `user_type` int(11) NOT NULL DEFAULT 1 COMMENT '0 = admin, 1 = user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

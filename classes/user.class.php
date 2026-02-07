@@ -2,10 +2,11 @@
 require_once(__DIR__ .'/../vendor/autoload.php');
 require_once(__DIR__ .'/tools.class.php');
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class User{
     private int $id;
-    private string $public_id;
+    private UuidInterface $public_id;
     private string $email;
     private string $password_hash;
     private string $full_name;
@@ -52,10 +53,10 @@ class User{
 
             $this->id = $user_id;
             try{
-                $this->public_id = Uuid::fromBytes($public_id);
+                $this->public_id = Uuid::fromString($public_id);
             }
             catch (Exception $exception){
-                throw new RuntimeException("Failed to parse UUID from bytes: " . $exception->getMessage());
+                throw new RuntimeException("Failed to parse UUID from string: " . $exception->getMessage());
             }
             $this->email = $email;
             $this->password_hash = $password_hash;
@@ -81,14 +82,11 @@ class User{
     }
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getPublicId(): string
+    public function getPublicId(): UuidInterface
     {
         return $this->public_id;
-    }
-    public function getPublicIdString(): string{
-        return $this->public_id->toString();
     }
     /**
      * @return string

@@ -16,15 +16,15 @@ $sql = "SELECT public_id FROM users WHERE email = ?";
 $stmt = $db->prepare($sql);
 $stmt->bind_param('s', $_POST['email']);
 $stmt->execute();
-/** @var string $public_id_bytes */
-$stmt->bind_result($public_id_bytes);
+/** @var string $public_id_string */
+$stmt->bind_result($public_id_string);
 $stmt->store_result();
 if($stmt->num_rows === 0){
     die("Login failed: User not found");
 }
 $stmt->fetch();
 try{
-    $public_id = Uuid::fromBytes($public_id_bytes);
+    $public_id = Uuid::fromString($public_id_string);
 }
 catch (Exception $exception){
     die("Login failed: Invalid user ID");
@@ -36,18 +36,18 @@ try{
         $user = Tools::getUserWithPublicId($public_id);
         $user->updateLastLogin(new DateTime());
 
-        $_SESSION['user_public_id'] = $user->getPublicIdString();
+        $_SESSION['user_public_id'] = $user->getPublicId()->toString();
         $_SESSION['is_logged_in'] = true;
         $_SESSION['login_timestamp'] = time();
         $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR'];
 
         if($user->getUserType() === USER_TYPE_ADMIN){
             $_SESSION['is_admin'] = true;
-            $url = ROOT_DIR . "/pages/admin/dashboard.php";
+            $url = ROOT_DIR . "pages/admin/dashboard.php";
         }
         else{
             $_SESSION['is_admin'] = false;
-            $url = ROOT_DIR . "/pages/game.php";
+            $url = ROOT_DIR . "pages/game.php";
         }
 
         header("Location: $url");

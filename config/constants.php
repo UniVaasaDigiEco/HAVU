@@ -12,7 +12,13 @@ const ICON_PATH = ROOT_DIR . 'images/logos/InnoWind_icon.png';
 const SESSION_NAME = "HavuGamificationSession";
 
 const ERROR_CODES = [
-    1 => "Wrong username or password."
+    1 => "Wrong username or password.",
+    2 => "Error creating route."
+];
+
+const SUCCESS_CODES = [
+    1 => "User created successfully.",
+    2 => "Route created successfully."
 ];
 
 const USER_TYPE_REGULAR = 1;

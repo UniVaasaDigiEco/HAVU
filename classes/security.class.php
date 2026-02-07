@@ -8,11 +8,34 @@ class Security{
      * @param $email
      * @param $password
      * @param $fullName
+     * @param $userType
      * @return void
      */
-    public static function addUser($email, $password, $fullName): void{
-        $db = Tools::getDb();
+    public static function addUser($email, $password, $fullName, $userType): void{
+        try{
+            $db = Tools::getDb();
 
+            $public_id = Uuid::uuid4()->toString();
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO users (public_id, email, password_hash, full_name, user_type) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $db->prepare($sql);
+
+            if(!$stmt){
+                throw new RuntimeException("Failed to prepare statement: " . $db->error);
+            }
+
+            $stmt->bind_param("ssssi", $public_id, $email, $passwordHash, $fullName, $userType);
+
+            if(!$stmt->execute()){
+                throw new RuntimeException("Failed to execute statement: " . $stmt->error);
+            }
+
+            $stmt->close();
+        }
+        catch(Exception $exception){
+            throw new RuntimeException("Failed to add user: " . $exception->getMessage());
+        }
     }
 
     public static function authenticateUser($public_id, $password): bool{

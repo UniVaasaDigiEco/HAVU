@@ -1,4 +1,9 @@
 <?php
+require_once('../classes/tools.class.php');
+require_once('../classes/security.class.php');
+require_once('../classes/route.class.php');
+
+Security::initSession();
 // Security headers to protect against common web attacks
 
 // Prevent clickjacking - stops your site from being embedded in iframes
@@ -28,6 +33,26 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
 
 // Hide PHP version for security through obscurity
 header_remove('X-Powered-By');
+
+$default_route_public_id = "417bef1b-1b00-46f5-ac85-4774ff20d0ed";
+
+if(isset($_GET['route']))
+{
+    $route_public_id = $_GET['route'];
+    try {
+        $route = Tools::getRouteIdByPublicId($route_public_id);
+    } catch (Exception $e) {
+        echo "<div class='alert alert-danger m-3'>Error: Route not found: ". $e->getMessage() ."<br>Please check the route ID and try again.</div>";
+    }
+}
+else {
+    // If no route specified, load the default route
+    try {
+        $route = Tools::getRouteIdByPublicId($default_route_public_id);
+    } catch (Exception $e) {
+        echo "<div class='alert alert-danger m-3'>Error: Default route not found: " . $e->getMessage() . "<br>Please check the default route ID and try again.</div>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

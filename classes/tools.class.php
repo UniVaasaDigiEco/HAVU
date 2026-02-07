@@ -25,7 +25,7 @@ class Tools{
      */
     public static function getUserWithPublicId($public_id): User{
         $db = self::getDb();
-        $uuidBytes = $public_id->getBytes();
+        $uuidBytes = $public_id->toString();
         $sql = "SELECT id FROM users WHERE public_id = ?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param('s', $uuidBytes);
@@ -66,5 +66,47 @@ class Tools{
         } catch (Exception $exception) {
             throw new RuntimeException("Failed to parse UUID from bytes: " . $exception->getMessage());
         }
+    }
+
+    /** Fetch public_id and title of all routes from the database and return them as an array of associative arrays with keys 'public_id_string' and 'title'.
+     * @return array
+     */
+    public static function getAllRoutePublicId(): array {
+        $db = self::getDb();
+
+        $sql = "SELECT public_id, title FROM routes";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $stmt->bind_result($public_id, $title);
+        $stmt->store_result();
+        $routes = [];
+        while($stmt->fetch()){
+            $routes[] = [
+                'public_id_string' => $public_id,
+                'title' => $title
+            ];
+        }
+        return $routes;
+    }
+
+
+    /** Fetch the route ID from the database based on the provided public_id. Return a Route object if found, otherwise throw an exception.
+     * @param string $public_id
+     * @return Route
+     * @throws Exception
+     */
+    public static function getRouteIdByPublicId(string $public_id): Route {
+        $db = self::getDb();
+        $sql = "SELECT id FROM routes WHERE public_id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('s', $public_id);
+        $stmt->execute();
+        $stmt->bind_result($route_id);
+        $stmt->store_result();
+        if($stmt->num_rows === 0){
+            throw new Exception("Route not found");
+        }
+        $stmt->fetch();
+        return new Route($route_id);
     }
 }
