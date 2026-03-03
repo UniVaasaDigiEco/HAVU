@@ -1,5 +1,18 @@
 <?php
-// Delete route page - coming soon
+require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ .'/../../classes/tools.class.php');
+require_once(__DIR__ .'/../../classes/security.class.php');
+use Ramsey\Uuid\Uuid;
+Security::initSession();
+
+$user_public_id_string = $_SESSION['user_public_id'];
+
+try {
+    $user = Tools::getUserWithPublicId($user_public_id_string);
+} catch (Exception $e) {
+    die("Error fetching user: " . $e->getMessage());
+}
+$routes = $user->getCreatedRoutes();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +29,24 @@
             <div class="p-5 bg-white rounded-3 shadow">
                 <i class="bi bi-trash-fill text-danger" style="font-size: 4rem;"></i>
                 <h2 class="mt-4">Delete Route</h2>
-                <p class="lead text-muted">This feature is coming soon!</p>
+                <form action="../../actions/delete-route.php" method="post" class="mt-4">
+                    <div class="mb-3">
+                        <label for="route_select" class="form-label">Select a route to delete</label>
+                        <select name="route_public_id" id="route_select" class="form-select">
+                            <option value="">-- Choose --</option>
+                            <?php
+                            foreach($routes as $route) {
+                                $route_pubhlic_id = $route->getPublicId();
+                                $route_title = $route->getTitle();
+                                echo "<option value='$route_pubhlic_id'>$route_title</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger" onclick="confirm('Are you sure you want to delete this route? This action cannot be undone.')">
+                        <i class="bi bi-trash-fill"></i> Delete Selected Route
+                    </button>
+                </form>
                 <a href="dashboard.php" class="btn btn-primary mt-3">
                     <i class="bi bi-arrow-left"></i> Back to Dashboard
                 </a>

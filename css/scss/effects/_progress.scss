@@ -1,13 +1,17 @@
 // Progress container and bar
 .progress-container {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: $z-progress-container;
     background: white;
-    padding: 15px 20px;
-    border-radius: $panel-border-radius;
-    box-shadow: $panel-shadow;
-    min-width: 300px;
+    padding: 10px 20px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
 }
+
+// Push Leaflet attribution above the progress bar
+.leaflet-bottom {
+    bottom: calc(var(--progress-bar-height, 60px));
+}
+

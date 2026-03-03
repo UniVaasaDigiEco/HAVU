@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ .'/../vendor/autoload.php');
 require_once(__DIR__ .'/tools.class.php');
+require_once(__DIR__ .'/route.class.php');
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -15,6 +16,8 @@ class User{
     private DateTime $created_at;
     private DateTime $updated_at;
     private int $user_type;
+
+    private array $created_routes;
 
     /** Create a User object by internal user ID
      * @param int $id Internal user ID
@@ -66,6 +69,24 @@ class User{
             $this->created_at = Tools::parseDateTime($created_at);
             $this->updated_at = Tools::parseDateTime($updated_at);
             $this->user_type = $user_type;
+
+            $this->created_routes = [];
+
+            $route_sql = "SELECT id FROM routes WHERE user_id = ?";
+            $route_stmt = $db->prepare($route_sql);
+            $route_stmt->bind_param("s", $this->public_id);
+            $route_stmt->execute();
+            $route_stmt->bind_result($route_id);
+            while($route_stmt->fetch()){
+                try{
+                    $route = new Route($route_id);
+                    $this->created_routes[] = $route;
+                }
+                catch (Exception $e){
+                    // Log error and continue loading other routes
+                    error_log("Failed to load route with ID $route_id for user {$this->id}: " . $e->getMessage());
+                }
+            }
         } catch (Exception $e){
             throw new RuntimeException("Failed to create User object: " . $e->getMessage());
         } finally {
@@ -161,5 +182,13 @@ class User{
     public function getUserType(): int
     {
         return $this->user_type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCreatedRoutes(): array
+    {
+        return $this->created_routes;
     }
 }

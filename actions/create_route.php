@@ -56,7 +56,7 @@ try {
         if (!$stmt) {
             throw new Exception('Failed to prepare route statement: ' . $db->error);
         }
-        $stmt->bind_param("sississ", $public_id, $is_published, $formatted_publication_date, $created_by, $created_by, $title, $description);
+        $stmt->bind_param("sisssss", $public_id, $is_published, $formatted_publication_date, $created_by, $created_by, $title, $description);
 
         if (!$stmt->execute()) {
             throw new Exception('Failed to insert route: ' . $stmt->error);

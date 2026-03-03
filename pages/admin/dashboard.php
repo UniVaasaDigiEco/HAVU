@@ -4,6 +4,14 @@ require_once('../../classes/security.class.php');
 require_once('../../classes/message.class.php');
 
 Security::initSession();
+
+try {
+    $user = Tools::getUserWithPublicId($_SESSION['user_public_id']);
+} catch (Exception $e) {
+    die("Error fetching user: " . $e->getMessage());
+}
+
+$routes = $user->getCreatedRoutes();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,10 +62,9 @@ Security::initSession();
                         <select class="form-select" id="route-select">
                             <option selected disabled>Select a route to test</option>
                             <?php
-                            $routes = Tools::getAllRoutePublicId();
                             if($routes){
                                 foreach ($routes as $route){
-                                    echo "<option value='{$route['public_id_string']}'>{$route['title']}</option>";
+                                    echo "<option value='{$route->getPublicId()}'>{$route->getTitle()}</option>";
                                 }
                             }
                             ?>

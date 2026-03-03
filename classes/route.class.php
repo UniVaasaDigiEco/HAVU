@@ -1,7 +1,7 @@
 <?php
-require_once('../vendor/autoload.php');
-require_once('tools.class.php');
-require_once('node.class.php');
+require_once(__DIR__ .'/../vendor/autoload.php');
+require_once(__DIR__ .'/../classes/tools.class.php');
+require_once(__DIR__ .'/../classes/node.class.php');
 use Ramsey\Uuid\Uuid;
 
 class Route{
@@ -227,5 +227,40 @@ class Route{
     public function toJavaScript(): string
     {
         return $this->toJson(JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+    }
+
+    /**
+     * Delete the route and its associated node references
+     * @throws Exception if deletion fails
+     */
+    public function delete(): void{
+        $db = Tools::getDb();
+        $db->begin_transaction();
+        try {
+            // Delete node-route cross references
+            $sql_cross = "DELETE FROM node_route_cross WHERE route_id = ? ORDER BY order_number";
+            $stmt_cross = $db->prepare($sql_cross);
+            $stmt_cross->bind_param('i', $this->id);
+            if (!$stmt_cross->execute()) {
+                throw new Exception('Failed to delete node-route references: ' . $stmt_cross->error);
+            }
+            $stmt_cross->close();
+
+            // Delete the route
+            $sql_route = "DELETE FROM routes WHERE id = ?";
+            $stmt_route = $db->prepare($sql_route);
+            $stmt_route->bind_param('i', $this->id);
+            if (!$stmt_route->execute()) {
+                throw new Exception('Failed to delete route: ' . $stmt_route->error);
+            }
+            $stmt_route->close();
+
+            $db->commit();
+        } catch (Exception $e) {
+            $db->rollback();
+            throw new RuntimeException("Failed to delete route: " . $e->getMessage());
+        } finally {
+            $db->close();
+        }
     }
 }

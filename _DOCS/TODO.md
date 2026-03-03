@@ -33,7 +33,7 @@
 
 ## TODO List - Short Term
 
-- [ ] Fix mobile UI
+- [X] Fix mobile UI
 - [ ] Polish UI/UX
   - [ ] Add better styling to map and markers
   - [ ] Improve user interface for status indicators
@@ -49,6 +49,7 @@
 - [ ] Ensure mobile responsiveness and performance optimization
 
 ## TODO List - Long Term
+- [ ] Fix the YouTube video embeds (the width should be relative to the screen size/width)
 - [ ] Documentation, comments, cleanup & guides
 - [ ] Replicate map to a forest area
   - [ ] More complex route with more nodes

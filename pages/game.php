@@ -29,7 +29,7 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 
 // Content Security Policy - most powerful XSS protection
 // Defines where resources can be loaded from
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com;");
 
 // Hide PHP version for security through obscurity
 header_remove('X-Powered-By');
@@ -163,21 +163,19 @@ else {
         // Initialize everything
         $(document).ready(function() {
             // Initialize map
-            map = L.map('map').setView(CAMPUS_CENTER, 16);
+            map = L.map('map', { zoomControl: false }).setView(CAMPUS_CENTER, 16);
 
             // Add OpenStreetMap tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
+            map.attributionControl.setPosition('topleft');
 
             drawRouteLine();
             initializeMarkers();
             updateProgress();
             initGPS();
-
-            // Add scale control
-            L.control.scale().addTo(map);
         });
 
         // Draw route line
@@ -384,9 +382,20 @@ else {
 
             if (visitedNodes === totalNodes) {
                 setTimeout(() => {
-                    alert('🎉 Congratulations! You\'ve completed the entire campus route!');
+                    alert('🎉 Congratulations! You\'ve completed the ' + routeData.title + ' route!');
                 }, 500);
             }
+        }
+
+        // Info panel visibility
+        function showInfoPanel() {
+            $('#info-panel').addClass('visible');
+            $('#info-panel-toggle').addClass('hidden');
+        }
+
+        function hideInfoPanel() {
+            $('#info-panel').removeClass('visible');
+            $('#info-panel-toggle').removeClass('hidden');
         }
 
         // Initialize GPS tracking
@@ -394,9 +403,6 @@ else {
             if ('geolocation' in navigator) {
                 navigator.geolocation.watchPosition(
                     (position) => {
-                        $('#gps-icon').removeClass('gps-inactive').addClass('gps-active');
-                        $('#gps-text').text('GPS: Active');
-
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
 
@@ -404,8 +410,7 @@ else {
                     },
                     (error) => {
                         console.error('GPS Error:', error);
-                        $('#gps-icon').removeClass('gps-active').addClass('gps-inactive');
-                        $('#gps-text').text('GPS: Error');
+                        alert('GPS Error: Unable to get your location. Please make sure location access is enabled and try again.\n\nError: ' + error.message);
                     },
                     {
                         enableHighAccuracy: true,
@@ -414,22 +419,25 @@ else {
                     }
                 );
             } else {
-                $('#gps-text').text('GPS: Not Available');
+                alert('GPS is not available in your browser. Location-based features will not work.');
                 console.log('Geolocation is not supported by this browser.');
             }
         }
     </script>
 </head>
 <body>
-    <!-- GPS Status Indicator -->
-    <div class="gps-status">
-        <span id="gps-icon" class="gps-inactive">📍</span>
-        <span id="gps-text">GPS: Inactive</span>
-    </div>
+
+    <!-- Info Panel Toggle Button -->
+    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()">
+        📍 <?php echo htmlspecialchars($route->getTitle()); ?> <span class="ms-1">⬇️</span>
+    </button>
 
     <!-- Info Panel -->
-    <div class="info-panel">
-        <h5>📍 <?php echo htmlspecialchars($route->getTitle()); ?></h5>
+    <div class="info-panel" id="info-panel">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="mb-0">📍 <?php echo htmlspecialchars($route->getTitle()); ?></h5>
+            <button type="button" class="btn-close ms-2" onclick="hideInfoPanel()" aria-label="Close"></button>
+        </div>
         <p class="mb-2"><small><?php echo htmlspecialchars($route->getDescription()); ?></small></p>
         <div class="mb-2">
             <img src="../images/acorn.png" alt="Acorns" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">

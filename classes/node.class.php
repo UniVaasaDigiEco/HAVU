@@ -1,6 +1,6 @@
 <?php
-require_once('../vendor/autoload.php');
-require_once('tools.class.php');
+require_once(__DIR__ .'/../vendor/autoload.php');
+require_once(__DIR__ .'/tools.class.php');
 use Ramsey\Uuid\Uuid;
 
 class Node{
@@ -163,6 +163,7 @@ class Node{
     public function toArray(): array
     {
         return [
+            'id' => $this->id,
             'public_id' => $this->public_id,
             'is_published' => $this->is_published,
             'publication_date' => $this->publication_date->format('Y-m-d'),

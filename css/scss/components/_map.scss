@@ -4,12 +4,34 @@
     width: 100%;
 }
 
+// Leaflet popup size constraints
+.leaflet-popup-content-wrapper {
+    max-width: 92vw;
+    max-height: 85vh;
+    overflow: hidden;
+}
+
+.leaflet-popup-content {
+    max-width: 92vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 13px 20px;
+}
+
 // Node popup styles
 .node-popup {
-    max-width: 300px;
 
     h5 {
         margin-top: 0;
         color: #0066cc;
+    }
+
+    // Responsive iframes (e.g. YouTube embeds)
+    iframe {
+        min-width: 300px;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9;
+        max-width: 100%;
     }
 }

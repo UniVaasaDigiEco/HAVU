@@ -25,7 +25,7 @@ class Tools{
      */
     public static function getUserWithPublicId($public_id): User{
         $db = self::getDb();
-        $uuidBytes = $public_id->toString();
+        $uuidBytes = $public_id;
         $sql = "SELECT id FROM users WHERE public_id = ?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param('s', $uuidBytes);

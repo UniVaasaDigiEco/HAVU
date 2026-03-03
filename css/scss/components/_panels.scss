@@ -1,31 +1,35 @@
-// Info panel and GPS status panels
+// Info panel
 .info-panel {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    left: 5px;
+    right: 5px;
     z-index: $z-info-panel;
     background: white;
     padding: 15px;
     border-radius: $panel-border-radius;
     box-shadow: $panel-shadow;
-    max-width: 300px;
+    transform: translateY(calc(-100% - 10px));
+    transition: transform 0.3s ease;
+
+    &.visible {
+        transform: translateY(0);
+    }
 }
 
-.gps-status {
+// Button to open the info panel
+.info-panel-toggle {
     position: absolute;
     top: 10px;
-    left: 60px;
-    z-index: $z-gps-status;
-    background: white;
-    padding: 10px 15px;
-    border-radius: $panel-border-radius;
+    right: 10px;
+    z-index: $z-info-panel;
+    border-radius: 50px;
     box-shadow: $panel-shadow;
+    transition: opacity 0.2s ease;
+
+    &.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
 }
 
-.gps-active {
-    color: #28a745;
-}
-
-.gps-inactive {
-    color: #dc3545;
-}
