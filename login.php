@@ -23,15 +23,15 @@
             <div class="container-fluid col-12 col-lg-3 bg-secondary-subtle p-4 rounded-3">
                 <form action="actions/login.php" method="POST">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Username</label>
+                        <label for="email" class="form-label">Tunnus</label>
                         <input id="email" name="email" type="email" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Salasana</label>
                         <input id="password" name="password" type="password" class="form-control">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary text-white"><i class="bi bi-box-arrow-in-right"></i> Login</button>
+                        <button type="submit" class="btn btn-primary text-white"><i class="bi bi-box-arrow-in-right"></i> Kirjaudu sisään</button>
                     </div>
                 </form>
             </div>

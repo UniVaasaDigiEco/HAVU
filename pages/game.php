@@ -212,14 +212,14 @@ else {
                     title: node.name
                 }).addTo(map);
 
-                const nodeLabel = index === 0 ? '🚀 START' : (index === routeNodes.length - 1 ? '🏁 FINISH' : '');
+                const nodeLabel = index === 0 ? '🚀 LÄHTÖ' : (index === routeNodes.length - 1 ? '🏁 MAALI' : '');
                 const popupContent = `
                     <div class="node-popup">
                         ${nodeLabel ? `<div class="text-center mb-2"><strong>${nodeLabel}</strong></div>` : ''}
                         <h5>${node.name}</h5>
                         <p>${node.description}</p>
                         <button class="btn btn-sm btn-primary" onclick="markAsVisited(${node.id})">
-                            Mark as Visited ✓
+                            Merkkaa käydyksi ✓
                         </button>
                     </div>
                 `;
@@ -267,7 +267,7 @@ else {
                     <div class="alert alert-success mb-0 py-2">
                         <strong>📍 Nearby!</strong><br>
                         <small>${nearestNode.name}<br>
-                        ${Math.round(nearestDistance)}m away</small>
+                        ${Math.round(nearestDistance)}m päässä</small>
                     </div>
                 `);
 
@@ -293,9 +293,9 @@ else {
                 if (closestNode) {
                     $('#distance-info').html(`
                         <div class="alert alert-info mb-0 py-2">
-                            <strong>Next:</strong><br>
+                            <strong>Seuraava:</strong><br>
                             <small>${closestNode.name}<br>
-                            ${Math.round(closestDistance)}m away</small>
+                            ${Math.round(closestDistance)}m päässä</small>
                         </div>
                     `);
                 }
@@ -353,8 +353,8 @@ else {
                 setTimeout(() => {
                     const celebrationPopup = `
                         <div class="node-popup text-center">
-                            <h5>🎉 Great Job!</h5>
-                            <p>You've discovered: <strong>${node.name}</strong></p>
+                            <h5>🎉 Hienoa!</h5>
+                            <p>Olet löytänyt rastin: <strong>${node.name}</strong></p>
                         </div>
                     `;
                     markers[nodeId].bindPopup(celebrationPopup).openPopup();
@@ -368,7 +368,7 @@ else {
             const visitedNodes = routeNodes.filter(n => n.visited).length;
             const percentage = (visitedNodes / totalNodes) * 100;
 
-            $('#progress-text').text(`${visitedNodes}/${totalNodes} nodes`);
+            $('#progress-text').text(`${visitedNodes}/${totalNodes} rastia`);
             $('#progress-bar').css('width', percentage + '%');
 
             // Update acorn count with animation
@@ -382,7 +382,7 @@ else {
 
             if (visitedNodes === totalNodes) {
                 setTimeout(() => {
-                    alert('🎉 Congratulations! You\'ve completed the ' + routeData.title + ' route!');
+                    alert('🎉 Onneksi olkoon! Olet kiertänyt koko ' + routeData.title + ' reitin!');
                 }, 500);
             }
         }
@@ -410,7 +410,7 @@ else {
                     },
                     (error) => {
                         console.error('GPS Error:', error);
-                        alert('GPS Error: Unable to get your location. Please make sure location access is enabled and try again.\n\nError: ' + error.message);
+                        alert('GPS Error: Sijaintijasi ei voida määrittää. Varmista, että sijaintipalvelut (Sijainti/Location) ovat päällä asetuksistasi, ja että selaimella on lupa käyttää niitä.\n\nVirhe: ' + error.message);
                     },
                     {
                         enableHighAccuracy: true,
@@ -419,8 +419,8 @@ else {
                     }
                 );
             } else {
-                alert('GPS is not available in your browser. Location-based features will not work.');
-                console.log('Geolocation is not supported by this browser.');
+                alert('GPS palvelut eivät ole tuettuja tällä selaimella. Varmista, että käytät modernia selainta ja että laitteesi tukee GPS:ää.');
+                console.log('Geolokaatiota ei ole tuettu tässä selaimessa.');
             }
         }
     </script>
@@ -436,7 +436,7 @@ else {
     <div class="info-panel" id="info-panel">
         <div class="d-flex justify-content-between align-items-start mb-2">
             <h5 class="mb-0">📍 <?php echo htmlspecialchars($route->getTitle()); ?></h5>
-            <button type="button" class="btn-close ms-2" onclick="hideInfoPanel()" aria-label="Close"></button>
+            <button type="button" class="btn-close ms-2" onclick="hideInfoPanel()" aria-label="Sulje"></button>
         </div>
         <p class="mb-2"><small><?php echo htmlspecialchars($route->getDescription()); ?></small></p>
         <div class="mb-2">
@@ -449,8 +449,8 @@ else {
     <!-- Progress Indicator -->
     <div class="progress-container">
         <div class="d-flex justify-content-between mb-2">
-            <span><strong>Progress</strong></span>
-            <span id="progress-text">0/0 nodes</span>
+            <span><strong>Eteneminen</strong></span>
+            <span id="progress-text">0/0 rastia</span>
         </div>
         <div class="progress">
             <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>

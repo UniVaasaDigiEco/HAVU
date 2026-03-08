@@ -11,7 +11,7 @@ Security::initSession();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU - Create New Route</title>
+    <title>HAVU Gamification - Luo uusi reitti</title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css" />
@@ -65,11 +65,11 @@ Security::initSession();
         <div class="col">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2><i class="bi bi-map-fill me-2"></i>Create New Route</h2>
-                    <p class="text-muted mb-0">Click on the map to add nodes to your route</p>
+                    <h2><i class="bi bi-map-fill me-2"></i>Luo uusi reitti</h2>
+                    <p class="text-muted mb-0">Anna reitille nimi ja kuvaus</p>
                 </div>
-                <a href="dashboard.php" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                <a href="dashboard.php" class="btn btn-warning">
+                    <i class="bi bi-arrow-left"></i> Takaisin hallintapaneeliin
                 </a>
             </div>
         </div>
@@ -84,31 +84,34 @@ Security::initSession();
             <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i>Route Details</h5>
+                        <h5 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i>Reitin tiedot</h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="route_title" class="form-label">Route Title <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="route_title" name="route_title" required>
+                            <label for="route_title" class="form-label">Reitin nimi <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="route_title" name="route_title" aria-describedby="route_help" required>
+                            <small id="route_help">Anna reitille jokin nimi</small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="route_description" class="form-label">Route Description</label>
-                            <textarea class="form-control" id="route_description" name="route_description" rows="4"></textarea>
+                            <label for="route_description" class="form-label">Reitin kuvaus</label>
+                            <textarea class="form-control" id="route_description" aria-describedby="description_help" name="route_description" rows="4"></textarea>
+                            <small id="description_help">Anna reitille lyhyt kuvaus. Esim. mitä reitillä voi nähdä, kuinka pitkä reitti on, kuinka vaikea reitti on, jne.</small>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 d-none">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published">
+                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" checked>
                                 <label class="form-check-label" for="is_published">
-                                    Publish immediately
+                                    Julkaise heti
                                 </label>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="publication_date" class="form-label">Publication Date</label>
-                            <input type="date" class="form-control" id="publication_date" name="publication_date">
+                            <label for="publication_date" class="form-label">Julkaisu päivämäärä</label>
+                            <input type="date" class="form-control" id="publication_date" name="publication_date" readonly>
+                            <small>Ei käytössä vielä, käytännössä vain luontipäivämäärä</small>
                         </div>
                     </div>
                 </div>
@@ -116,13 +119,13 @@ Security::initSession();
                 <!-- Nodes List -->
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i>Nodes (<span id="nodeCount">0</span>)</h5>
+                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i>Rasti(t) (<span id="nodeCount">0</span>)</h5>
                     </div>
                     <div class="card-body p-0">
                         <div id="nodesList" class="list-group list-group-flush">
                             <div class="node-list-empty">
                                 <i class="bi bi-cursor-fill" style="font-size: 3rem;"></i>
-                                <p class="mt-3">Click on the map to add your first node</p>
+                                <p class="mt-3">Klikkaa paikkaa kartalla, lisätäksesi rastin reitille</p>
                             </div>
                         </div>
                     </div>
@@ -134,12 +137,12 @@ Security::initSession();
                 <!-- Map -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="bi bi-map me-2"></i>Map</h5>
+                        <h5 class="mb-0"><i class="bi bi-map me-2"></i>Kartta</h5>
                     </div>
                     <div class="card-body">
                         <div id="map"></div>
                         <div class="mt-2 text-muted small">
-                            <i class="bi bi-info-circle"></i> Click anywhere on the map to add a node to your route
+                            <i class="bi bi-info-circle"></i> Klikkaa mitä tahansa kohtaa kartalla lisätäksesi rastin. Voit muuttaa rastin paikkaa vetämällä (hiiren vasen nappi pohjaan rastin päällä ja liikuta hiirtä) sitä, tai muokata rastin tietoja klikkaamalla rastia. Voit zoomata karttaa hiiren rullalla, kosketusnäytöllä nipistämällä tai käyttämällä plus/miinus nappeja kartan vasemmassa yläreunassa.
                         </div>
                     </div>
                 </div>
@@ -147,39 +150,43 @@ Security::initSession();
                 <!-- Node Editor -->
                 <div id="nodeEditor" class="card shadow-sm" style="display: none;">
                     <div class="card-header bg-warning">
-                        <h5 class="mb-0"><i class="bi bi-pencil-fill me-2"></i>Edit Node</h5>
+                        <h5 class="mb-0"><i class="bi bi-pencil-fill me-2"></i>Muokkaa rastia</h5>
                     </div>
                     <div class="card-body">
                         <input type="hidden" id="editNodeIndex">
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="node_title" class="form-label">Node Title <span class="text-danger">*</span></label>
+                                <label for="node_title" class="form-label">Rastin nimi <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="node_title">
+                                <small>Rastin nimi. Esimerkiksi lähellä oleva nähtävyys tai maamerkki ("Olavin kinttupolku", "Lampi", jne.)</small>
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label for="node_lat" class="form-label">Latitude</label>
+                                <label for="node_lat" class="form-label">Leveyspiiri</label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lat" readonly>
+                                <small>Voit asettaa rastin leveyspiirin koordinaatin käsin.</small>
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label for="node_lng" class="form-label">Longitude</label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lng" readonly>
+                                <small>Voit asettaa rastin pituuspiirin koordinaatin käsin.</small>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="node_content" class="form-label">Node Content</label>
-                            <textarea class="form-control" id="node_content" rows="4" placeholder="Enter the content that will be displayed when users reach this node..."></textarea>
+                            <label for="node_content" class="form-label">Rastin sisältö</label>
+                            <textarea class="form-control" id="node_content" rows="4" placeholder="Aseta sisältö, mikä näytetään pelaajalle, kun he saapuvat rastille..."></textarea>
+                            <small>Lyhyt sisältö rastille. Esimerkiksi kuvaus ympäröivästä luonnosta, maamerkistä tai vaikka historiasta.</small>
                         </div>
 
                         <div class="d-flex gap-2">
                             <button type="button" class="btn btn-primary" onclick="saveNodeEdit()">
-                                <i class="bi bi-check-lg"></i> Save Node
+                                <i class="bi bi-check-lg"></i> Tallenna rasti
                             </button>
                             <button type="button" class="btn btn-outline-secondary" onclick="cancelNodeEdit()">
-                                Cancel
+                                Peruuta
                             </button>
                         </div>
                     </div>
@@ -194,11 +201,11 @@ Security::initSession();
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="mb-1">Ready to create your route?</h5>
-                                <p class="text-muted mb-0">Make sure you've added all nodes and filled in the route details</p>
+                                <h5 class="mb-1">Valmis luomaan reitin?</h5>
+                                <p class="text-muted mb-0">Tarkista, että olet lisännyt kaikki rastit ja täyttänyt tarvittavat tiedot.</p>
                             </div>
                             <button type="submit" class="btn btn-success btn-lg">
-                                <i class="bi bi-check-circle-fill me-2"></i> Create Route
+                                <i class="bi bi-check-circle-fill me-2"></i> Luo reitti
                             </button>
                         </div>
                     </div>
@@ -341,22 +348,22 @@ Security::initSession();
                     <div class="node-number">${index + 1}</div>
                     <div class="flex-grow-1">
                         <h6 class="mb-1">${escapeHtml(node.title)}</h6>
-                        <p class="mb-1 small text-muted">${escapeHtml(node.content) || '<em>No content</em>'}</p>
+                        <p class="mb-1 small text-muted">${escapeHtml(node.content) || '<em>Ei sisältöä</em>'}</p>
                         <small class="text-muted">
                             <i class="bi bi-geo-alt"></i> ${node.lat.toFixed(6)}, ${node.lng.toFixed(6)}
                         </small>
                     </div>
                     <div class="d-flex flex-column gap-1">
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNode(${index})" title="Edit">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNode(${index})" title="Muokkaa">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteNode(${index})" title="Delete">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteNode(${index})" title="Poista">
                             <i class="bi bi-trash"></i>
                         </button>
-                        ${index > 0 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeUp(${index})" title="Move up">
+                        ${index > 0 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeUp(${index})" title="Siirrä ylös">
                             <i class="bi bi-arrow-up"></i>
                         </button>` : ''}
-                        ${index < nodes.length - 1 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeDown(${index})" title="Move down">
+                        ${index < nodes.length - 1 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeDown(${index})" title="Siirrä alas">
                             <i class="bi bi-arrow-down"></i>
                         </button>` : ''}
                     </div>
@@ -411,7 +418,7 @@ Security::initSession();
 
     // Delete node
     function deleteNode(index) {
-        if (!confirm('Are you sure you want to delete this node?')) {
+        if (!confirm('Oletko varma, että haluat poistaa tämän rastin?')) {
             return;
         }
 
@@ -480,7 +487,7 @@ Security::initSession();
     document.getElementById('routeForm').addEventListener('submit', function(e) {
         if (nodes.length === 0) {
             e.preventDefault();
-            alert('Please add at least one node to the route');
+            alert('Ole hyvä ja lisää vähintään yksi rasti reitille ennen kuin luot reitin.');
             return false;
         }
 
@@ -493,6 +500,10 @@ Security::initSession();
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
+
+        // Set publication date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('publication_date').value = today;
     });
 </script>
 </body>

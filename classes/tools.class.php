@@ -117,4 +117,27 @@ class Tools{
         $stmt->fetch();
         return new Route($route_id);
     }
+
+    /** Get all routes created by a specific user, ordered by created_at descending
+     * @param int $user_id
+     * @return array Array of associative arrays with 'id', 'public_id', and 'title' keys
+     */
+    public static function getRoutesByUserId(int $user_id): array {
+        $db = self::getDb();
+        $sql = "SELECT id, public_id, title FROM routes WHERE user_id = ? ORDER BY created_at DESC";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $stmt->bind_result($id, $public_id, $title);
+        $stmt->store_result();
+        $routes = [];
+        while($stmt->fetch()){
+            $routes[] = [
+                'id' => $id,
+                'public_id' => $public_id,
+                'title' => $title
+            ];
+        }
+        return $routes;
+    }
 }
