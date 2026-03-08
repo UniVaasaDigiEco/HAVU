@@ -43,6 +43,9 @@ $routes = $user->getCreatedRoutes();
                     ?>
                     <!--<p class="lead">Here you can manage the routes for the game. Create new routes, edit existing ones, or remove routes that are no longer needed.</p>-->
                     <p class="lead">Tästä voit hallita reittejäsi. Luo uusia reittejä, muokkaa olemassa olevia, tai poista reittejä, joita ei enää tarvita.</p>
+                    <p>
+                        <a href="files/user_guide_FI.docx" download>Lataa ohjeet tästä</a>
+                    </p>
                 </div>
                 <div id="route-management-controls" class="d-flex flex-wrap gap-2">
                     <a href="new-route.php" class="btn btn-primary text-white" id="btn-newRoute">
