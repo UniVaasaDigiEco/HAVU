@@ -1,83 +1,114 @@
 # HAVU Gamification - Campus Route Geocaching App
 
-A geocaching-style map application that creates an interactive campus tour at the University of Vaasa.
+A geocaching-style map application for creating and playing interactive campus tours. Admins create routes with GPS waypoints; players walk the route and check in at each waypoint when within 50 metres.
 
 ## Features
 
-- 📍 **GPS Tracking**: Real-time location tracking using phone GPS
+### Player
+- 📍 **GPS Tracking**: Real-time location tracking via the browser Geolocation API
 - 🗺️ **Interactive Map**: Leaflet-powered map with OpenStreetMap tiles
-- 📌 **Route Waypoints**: 6 nodes/pins forming a route around campus
-- 🎯 **Proximity Detection**: Automatically detects when user is near a node (50m threshold)
-- 💬 **Auto-popup**: Information popups open when user approaches nodes
-- ✅ **Progress Tracking**: Visual progress bar showing visited nodes
-- 🎨 **Visual Feedback**: Different icons for visited/unvisited nodes
-- 📏 **Distance Display**: Shows distance to nearest unvisited node
+- 🎯 **Proximity Detection**: Popup opens automatically when within 50 m of a waypoint
+- 💬 **Rich Content**: Waypoints can contain formatted text, images, and videos
+- ✅ **Progress Tracking**: Visual progress bar showing visited waypoints
+- 🎨 **Visual Feedback**: Different icons for start, finish, visited, and unvisited waypoints
+- 📏 **Distance Display**: Shows distance to the nearest unvisited waypoint
 
-## Campus Route Nodes
+### Admin
+- 🛠️ **Route Management**: Create, edit, and delete routes via a web dashboard
+- 🖊️ **WYSIWYG Editor**: Summernote editor for waypoint content with image and video upload
+- 🗺️ **Map-based Node Placement**: Click the map to place waypoints; drag to reposition
+- 📂 **Media Uploads**: Images (max 10 MB) and videos (max 100 MB) stored per-user
 
-1. **Main Building - Palosaari** (63.1055, 21.5929)
-2. **Tritonia Academic Library** (63.1045, 21.5945)
-3. **Technobothnia** (63.1065, 21.5950)
-4. **Fabriikki** (63.1070, 21.5915)
-5. **Student Union Building** (63.1050, 21.5910)
-6. **Campus Park Area** (63.1060, 21.5935)
+## Tech Stack
+
+- **Backend**: PHP 8.4, MySQLi, Composer (`ramsey/uuid`)
+- **Frontend**: Bootstrap 5, jQuery, Leaflet.js, Summernote (WYSIWYG)
+- **Server**: XAMPP (Apache + MySQL)
+- **CSS**: SCSS compiled to `css/bs-custom.css`
 
 ## Setup
 
-1. Make sure XAMPP is installed and running
-2. Navigate to the project directory
-3. Dependencies are already installed (bootstrap, jquery, leaflet)
-4. Open in browser: `http://localhost/HavuGamification/`
+### Requirements
+
+- XAMPP (Apache + MySQL + PHP 8.4)
+- Node.js / npm (for SCSS compilation only)
+- Composer
+
+### Installation
+
+1. Clone/copy the project into `xampp/htdocs/HavuGamification/`
+2. Import the database schema:
+   ```
+   _SQL/jansoftw_havu_structure.sql
+   ```
+3. Copy `.env.example` to `.env` and fill in your database credentials:
+   ```php
+   return [
+       'DB_HOST' => 'localhost',
+       'DB_NAME' => 'jansoftw_havu',
+       'DB_USER' => 'root',
+       'DB_PASS' => '',
+   ];
+   ```
+4. Install PHP dependencies:
+   ```bash
+   composer install
+   ```
+5. Node modules are committed — no `npm install` needed unless starting fresh:
+   ```bash
+   npm install
+   ```
+6. Open in browser: `http://localhost/HavuGamification/`
+
+### SCSS Compilation
+
+```bash
+npm run scss-compile   # one-time build
+npm run scss-watch     # watch mode during development
+```
 
 ## Usage
 
-1. **Allow GPS Access**: When prompted, allow the browser to access your location
-2. **GPS Indicator**: Top-left shows GPS status (Active/Inactive)
-3. **Info Panel**: Top-right shows nearby node information
-4. **Walk the Route**: Follow the blue dashed line connecting all nodes
-5. **Discover Nodes**: When within 50 meters, popup opens automatically
-6. **Mark as Visited**: Click the "Mark as Visited" button in popups
-7. **Track Progress**: Bottom progress bar shows completion percentage
-8. **Complete Route**: Visit all 6 nodes to complete the campus tour!
+### Admin
 
-## Technical Details
+1. Log in at `http://localhost/HavuGamification/login.php`
+2. From the dashboard, create a new route — give it a name, description, and publication date
+3. Click the map to place waypoints; drag to reposition them
+4. Click a waypoint to edit its name and content in the WYSIWYG editor
+5. Upload images via the toolbar picture button, or drag-and-drop into the editor
+6. Embed YouTube/Vimeo videos via the video URL button, or upload a video file via the camera icon button
+7. Reorder waypoints using the up/down arrows in the waypoint list
+8. Submit the form to save the route, then test it from the dashboard
 
-- **Framework**: Leaflet.js for mapping
-- **UI**: Bootstrap 5 for styling
-- **GPS**: HTML5 Geolocation API
-- **Distance Calculation**: Haversine formula
-- **Proximity Threshold**: 50 meters (configurable)
-- **Update Interval**: 3 seconds (configurable)
+### Player
+
+1. Open a route link (e.g. `pages/game.php?route=<uuid>`)
+2. Allow GPS access when prompted
+3. Walk towards each waypoint — a popup opens automatically within 50 m
+4. Click "Merkkaa käydyksi" to mark the waypoint as visited
+5. Complete all waypoints to finish the route
+
+## Media Uploads
+
+Uploaded files are stored at:
+```
+uploads/{user_public_id}/{uuid}.{ext}
+```
+
+PHP execution is disabled in the uploads directory via `.htaccess`. Allowed types:
+
+| Type   | Formats               | Max size |
+|--------|-----------------------|----------|
+| Image  | JPEG, PNG, GIF, WebP  | 10 MB    |
+| Video  | MP4, WebM, MOV        | 100 MB   |
 
 ## Configuration
 
-You can modify these settings in `index.php`:
+Game proximity and GPS update frequency can be adjusted in `pages/game.php`:
 
 ```javascript
-const PROXIMITY_THRESHOLD = 50; // meters - distance to trigger popup
-const UPDATE_INTERVAL = 3000; // ms - GPS update frequency
+const PROXIMITY_THRESHOLD = 50; // metres — distance to trigger waypoint popup
 ```
-
-## Adding New Nodes
-
-To add more waypoints to the route, edit the `routeNodes` array in `index.php`:
-
-```javascript
-{
-    id: 7,
-    name: "New Location",
-    lat: 63.1234,
-    lng: 21.5678,
-    description: "Information about this location...",
-    visited: false
-}
-```
-
-## Browser Compatibility
-
-- Requires browser with Geolocation API support
-- Works best on mobile devices with GPS
-- Desktop browsers can use Wi-Fi positioning (less accurate)
 
 ## Authors
 
@@ -86,4 +117,3 @@ Jyri Nieminen & Vaiva Stanisauskaite
 ## License
 
 ISC
-
