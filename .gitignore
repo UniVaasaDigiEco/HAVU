@@ -10,6 +10,7 @@ vendor/
 .vscode/
 .idea/
 *.sublime-*
+CLAUDE.md
 
 # OS
 .DS_Store

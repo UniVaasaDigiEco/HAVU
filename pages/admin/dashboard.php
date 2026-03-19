@@ -83,7 +83,7 @@ $routes = $user->getCreatedRoutes();
                                 alert("Please select a route to test.");
                                 return;
                             }
-                            window.location.href = `../game.php?route=${selectedRoutePublicId}`;
+                            window.location.href = `testGame.php?route=${selectedRoutePublicId}`;
                         });
                     </script>
                 </div>

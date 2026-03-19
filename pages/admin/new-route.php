@@ -4,17 +4,17 @@ require_once('../../classes/tools.class.php');
 require_once('../../classes/security.class.php');
 use Ramsey\Uuid\Uuid;
 Security::initSession();
-
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAVU Gamification - Luo uusi reitti</title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="../../node_modules/summernote/dist/summernote-bs5.min.css">
     <style>
         #map {
             height: 500px;
@@ -55,6 +55,10 @@ Security::initSession();
             text-align: center;
             padding: 3rem;
             color: #6c757d;
+        }
+
+        .note-editor.note-frame {
+            border-radius: 0.375rem;
         }
     </style>
 </head>
@@ -169,7 +173,7 @@ Security::initSession();
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label for="node_lng" class="form-label">Longitude</label>
+                                <label for="node_lng" class="form-label">Pituuspiiri</label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lng" readonly>
                                 <small>Voit asettaa rastin pituuspiirin koordinaatin käsin.</small>
                             </div>
@@ -177,8 +181,8 @@ Security::initSession();
 
                         <div class="mb-3">
                             <label for="node_content" class="form-label">Rastin sisältö</label>
-                            <textarea class="form-control" id="node_content" rows="4" placeholder="Aseta sisältö, mikä näytetään pelaajalle, kun he saapuvat rastille..."></textarea>
-                            <small>Lyhyt sisältö rastille. Esimerkiksi kuvaus ympäröivästä luonnosta, maamerkistä tai vaikka historiasta.</small>
+                            <textarea id="node_content"></textarea>
+                            <small>Lyhyt sisältö rastille. Esimerkiksi kuvaus ympäröivästä luonnosta, maamerkistä tai vaikka historiasta. Voit lisätä kuvia ja videoita.</small>
                         </div>
 
                         <div class="d-flex gap-2">
@@ -215,14 +219,84 @@ Security::initSession();
     </form>
 </div>
 
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
+<script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
+<script src="../../node_modules/summernote/dist/lang/summernote-fi-FI.min.js"></script>
 <script>
     // Global variables
     let map;
     let markers = [];
     let nodes = [];
     const CAMPUS_CENTER = [63.1055, 21.5929];
+
+    // Upload image or video file and insert into editor
+    function uploadFile(file, type) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            url: '../../actions/upload-media.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.url) {
+                    if (type === 'image') {
+                        $('#node_content').summernote('insertImage', response.url);
+                    } else {
+                        const videoHtml = `<video controls style="max-width:100%"><source src="${response.url}" type="${file.type}"></video><p></p>`;
+                        $('#node_content').summernote('pasteHTML', videoHtml);
+                    }
+                } else {
+                    alert('Lataus epäonnistui: ' + (response.error || 'Tuntematon virhe'));
+                }
+            },
+            error: function() {
+                alert('Lataus epäonnistui. Yritä uudelleen.');
+            }
+        });
+    }
+
+    // Initialize Summernote editor
+    function initEditor() {
+        $('#node_content').summernote({
+            lang: 'fi-FI',
+            height: 220,
+            toolbar: [
+                ['style',  ['style']],
+                ['font',   ['bold', 'italic', 'underline', 'clear']],
+                ['para',   ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video', 'videoUpload']],
+                ['view',   ['fullscreen', 'codeview']],
+            ],
+            buttons: {
+                videoUpload: function(context) {
+                    const ui = $.summernote.ui;
+                    return ui.button({
+                        contents: '<i class="bi bi-camera-video-fill"></i>',
+                        tooltip: 'Lataa videotiedosto',
+                        click: function() {
+                            const input = $('<input type="file" accept="video/mp4,video/webm,video/quicktime">');
+                            input.on('change', function() {
+                                if (this.files[0]) {
+                                    uploadFile(this.files[0], 'video');
+                                }
+                            });
+                            input.trigger('click');
+                        }
+                    }).render();
+                }
+            },
+            callbacks: {
+                onImageUpload: function(files) {
+                    uploadFile(files[0], 'image');
+                }
+            }
+        });
+    }
 
     // Initialize map
     function initMap() {
@@ -233,17 +307,12 @@ Security::initSession();
             maxZoom: 19
         }).addTo(map);
 
-        // Add click event to map
         map.on('click', onMapClick);
     }
 
     // Handle map click
     function onMapClick(e) {
-        const lat = e.latlng.lat;
-        const lng = e.latlng.lng;
-
-        // Add node
-        addNode(lat, lng);
+        addNode(e.latlng.lat, e.latlng.lng);
     }
 
     // Add a new node
@@ -251,7 +320,6 @@ Security::initSession();
         const nodeIndex = nodes.length;
         const nodeNumber = nodeIndex + 1;
 
-        // Create node data
         const node = {
             lat: lat,
             lng: lng,
@@ -261,18 +329,14 @@ Security::initSession();
 
         nodes.push(node);
 
-        // Create marker
         const marker = L.marker([lat, lng], {
             draggable: true,
             icon: createNumberedIcon(nodeNumber)
         }).addTo(map);
 
         marker.nodeIndex = nodeIndex;
+        marker.bindPopup(buildPopupContent(node));
 
-        // Add popup
-        marker.bindPopup(`<b>${node.title}</b><br>${node.content || 'No content yet'}`);
-
-        // Handle marker drag
         marker.on('dragend', function(e) {
             const newPos = e.target.getLatLng();
             nodes[marker.nodeIndex].lat = newPos.lat;
@@ -280,21 +344,22 @@ Security::initSession();
             updateNodesList();
         });
 
-        // Handle marker click
         marker.on('click', function() {
             editNode(marker.nodeIndex);
         });
 
         markers.push(marker);
 
-        // Update UI
         updateNodesList();
         updatePolyline();
 
-        // Show editor for new nodes
         if (!title) {
             editNode(nodeIndex);
         }
+    }
+
+    function buildPopupContent(node) {
+        return `<b>${escapeHtml(node.title)}</b><div class="mt-1">${node.content || '<em>Ei sisältöä</em>'}</div>`;
     }
 
     // Create numbered icon for markers
@@ -325,6 +390,13 @@ Security::initSession();
         }
     }
 
+    // Strip HTML tags for plain-text previews
+    function stripHtml(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.textContent || div.innerText || '';
+    }
+
     // Update nodes list display
     function updateNodesList() {
         const nodesList = document.getElementById('nodesList');
@@ -336,7 +408,7 @@ Security::initSession();
             nodesList.innerHTML = `
                 <div class="node-list-empty">
                     <i class="bi bi-cursor-fill" style="font-size: 3rem;"></i>
-                    <p class="mt-3">Click on the map to add your first node</p>
+                    <p class="mt-3">Klikkaa paikkaa kartalla, lisätäksesi rastin reitille</p>
                 </div>
             `;
             return;
@@ -348,7 +420,7 @@ Security::initSession();
                     <div class="node-number">${index + 1}</div>
                     <div class="flex-grow-1">
                         <h6 class="mb-1">${escapeHtml(node.title)}</h6>
-                        <p class="mb-1 small text-muted">${escapeHtml(node.content) || '<em>Ei sisältöä</em>'}</p>
+                        <p class="mb-1 small text-muted">${escapeHtml(stripHtml(node.content)) || '<em>Ei sisältöä</em>'}</p>
                         <small class="text-muted">
                             <i class="bi bi-geo-alt"></i> ${node.lat.toFixed(6)}, ${node.lng.toFixed(6)}
                         </small>
@@ -379,9 +451,9 @@ Security::initSession();
 
         document.getElementById('editNodeIndex').value = index;
         document.getElementById('node_title').value = node.title;
-        document.getElementById('node_content').value = node.content;
         document.getElementById('node_lat').value = node.lat.toFixed(6);
         document.getElementById('node_lng').value = node.lng.toFixed(6);
+        $('#node_content').summernote('code', node.content || '');
 
         editor.style.display = 'block';
         editor.scrollIntoView({ behavior: 'smooth' });
@@ -391,18 +463,17 @@ Security::initSession();
     function saveNodeEdit() {
         const index = parseInt(document.getElementById('editNodeIndex').value);
         const title = document.getElementById('node_title').value.trim();
-        const content = document.getElementById('node_content').value.trim();
+        const content = $('#node_content').summernote('code');
 
         if (!title) {
-            alert('Node title is required');
+            alert('Rastin nimi on pakollinen');
             return;
         }
 
         nodes[index].title = title;
         nodes[index].content = content;
 
-        // Update marker popup
-        markers[index].setPopupContent(`<b>${title}</b><br>${content || 'No content yet'}`);
+        markers[index].setPopupContent(buildPopupContent(nodes[index]));
 
         updateNodesList();
         cancelNodeEdit();
@@ -413,7 +484,7 @@ Security::initSession();
         document.getElementById('nodeEditor').style.display = 'none';
         document.getElementById('editNodeIndex').value = '';
         document.getElementById('node_title').value = '';
-        document.getElementById('node_content').value = '';
+        $('#node_content').summernote('code', '');
     }
 
     // Delete node
@@ -422,14 +493,10 @@ Security::initSession();
             return;
         }
 
-        // Remove marker
         map.removeLayer(markers[index]);
-
-        // Remove from arrays
         nodes.splice(index, 1);
         markers.splice(index, 1);
 
-        // Update all marker icons with new numbers
         markers.forEach((marker, i) => {
             marker.setIcon(createNumberedIcon(i + 1));
             marker.nodeIndex = i;
@@ -444,11 +511,9 @@ Security::initSession();
     function moveNodeUp(index) {
         if (index === 0) return;
 
-        // Swap nodes
         [nodes[index], nodes[index - 1]] = [nodes[index - 1], nodes[index]];
         [markers[index], markers[index - 1]] = [markers[index - 1], markers[index]];
 
-        // Update marker icons and indices
         markers[index].setIcon(createNumberedIcon(index + 1));
         markers[index].nodeIndex = index;
         markers[index - 1].setIcon(createNumberedIcon(index));
@@ -462,11 +527,9 @@ Security::initSession();
     function moveNodeDown(index) {
         if (index === nodes.length - 1) return;
 
-        // Swap nodes
         [nodes[index], nodes[index + 1]] = [nodes[index + 1], nodes[index]];
         [markers[index], markers[index + 1]] = [markers[index + 1], markers[index]];
 
-        // Update marker icons and indices
         markers[index].setIcon(createNumberedIcon(index + 1));
         markers[index].nodeIndex = index;
         markers[index + 1].setIcon(createNumberedIcon(index + 2));
@@ -491,17 +554,15 @@ Security::initSession();
             return false;
         }
 
-        // Store nodes data in hidden field
         document.getElementById('nodesData').value = JSON.stringify(nodes);
-
         return true;
     });
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
+        initEditor();
 
-        // Set publication date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('publication_date').value = today;
     });

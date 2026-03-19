@@ -5,7 +5,6 @@ require_once('../../classes/security.class.php');
 require_once('../../classes/message.class.php');
 Security::initSession();
 
-// Get current user
 try {
     if (empty($_SESSION['user_public_id'])) {
         throw new Exception('User not authenticated');
@@ -15,13 +14,11 @@ try {
     die('Error: ' . $e->getMessage());
 }
 
-// Get all routes for this user
 $user_routes = $user->getCreatedRoutes();
 $selected_route_public_id = $_GET['route_public_id'] ?? '';
 $route_data = null;
 $error = null;
 
-// If a route is selected, load and validate ownership
 if (!empty($selected_route_public_id)) {
     try {
         $selected_route = Tools::getRouteByPublicId($selected_route_public_id);
@@ -40,14 +37,15 @@ if (!empty($selected_route_public_id)) {
 $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAVU - Muokkaa reittiä</title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="../../node_modules/summernote/dist/summernote-bs5.min.css">
     <style>
         #map {
             height: 500px;
@@ -88,6 +86,10 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             text-align: center;
             padding: 3rem;
             color: #6c757d;
+        }
+
+        .note-editor.note-frame {
+            border-radius: 0.375rem;
         }
     </style>
 </head>
@@ -239,7 +241,8 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
                         <div class="mb-3">
                             <label for="node_content" class="form-label">Rastin sisältö</label>
-                            <textarea class="form-control" id="node_content" rows="4" placeholder="Aseta sisältö, mikä näytetään pelaajalle, kun he saapuvat rastille..."></textarea>
+                            <textarea id="node_content"></textarea>
+                            <small>Lyhyt sisältö rastille. Voit lisätä kuvia ja videoita.</small>
                         </div>
 
                         <div class="d-flex gap-2">
@@ -275,8 +278,11 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     </form>
 </div>
 
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
+<script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
+<script src="../../node_modules/summernote/dist/lang/summernote-fi-FI.min.js"></script>
 <script>
     let map;
     let markers = [];
@@ -285,6 +291,73 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     const CAMPUS_CENTER = [63.1055, 21.5929];
     const selectedRoutePublicId = <?= json_encode($selected_route_public_id, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     const selectedRouteData = <?= $route_data_json ?: 'null' ?>;
+
+    // Upload image or video file and insert into editor
+    function uploadFile(file, type) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            url: '../../actions/upload-media.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.url) {
+                    if (type === 'image') {
+                        $('#node_content').summernote('insertImage', response.url);
+                    } else {
+                        const videoHtml = `<video controls style="max-width:100%"><source src="${response.url}" type="${file.type}"></video><p></p>`;
+                        $('#node_content').summernote('pasteHTML', videoHtml);
+                    }
+                } else {
+                    alert('Lataus epäonnistui: ' + (response.error || 'Tuntematon virhe'));
+                }
+            },
+            error: function() {
+                alert('Lataus epäonnistui. Yritä uudelleen.');
+            }
+        });
+    }
+
+    // Initialize Summernote editor
+    function initEditor() {
+        $('#node_content').summernote({
+            lang: 'fi-FI',
+            height: 220,
+            toolbar: [
+                ['style',  ['style']],
+                ['font',   ['bold', 'italic', 'underline', 'clear']],
+                ['para',   ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video', 'videoUpload']],
+                ['view',   ['fullscreen', 'codeview']],
+            ],
+            buttons: {
+                videoUpload: function(context) {
+                    const ui = $.summernote.ui;
+                    return ui.button({
+                        contents: '<i class="bi bi-camera-video-fill"></i>',
+                        tooltip: 'Lataa videotiedosto',
+                        click: function() {
+                            const input = $('<input type="file" accept="video/mp4,video/webm,video/quicktime">');
+                            input.on('change', function() {
+                                if (this.files[0]) {
+                                    uploadFile(this.files[0], 'video');
+                                }
+                            });
+                            input.trigger('click');
+                        }
+                    }).render();
+                }
+            },
+            callbacks: {
+                onImageUpload: function(files) {
+                    uploadFile(files[0], 'image');
+                }
+            }
+        });
+    }
 
     function initMap() {
         map = L.map('map').setView(CAMPUS_CENTER, 15);
@@ -302,7 +375,6 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             alert('Ole hyvä ja valitse reitti ensin.');
             return;
         }
-
         addNode(e.latlng.lat, e.latlng.lng);
     }
 
@@ -325,7 +397,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         }).addTo(map);
 
         marker.nodeIndex = nodeIndex;
-        marker.bindPopup(`<b>${escapeHtml(node.title)}</b><br>${escapeHtml(node.content) || 'Ei sisältöä'}`);
+        marker.bindPopup(buildPopupContent(node));
 
         marker.on('dragend', function(event) {
             const newPos = event.target.getLatLng();
@@ -347,6 +419,10 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         if (openEditor && !title) {
             editNode(nodeIndex);
         }
+    }
+
+    function buildPopupContent(node) {
+        return `<b>${escapeHtml(node.title)}</b><div class="mt-1">${node.content || '<em>Ei sisältöä</em>'}</div>`;
     }
 
     function createNumberedIcon(number) {
@@ -374,6 +450,12 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         }
     }
 
+    function stripHtml(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.textContent || div.innerText || '';
+    }
+
     function updateNodesList() {
         const nodesList = document.getElementById('nodesList');
         const nodeCount = document.getElementById('nodeCount');
@@ -396,7 +478,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                     <div class="node-number">${index + 1}</div>
                     <div class="flex-grow-1">
                         <h6 class="mb-1">${escapeHtml(node.title)}</h6>
-                        <p class="mb-1 small text-muted">${escapeHtml(node.content) || '<em>Ei sisältöä</em>'}</p>
+                        <p class="mb-1 small text-muted">${escapeHtml(stripHtml(node.content)) || '<em>Ei sisältöä</em>'}</p>
                         <small class="text-muted">
                             <i class="bi bi-geo-alt"></i> ${Number(node.lat).toFixed(6)}, ${Number(node.lng).toFixed(6)}
                         </small>
@@ -426,9 +508,9 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
         document.getElementById('editNodeIndex').value = index;
         document.getElementById('node_title').value = node.title;
-        document.getElementById('node_content').value = node.content;
         document.getElementById('node_lat').value = Number(node.lat).toFixed(6);
         document.getElementById('node_lng').value = Number(node.lng).toFixed(6);
+        $('#node_content').summernote('code', node.content || '');
 
         editor.style.display = 'block';
         editor.scrollIntoView({ behavior: 'smooth' });
@@ -437,7 +519,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     function saveNodeEdit() {
         const index = parseInt(document.getElementById('editNodeIndex').value, 10);
         const title = document.getElementById('node_title').value.trim();
-        const content = document.getElementById('node_content').value.trim();
+        const content = $('#node_content').summernote('code');
 
         if (!title) {
             alert('Rastin nimi on pakollinen');
@@ -446,7 +528,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
         nodes[index].title = title;
         nodes[index].content = content;
-        markers[index].setPopupContent(`<b>${escapeHtml(title)}</b><br>${escapeHtml(content) || 'Ei sisältöä'}`);
+        markers[index].setPopupContent(buildPopupContent(nodes[index]));
 
         updateNodesList();
         cancelNodeEdit();
@@ -456,7 +538,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         document.getElementById('nodeEditor').style.display = 'none';
         document.getElementById('editNodeIndex').value = '';
         document.getElementById('node_title').value = '';
-        document.getElementById('node_content').value = '';
+        $('#node_content').summernote('code', '');
     }
 
     function deleteNode(index) {
@@ -523,14 +605,11 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     }
 
     function loadSelectedRouteData() {
-        if (!selectedRouteData) {
-            return;
-        }
+        if (!selectedRouteData) return;
 
         clearAllNodes();
 
-        const routeNodes = selectedRouteData.nodes || [];
-        routeNodes.sort((a, b) => a.order_number - b.order_number);
+        const routeNodes = (selectedRouteData.nodes || []).slice().sort((a, b) => a.order_number - b.order_number);
 
         routeNodes.forEach(routeNode => {
             const node = routeNode.node || {};
@@ -562,6 +641,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
+        initEditor();
 
         if (selectedRouteData) {
             loadSelectedRouteData();
