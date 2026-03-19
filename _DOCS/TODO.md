@@ -41,7 +41,10 @@
   - [ ] Unit tests
   - [ ] User tests
 - [ ] Add more varied content to nodes (e.g., images, descriptions)
-  - [ ] Also more nodes
+  - [ ] Add YouTube video embeds to nodes
+  - [ ] Add quizzes or challenges at nodes
+  - [ ] Add rewards or badges for completing nodes/routes
+  - [ ] Add Summernote or similar WYSIWYG editor for content creation in admin panel
 - [ ] Add User login
 - [ ] Implement progress tracking and rewards system
 - [ ] Admin console/panel to create and manage routes and nodes
@@ -49,6 +52,7 @@
 - [ ] Ensure mobile responsiveness and performance optimization
 
 ## TODO List - Long Term
+- [ ] Fix the url (away from /HavuGamication)]
 - [ ] Fix the YouTube video embeds (the width should be relative to the screen size/width)
 - [ ] Documentation, comments, cleanup & guides
 - [ ] Replicate map to a forest area
