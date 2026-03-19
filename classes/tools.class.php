@@ -118,6 +118,28 @@ class Tools{
         return new Route($route_id);
     }
 
+    /** Get the internal integer user ID from a public UUID string, without loading the full User object.
+     * @param string $public_id
+     * @return int
+     * @throws Exception
+     */
+    public static function getUserIdByPublicId(string $public_id): int {
+        $db = self::getDb();
+        $sql = "SELECT id FROM users WHERE public_id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('s', $public_id);
+        $stmt->execute();
+        $stmt->bind_result($user_id);
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) {
+            throw new Exception("User not found");
+        }
+        $stmt->fetch();
+        $stmt->close();
+        $db->close();
+        return $user_id;
+    }
+
     /** Get all routes created by a specific user, ordered by created_at descending
      * @param int $user_id
      * @return array Array of associative arrays with 'id', 'public_id', and 'title' keys

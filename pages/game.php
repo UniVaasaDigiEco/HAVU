@@ -36,6 +36,8 @@ header_remove('X-Powered-By');
 
 $default_route_public_id = "417bef1b-1b00-46f5-ac85-4774ff20d0ed";
 
+$is_logged_in = !empty($_SESSION['user_public_id']) && empty($_SESSION['is_admin']);
+
 $route = null;
 if(isset($_GET['route']))
 {
@@ -80,6 +82,9 @@ else {
         // Configuration
         const PROXIMITY_THRESHOLD = 50; // meters - distance to trigger node popup
         const UPDATE_INTERVAL = 3000; // ms - how often to check GPS position
+
+        // Session state
+        const isLoggedIn = <?= $is_logged_in ? 'true' : 'false' ?>;
 
         // Load route data from PHP
         const routeData = <?php echo $route->toJavaScript(); ?>;
@@ -327,11 +332,25 @@ else {
             checkProximity(lat, lng);
         }
 
+        // Send visit to server for logged-in players
+        function trackVisit(nodeId) {
+            if (!isLoggedIn) return;
+            $.ajax({
+                url: '../actions/track-visit.php',
+                type: 'POST',
+                data: { node_id: nodeId, route_public_id: routeData.public_id },
+                error: function() {
+                    console.warn('Visit tracking failed for node', nodeId);
+                }
+            });
+        }
+
         // Mark node as visited
         window.markAsVisited = function(nodeId) {
             const node = routeNodes.find(n => n.id === nodeId);
             if (node && !node.visited) {
                 node.visited = true;
+                trackVisit(nodeId);
                 markers[nodeId].setIcon(visitedIcon);
                 updateProgress();
 
@@ -381,10 +400,22 @@ else {
             $acornCount.text(visitedNodes);
 
             if (visitedNodes === totalNodes) {
-                setTimeout(() => {
-                    alert('🎉 Onneksi olkoon! Olet kiertänyt koko ' + routeData.title + ' reitin!');
-                }, 500);
+                setTimeout(() => showCompletionScreen(visitedNodes), 3500);
             }
+        }
+
+        function showCompletionScreen(acornCount) {
+            const dateStr = new Date().toLocaleDateString('fi-FI', {day: 'numeric', month: 'numeric', year: 'numeric'});
+
+            document.getElementById('completion-route-name').textContent = routeData.title;
+            document.getElementById('completion-acorn-count').textContent = acornCount;
+            document.getElementById('completion-date').textContent = dateStr;
+
+            if (isLoggedIn) {
+                document.getElementById('completion-btn-dashboard').style.display = '';
+            }
+
+            document.getElementById('completion-screen').style.display = 'block';
         }
 
         // Info panel visibility
@@ -424,8 +455,64 @@ else {
             }
         }
     </script>
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        #completion-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(160deg, #1b5e2e 0%, #2e7d42 50%, #1b5e2e 100%);
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Route Completion Screen -->
+    <div id="completion-screen">
+        <div class="d-flex flex-column align-items-center justify-content-center min-vh-100 p-4 text-white text-center">
+            <div style="max-width: 460px; width: 100%;">
+
+                <img src="../images/acorn.png" alt="Acorn"
+                     style="width: 90px; height: 90px; margin-bottom: 1.5rem; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.5));">
+
+                <h1 class="display-5 fw-bold mb-1">Onneksi olkoon! 🎉</h1>
+                <p class="lead mb-1 text-white-50">Suoritit reitin</p>
+                <h2 class="fw-bold mb-4" id="completion-route-name"></h2>
+
+                <div class="d-flex justify-content-center gap-3 mb-5">
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3" style="min-width: 130px;">
+                        <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+                            <img src="../images/acorn.png" alt="Acorn" style="width: 22px; height: 22px;">
+                            <span class="fs-2 fw-bold" id="completion-acorn-count">0</span>
+                        </div>
+                        <div class="text-white-50 small">Tammenterhoa
+
+                        </div>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded-3 p-3" style="min-width: 130px;">
+                        <div class="fs-4 fw-bold mb-1" id="completion-date"></div>
+                        <div class="text-white-50 small">Suorituspäivä</div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button onclick="window.location.reload()" class="btn btn-light btn-lg fw-bold">
+                        <i class="bi bi-arrow-repeat me-2"></i>Pelaa uudelleen
+                    </button>
+                    <a href="routes.php" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-map me-2"></i>Valitse reitti
+                    </a>
+                    <a href="player/dashboard.php" class="btn btn-outline-light btn-lg"
+                       id="completion-btn-dashboard" style="display: none;">
+                        <i class="bi bi-person-fill me-2"></i>Oma profiili
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!-- Info Panel Toggle Button -->
     <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()">

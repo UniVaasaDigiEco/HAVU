@@ -14,10 +14,16 @@
             <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
             <h1 class="mb-4">HAVU - Gamification</h1>
             <?php
-            if(isset($_GET['error'])) {
+            if (isset($_GET['error'])) {
                 require_once('classes/message.class.php');
                 $error_code = intval($_GET['error']);
                 echo Message::error($error_code);
+            }
+            if (isset($_GET['registered'])) {
+                echo "<div class='col-12 col-lg-3 alert alert-success alert-dismissible fade show' role='alert'>
+                    <i class='bi bi-check-circle-fill me-2'></i>Tili luotu onnistuneesti! Voit nyt kirjautua sisään.
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Sulje'></button>
+                </div>";
             }
             ?>
             <div class="container-fluid col-12 col-lg-3 bg-secondary-subtle p-4 rounded-3">
@@ -31,10 +37,19 @@
                         <input id="password" name="password" type="password" class="form-control">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary text-white"><i class="bi bi-box-arrow-in-right"></i> Kirjaudu sisään</button>
+                        <button type="submit" class="btn btn-primary text-white w-100"><i class="bi bi-box-arrow-in-right me-1"></i> Kirjaudu sisään</button>
                     </div>
                 </form>
             </div>
+            <p class="mt-3 text-muted">
+                Ei tiliä vielä?
+                <a href="register.php">Rekisteröidy ilmaiseksi</a>
+            </p>
+            <p>
+                <a href="index.html" class="text-muted small">
+                    <i class="bi bi-arrow-left"></i> Takaisin etusivulle
+                </a>
+            </p>
         </div>
     </div>
 </body>

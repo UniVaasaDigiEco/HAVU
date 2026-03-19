@@ -12,6 +12,9 @@ A geocaching-style map application for creating and playing interactive campus t
 - ✅ **Progress Tracking**: Visual progress bar showing visited waypoints
 - 🎨 **Visual Feedback**: Different icons for start, finish, visited, and unvisited waypoints
 - 📏 **Distance Display**: Shows distance to the nearest unvisited waypoint
+- 🎉 **Completion Screen**: Full-screen celebration shown when all waypoints are visited
+- 👤 **Player Accounts**: Optional free registration to track progress across routes
+- 🗂️ **Route Selection**: Public route picker — browse and start any available route without an account
 
 ### Admin
 - 🛠️ **Route Management**: Create, edit, and delete routes via a web dashboard
@@ -37,9 +40,10 @@ A geocaching-style map application for creating and playing interactive campus t
 ### Installation
 
 1. Clone/copy the project into `xampp/htdocs/HavuGamification/`
-2. Import the database schema:
+2. Import the database schema in order:
    ```
    _SQL/jansoftw_havu_structure.sql
+   _SQL/add_progress_tables.sql
    ```
 3. Copy `.env.example` to `.env` and fill in your database credentials:
    ```php
@@ -80,13 +84,20 @@ npm run scss-watch     # watch mode during development
 7. Reorder waypoints using the up/down arrows in the waypoint list
 8. Submit the form to save the route, then test it from the dashboard
 
-### Player
+### Player (anonymous)
 
-1. Open a route link (e.g. `pages/game.php?route=<uuid>`)
-2. Allow GPS access when prompted
-3. Walk towards each waypoint — a popup opens automatically within 50 m
-4. Click "Merkkaa käydyksi" to mark the waypoint as visited
-5. Complete all waypoints to finish the route
+1. Open `http://localhost/HavuGamification/` and click **Pelaa nyt**
+2. Choose a route from the list and click **Aloita reitti**
+3. Allow GPS access when prompted
+4. Walk towards each waypoint — a popup opens automatically within 50 m
+5. Click "Merkkaa käydyksi" to mark the waypoint as visited
+6. A completion screen is shown when all waypoints are visited
+
+### Player (registered)
+
+1. Register at `register.php` or log in at `login.php`
+2. After login, the player dashboard shows completed routes, in-progress routes, and available routes
+3. Progress (individual node visits and route completions) is saved automatically during play
 
 ## Media Uploads
 

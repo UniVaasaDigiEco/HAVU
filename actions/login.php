@@ -47,7 +47,7 @@ try{
         }
         else{
             $_SESSION['is_admin'] = false;
-            $url = ROOT_DIR . "pages/testGame.php";
+            $url = ROOT_DIR . "pages/player/dashboard.php";
         }
 
         header("Location: $url");
