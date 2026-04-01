@@ -85,7 +85,7 @@ try {
 <body>
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="../index.html">
+        <a class="navbar-brand fw-bold" href="../index.php">
             <img src="../images/havu_logo.png" alt="HAVU" height="30" class="me-2">
             HAVU Gamification
         </a>
@@ -109,7 +109,7 @@ try {
                     <i class="bi bi-box-arrow-in-right me-1"></i>Kirjaudu sisään
                 </a>
                 <a href="../register.php" class="btn btn-sm btn-light">
-                    <i class="bi bi-person-plus-fill me-1"></i>Rekisteröidy
+                    <i class="bi bi-person-plus-fill me-1"></i>Luo tunnus
                 </a>
             <?php endif; ?>
         </div>
@@ -123,7 +123,7 @@ try {
         <?php if (!$is_logged_in): ?>
             <p class="text-muted small">
                 <i class="bi bi-info-circle me-1"></i>
-                <a href="../register.php">Rekisteröidy ilmaiseksi</a> seurataksesi edistymistäsi — tai pelaa suoraan ilman rekisteröitymistä.
+                <a href="../register.php">Luo tunnus ilmaiseksi</a> seurataksesi edistymistäsi — tai pelaa suoraan ilman tunnusta.
             </p>
         <?php endif; ?>
     </div>

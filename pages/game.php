@@ -80,7 +80,7 @@ else {
 
     <script>
         // Configuration
-        const PROXIMITY_THRESHOLD = 50; // meters - distance to trigger node popup
+        const PROXIMITY_THRESHOLD = 20; // meters - distance to trigger node popup
         const UPDATE_INTERVAL = 3000; // ms - how often to check GPS position
 
         // Session state

@@ -144,6 +144,17 @@ Security::initSession();
                         <h5 class="mb-0"><i class="bi bi-map me-2"></i>Kartta</h5>
                     </div>
                     <div class="card-body">
+                        <!-- Location search -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" id="locationSearch" class="form-control" placeholder="Etsi sijaintia... (esim. Vaasa, Yliopisto)" autocomplete="off">
+                                <button class="btn btn-outline-secondary" type="button" id="locationSearchBtn">
+                                    Etsi
+                                </button>
+                            </div>
+                            <div id="searchResults" class="list-group mt-1" style="display:none; position:absolute; z-index:1000; max-width:600px;"></div>
+                        </div>
                         <div id="map"></div>
                         <div class="mt-2 text-muted small">
                             <i class="bi bi-info-circle"></i> Klikkaa mitä tahansa kohtaa kartalla lisätäksesi rastin. Voit muuttaa rastin paikkaa vetämällä (hiiren vasen nappi pohjaan rastin päällä ja liikuta hiirtä) sitä, tai muokata rastin tietoja klikkaamalla rastia. Voit zoomata karttaa hiiren rullalla, kosketusnäytöllä nipistämällä tai käyttämällä plus/miinus nappeja kartan vasemmassa yläreunassa.
@@ -298,7 +309,7 @@ Security::initSession();
         });
     }
 
-    // Initialize map
+    // Initialize map — center on user's location, fall back to campus
     function initMap() {
         map = L.map('map').setView(CAMPUS_CENTER, 15);
 
@@ -308,6 +319,82 @@ Security::initSession();
         }).addTo(map);
 
         map.on('click', onMapClick);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    map.setView([pos.coords.latitude, pos.coords.longitude], 15);
+                },
+                function() { /* denied or unavailable — stay on campus center */ }
+            );
+        }
+    }
+
+    // Location search via Nominatim
+    let searchMarker = null;
+
+    function searchLocation() {
+        const query = document.getElementById('locationSearch').value.trim();
+        if (!query) return;
+
+        const btn = document.getElementById('locationSearchBtn');
+        btn.disabled = true;
+        btn.textContent = 'Haetaan...';
+
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=fi`, {
+            headers: { 'Accept-Language': 'fi' }
+        })
+        .then(r => r.json())
+        .then(results => {
+            const container = document.getElementById('searchResults');
+            if (!results.length) {
+                container.innerHTML = '<div class="list-group-item text-muted">Ei tuloksia</div>';
+                container.style.display = 'block';
+                return;
+            }
+            container.innerHTML = results.map((r, i) =>
+                `<button type="button" class="list-group-item list-group-item-action" data-idx="${i}"
+                    data-lat="${r.lat}" data-lon="${r.lon}">
+                    <i class="bi bi-geo-alt me-1"></i>${r.display_name}
+                </button>`
+            ).join('');
+            container.style.display = 'block';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.textContent = 'Etsi';
+        });
+    }
+
+    function setupSearch() {
+        document.getElementById('locationSearchBtn').addEventListener('click', searchLocation);
+        document.getElementById('locationSearch').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); searchLocation(); }
+        });
+
+        document.getElementById('searchResults').addEventListener('click', function(e) {
+            const btn = e.target.closest('button[data-lat]');
+            if (!btn) return;
+
+            const lat = parseFloat(btn.dataset.lat);
+            const lon = parseFloat(btn.dataset.lon);
+
+            map.setView([lat, lon], 16);
+
+            if (searchMarker) map.removeLayer(searchMarker);
+            searchMarker = L.marker([lat, lon], { opacity: 0.6 }).addTo(map)
+                .bindPopup(btn.textContent.trim()).openPopup();
+
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('locationSearch').value = '';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#locationSearch') && !e.target.closest('#locationSearchBtn') && !e.target.closest('#searchResults')) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
     }
 
     // Handle map click
@@ -562,6 +649,7 @@ Security::initSession();
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
         initEditor();
+        setupSearch();
 
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('publication_date').value = today;

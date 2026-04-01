@@ -1,3 +1,7 @@
+<?php
+require_once('classes/security.class.php');
+Security::logout();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +25,7 @@
             }
             if (isset($_GET['registered'])) {
                 echo "<div class='col-12 col-lg-3 alert alert-success alert-dismissible fade show' role='alert'>
-                    <i class='bi bi-check-circle-fill me-2'></i>Tili luotu onnistuneesti! Voit nyt kirjautua sisään.
+                    <i class='bi bi-check-circle-fill me-2'></i>Tunnus luotu onnistuneesti! Voit nyt kirjautua sisään.
                     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Sulje'></button>
                 </div>";
             }
@@ -42,11 +46,11 @@
                 </form>
             </div>
             <p class="mt-3 text-muted">
-                Ei tiliä vielä?
-                <a href="register.php">Rekisteröidy ilmaiseksi</a>
+                Ei tunnusta vielä?
+                <a href="register.php">Luo tunnus ilmaiseksi</a>
             </p>
             <p>
-                <a href="index.html" class="text-muted small">
+                <a href="index.php" class="text-muted small">
                     <i class="bi bi-arrow-left"></i> Takaisin etusivulle
                 </a>
             </p>

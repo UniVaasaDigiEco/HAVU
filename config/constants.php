@@ -24,6 +24,8 @@ const SUCCESS_CODES = [
 const USER_TYPE_REGULAR = 1;
 const USER_TYPE_ADMIN = 0;
 
+const HOME_URL = ROOT_DIR . "index.php";
+
 // Database configuration from environment file
 define('DB_HOST', $env['DB_HOST']);
 define('DB_NAME', $env['DB_NAME']);

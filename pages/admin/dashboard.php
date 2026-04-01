@@ -32,6 +32,7 @@ $routes = $user->getCreatedRoutes();
                 <button class="btn btn-primary text-white w-100" id="show-route-management" data-target="#route-management">
                     <i class="bi bi-map-fill"></i> Hallitse reittejä
                 </button>
+                <a class="btn btn-primary text-white w-100" id="logout" href="../../actions/logout.php"><i class="bi bi-box-arrow-left me-1"></i> Kirjaudu ulos</a>
             </div>
         </div>
         <div id="dashboard-content" class="col-10">
