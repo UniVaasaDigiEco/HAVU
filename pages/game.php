@@ -2,6 +2,7 @@
 require_once('../classes/tools.class.php');
 require_once('../classes/security.class.php');
 require_once('../classes/route.class.php');
+require_once('../config/constants.php');
 
 Security::initSession();
 // Security headers to protect against common web attacks
@@ -36,7 +37,7 @@ header_remove('X-Powered-By');
 
 $default_route_public_id = "417bef1b-1b00-46f5-ac85-4774ff20d0ed";
 
-$is_logged_in = !empty($_SESSION['user_public_id']) && empty($_SESSION['is_admin']);
+$is_logged_in = !empty($_SESSION['user_public_id']);
 
 $route = null;
 if(isset($_GET['route']))
@@ -80,8 +81,9 @@ else {
 
     <script>
         // Configuration
-        const PROXIMITY_THRESHOLD = 50; // meters - distance to trigger node popup
+        const PROXIMITY_THRESHOLD = 20; // meters - distance to trigger node popup
         const UPDATE_INTERVAL = 3000; // ms - how often to check GPS position
+        const REQUIRE_GPS_PROXIMITY = <?= REQUIRE_GPS_PROXIMITY ? 'true' : 'false' ?>;
 
         // Session state
         const isLoggedIn = <?= $is_logged_in ? 'true' : 'false' ?>;
@@ -120,7 +122,11 @@ else {
             lat: parseFloat(nodeData.node.latitude),
             lng: parseFloat(nodeData.node.longitude),
             description: nodeData.node.content,
+            challenge_data: nodeData.node.challenge_data || null,
             visited: false,
+            inProximity: !REQUIRE_GPS_PROXIMITY,
+            challengeDone: false,
+            challengeError: false,
             order_number: nodeData.order_number
         }));
 
@@ -168,7 +174,7 @@ else {
         // Initialize everything
         $(document).ready(function() {
             // Initialize map
-            map = L.map('map', { zoomControl: false }).setView(CAMPUS_CENTER, 16);
+            map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(CAMPUS_CENTER, 16);
 
             // Add OpenStreetMap tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -199,17 +205,139 @@ else {
             }).addTo(map);
         }
 
+        // Escape HTML for safe insertion
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        }
+
+        // Levenshtein similarity: 1 - (distance / max(len_a, len_b))
+        function levenshteinSimilarity(a, b) {
+            if (!a.length || !b.length) return 0;
+            const m = a.length, n = b.length;
+            const dp = [];
+            for (let i = 0; i <= m; i++) {
+                dp[i] = [i];
+                for (let j = 1; j <= n; j++) dp[i][j] = i === 0 ? j : 0;
+            }
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    dp[i][j] = a[i-1] === b[j-1]
+                        ? dp[i-1][j-1]
+                        : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+                }
+            }
+            return 1 - dp[m][n] / Math.max(m, n);
+        }
+
+        // Build popup HTML for a node based on its current state
+        function buildNodePopup(node) {
+            const nodeIndex = routeNodes.indexOf(node);
+            const nodeLabel = nodeIndex === 0 ? '🚀 LÄHTÖ' : (nodeIndex === routeNodes.length - 1 ? '🏁 MAALI' : '');
+            const canCheckin = !REQUIRE_GPS_PROXIMITY || (node.inProximity && (!node.challenge_data || node.challengeDone));
+
+            let challengeHtml = '';
+            if (node.challenge_data && !node.visited) {
+                if (node.challengeDone) {
+                    challengeHtml = '<div class="alert alert-success py-2 mt-2 mb-1">✅ Haaste suoritettu!</div>';
+                } else {
+                    const badgeHtml = node.inProximity
+                        ? '<span class="badge bg-success mb-2">📍 Olet paikalla!</span>'
+                        : '<span class="badge bg-secondary mb-2">🔒 Ole lähempänä vastataksesi</span>';
+
+                    let inputHtml = '';
+                    if (node.challenge_data.type === 'multiple_choice') {
+                        inputHtml = node.challenge_data.options.map((opt, i) =>
+                            `<div class="form-check">
+                                <input class="form-check-input" type="radio" name="mc-${node.id}" value="${i}" id="mc-${node.id}-${i}" ${node.inProximity ? '' : 'disabled'}>
+                                <label class="form-check-label" for="mc-${node.id}-${i}">${escapeHtml(opt)}</label>
+                            </div>`
+                        ).join('');
+                    } else if (node.challenge_data.type === 'text') {
+                        inputHtml = `<input type="text" class="form-control form-control-sm mb-2" id="text-answer-${node.id}" placeholder="Kirjoita vastauksesi..." ${node.inProximity ? '' : 'disabled'}>`;
+                    }
+
+                    challengeHtml = `
+                        <div class="challenge-area mt-2 border-top pt-2">
+                            ${badgeHtml}
+                            <p class="fw-semibold mb-2">${escapeHtml(node.challenge_data.question)}</p>
+                            ${inputHtml}
+                            <button class="btn btn-sm btn-outline-primary" onclick="checkChallengeAnswer(${node.id})" ${node.inProximity ? '' : 'disabled'}>Tarkista vastaus</button>
+                            <div class="challenge-error-msg text-danger small mt-1" style="display:none;">Väärä vastaus. Yritä uudelleen.</div>
+                        </div>`;
+                }
+            }
+
+            return `
+                <div class="node-popup" id="popup-body-${node.id}">
+                    ${nodeLabel ? `<div class="text-center mb-2"><strong>${nodeLabel}</strong></div>` : ''}
+                    <h5>${escapeHtml(node.name)}</h5>
+                    <div class="mb-2">${node.description || ''}</div>
+                    ${challengeHtml}
+                    <button class="checkin-btn btn btn-sm ${canCheckin ? 'btn-success' : 'btn-secondary'} mt-2"
+                            onclick="markAsVisited(${node.id})"
+                            ${canCheckin ? '' : 'disabled'}>
+                        Merkkaa käydyksi ✓
+                    </button>
+                </div>`;
+        }
+
+        // Verify challenge answer for a node
+        window.checkChallengeAnswer = function(nodeId) {
+            const node = routeNodes.find(n => n.id === nodeId);
+            if (!node || !node.challenge_data || node.challengeDone) return;
+
+            let isCorrect = false;
+
+            if (node.challenge_data.type === 'multiple_choice') {
+                const checked = document.querySelector(`input[name="mc-${nodeId}"]:checked`);
+                if (!checked) return;
+                isCorrect = parseInt(checked.value, 10) === node.challenge_data.correct_index;
+            } else if (node.challenge_data.type === 'text') {
+                const input = document.getElementById(`text-answer-${nodeId}`);
+                if (!input || !input.value.trim()) return;
+                isCorrect = levenshteinSimilarity(
+                    input.value.trim().toLowerCase(),
+                    node.challenge_data.answer.trim().toLowerCase()
+                ) >= 0.70;
+            }
+
+            const body = document.getElementById('popup-body-' + nodeId);
+
+            if (isCorrect) {
+                node.challengeDone = true;
+                node.challengeError = false;
+                if (body) {
+                    const challengeArea = body.querySelector('.challenge-area');
+                    if (challengeArea) {
+                        challengeArea.innerHTML = '<div class="alert alert-success py-2 mt-2 mb-1">✅ Haaste suoritettu!</div>';
+                    }
+                    const checkinBtn = body.querySelector('.checkin-btn');
+                    if (checkinBtn) {
+                        checkinBtn.disabled = false;
+                        checkinBtn.className = 'checkin-btn btn btn-sm btn-success mt-2';
+                    }
+                }
+            } else {
+                node.challengeError = true;
+                if (body) {
+                    const errorMsg = body.querySelector('.challenge-error-msg');
+                    if (errorMsg) errorMsg.style.display = 'block';
+                }
+            }
+        };
+
         // Create markers for all nodes
         function initializeMarkers() {
             routeNodes.forEach((node, index) => {
-                // Determine which icon to use
                 let icon;
                 if (index === 0) {
-                    icon = startIcon; // First node - green
+                    icon = startIcon;
                 } else if (index === routeNodes.length - 1) {
-                    icon = finishIcon; // Last node - gold
+                    icon = finishIcon;
                 } else {
-                    icon = unvisitedIcon; // Middle nodes - red
+                    icon = unvisitedIcon;
                 }
 
                 const marker = L.marker([node.lat, node.lng], {
@@ -217,19 +345,7 @@ else {
                     title: node.name
                 }).addTo(map);
 
-                const nodeLabel = index === 0 ? '🚀 LÄHTÖ' : (index === routeNodes.length - 1 ? '🏁 MAALI' : '');
-                const popupContent = `
-                    <div class="node-popup">
-                        ${nodeLabel ? `<div class="text-center mb-2"><strong>${nodeLabel}</strong></div>` : ''}
-                        <h5>${node.name}</h5>
-                        <p>${node.description}</p>
-                        <button class="btn btn-sm btn-primary" onclick="markAsVisited(${node.id})">
-                            Merkkaa käydyksi ✓
-                        </button>
-                    </div>
-                `;
-
-                marker.bindPopup(popupContent);
+                marker.bindPopup(buildNodePopup(node));
                 markers[node.id] = marker;
             });
         }
@@ -250,7 +366,7 @@ else {
             return R * c; // Distance in meters
         }
 
-        // Check proximity to nodes
+        // Check proximity to nodes and update per-node state
         function checkProximity(userLat, userLng) {
             let nearestNode = null;
             let nearestDistance = Infinity;
@@ -259,51 +375,38 @@ else {
                 if (!node.visited) {
                     const distance = calculateDistance(userLat, userLng, node.lat, node.lng);
 
-                    if (distance < PROXIMITY_THRESHOLD && distance < nearestDistance) {
+                    if (distance < nearestDistance) {
                         nearestNode = node;
                         nearestDistance = distance;
+                    }
+
+                    if (REQUIRE_GPS_PROXIMITY) {
+                        const wasInProximity = node.inProximity;
+                        node.inProximity = distance < PROXIMITY_THRESHOLD;
+
+                        // Proximity state changed — update popup if it's open
+                        if (node.inProximity !== wasInProximity && markers[node.id] && markers[node.id].isPopupOpen()) {
+                            markers[node.id].setPopupContent(buildNodePopup(node));
+                        }
                     }
                 }
             });
 
-            // Update distance info
+            if (nearestNode && nearestDistance < PROXIMITY_THRESHOLD) {
+                // Auto-open popup for the nearest in-range node
+                markers[nearestNode.id].openPopup();
+            }
+
+            // Update distance info panel
             if (nearestNode) {
+                const inRange = nearestDistance < PROXIMITY_THRESHOLD;
                 $('#distance-info').html(`
-                    <div class="alert alert-success mb-0 py-2">
-                        <strong>📍 Nearby!</strong><br>
-                        <small>${nearestNode.name}<br>
+                    <div class="alert ${inRange ? 'alert-success' : 'alert-info'} mb-0 py-2">
+                        <strong>${inRange ? '📍 Olet paikalla!' : 'Seuraava:'}</strong><br>
+                        <small>${escapeHtml(nearestNode.name)}<br>
                         ${Math.round(nearestDistance)}m päässä</small>
                     </div>
                 `);
-
-                // Auto-open popup when very close
-                if (nearestDistance < PROXIMITY_THRESHOLD) {
-                    markers[nearestNode.id].openPopup();
-                }
-            } else {
-                // Find closest unvisited node
-                let closestNode = null;
-                let closestDistance = Infinity;
-
-                routeNodes.forEach(node => {
-                    if (!node.visited) {
-                        const distance = calculateDistance(userLat, userLng, node.lat, node.lng);
-                        if (distance < closestDistance) {
-                            closestNode = node;
-                            closestDistance = distance;
-                        }
-                    }
-                });
-
-                if (closestNode) {
-                    $('#distance-info').html(`
-                        <div class="alert alert-info mb-0 py-2">
-                            <strong>Seuraava:</strong><br>
-                            <small>${closestNode.name}<br>
-                            ${Math.round(closestDistance)}m päässä</small>
-                        </div>
-                    `);
-                }
             }
         }
 
@@ -349,6 +452,10 @@ else {
         window.markAsVisited = function(nodeId) {
             const node = routeNodes.find(n => n.id === nodeId);
             if (node && !node.visited) {
+                // Guard: proximity and challenge must be satisfied
+                if (REQUIRE_GPS_PROXIMITY && !node.inProximity) return;
+                if (node.challenge_data && !node.challengeDone) return;
+
                 node.visited = true;
                 trackVisit(nodeId);
                 markers[nodeId].setIcon(visitedIcon);

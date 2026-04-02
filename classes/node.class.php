@@ -15,6 +15,7 @@ class Node{
     private string $content;
     private float $latitude;
     private float $longitude;
+    private ?array $challenge_data;
 
     /** Create a Node object by internal node ID
      * @param int $id Internal node ID
@@ -26,7 +27,7 @@ class Node{
             throw new InvalidArgumentException("Invalid node ID");
         }
         $db = Tools::getDb();
-        $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, title, content, latitude, longitude FROM nodes WHERE id = ?";
+        $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, title, content, latitude, longitude, challenge_data FROM nodes WHERE id = ?";
         $stmt = $db->prepare($sql);
 
         try{
@@ -43,8 +44,9 @@ class Node{
              * @var string $content
              * @var float $latitude
              * @var float $longitude
+             * @var string|null $challenge_data_raw
              */
-            $stmt->bind_result($public_id, $is_published, $publication_date, $created_by, $created_at, $updated_at, $title, $content, $latitude, $longitude);
+            $stmt->bind_result($public_id, $is_published, $publication_date, $created_by, $created_at, $updated_at, $title, $content, $latitude, $longitude, $challenge_data_raw);
             $stmt->store_result();
             if ($stmt->num_rows === 0) {
                 throw new Exception("Node not found");
@@ -65,6 +67,7 @@ class Node{
             $this->content = $content;
             $this->latitude = $latitude;
             $this->longitude = $longitude;
+            $this->challenge_data = $challenge_data_raw !== null ? json_decode($challenge_data_raw, true) : null;
         }
         finally{
             $stmt->close();
@@ -157,6 +160,14 @@ class Node{
     }
 
     /**
+     * @return array|null
+     */
+    public function getChallengeData(): ?array
+    {
+        return $this->challenge_data;
+    }
+
+    /**
      * Convert node to array format
      * @return array
      */
@@ -173,7 +184,8 @@ class Node{
             'title' => $this->title,
             'content' => $this->content,
             'latitude' => $this->latitude,
-            'longitude' => $this->longitude
+            'longitude' => $this->longitude,
+            'challenge_data' => $this->challenge_data
         ];
     }
 

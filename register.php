@@ -14,7 +14,7 @@ if (!empty($_SESSION['user_public_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU - Gamification - Rekisteröidy</title>
+    <title>HAVU - Gamification - Luo tunnus</title>
     <link rel="stylesheet" href="css/bs-custom.css">
     <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -24,7 +24,7 @@ if (!empty($_SESSION['user_public_id'])) {
     <div class="row h-100">
         <div class="col-12 d-flex flex-column justify-content-center align-items-center">
             <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 300px;">
-            <h1 class="mb-4">Rekisteröidy</h1>
+            <h1 class="mb-4">Luo tunnus</h1>
 
             <?php if (isset($_GET['error'])): ?>
                 <div class="col-12 col-lg-4 alert alert-danger alert-dismissible fade show" role="alert">
@@ -61,19 +61,19 @@ if (!empty($_SESSION['user_public_id'])) {
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-success text-white w-100">
-                            <i class="bi bi-person-plus-fill me-1"></i> Luo tili
+                            <i class="bi bi-person-plus-fill me-1"></i> Luo tunnus
                         </button>
                     </div>
                 </form>
             </div>
 
             <p class="mt-3 text-muted">
-                Onko sinulla jo tili?
+                Onko sinulla jo tunnus?
                 <a href="login.php">Kirjaudu sisään</a>
             </p>
             <p>
-                <a href="pages/routes.php" class="text-muted small">
-                    <i class="bi bi-arrow-left"></i> Takaisin reiteille
+                <a href="#" class="text-muted small" onclick="event.preventDefault(); window.history.back();">
+                    <i class="bi bi-arrow-left"></i> Takaisin
                 </a>
             </p>
         </div>

@@ -12,17 +12,24 @@ const ICON_PATH = ROOT_DIR . 'images/logos/InnoWind_icon.png';
 const SESSION_NAME = "HavuGamificationSession";
 
 const ERROR_CODES = [
+    0 => "",
     1 => "Wrong username or password.",
     2 => "Error creating route."
 ];
 
 const SUCCESS_CODES = [
+    0 => "",
     1 => "User created successfully.",
     2 => "Route created successfully."
 ];
 
 const USER_TYPE_REGULAR = 1;
 const USER_TYPE_ADMIN = 0;
+
+const HOME_URL = ROOT_DIR . "index.php";
+
+// Set to false to skip GPS proximity checks (useful for development/testing)
+const REQUIRE_GPS_PROXIMITY = false;
 
 // Database configuration from environment file
 define('DB_HOST', $env['DB_HOST']);

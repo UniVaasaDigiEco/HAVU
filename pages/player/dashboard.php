@@ -10,11 +10,6 @@ if (empty($_SESSION['user_public_id'])) {
     exit;
 }
 
-if (!empty($_SESSION['is_admin'])) {
-    header('Location: ../admin/dashboard.php');
-    exit;
-}
-
 try {
     $user_id = Tools::getUserIdByPublicId($_SESSION['user_public_id']);
     $user    = Tools::getUserWithPublicId($_SESSION['user_public_id']);
@@ -131,7 +126,7 @@ try {
 <body>
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="../../index.html">
+        <a class="navbar-brand fw-bold" href="../../index.php">
             <img src="../../images/havu_logo.png" alt="HAVU" height="30" class="me-2">
             HAVU Gamification
         </a>
@@ -139,6 +134,11 @@ try {
             <a href="../routes.php" class="btn btn-sm btn-outline-light">
                 <i class="bi bi-map me-1"></i>Kaikki reitit
             </a>
+            <?php if (!empty($_SESSION['is_admin'])): ?>
+                <a href="../admin/dashboard.php" class="btn btn-sm btn-outline-light">
+                    <i class="bi bi-gear-fill me-1"></i>Hallintapaneeli
+                </a>
+            <?php endif; ?>
             <a href="../../actions/logout.php" class="btn btn-sm btn-outline-light">
                 <i class="bi bi-box-arrow-right me-1"></i>Kirjaudu ulos
             </a>

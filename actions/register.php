@@ -56,7 +56,7 @@ if ($exists) {
 try {
     Security::addUser($email, $password, $full_name, USER_TYPE_REGULAR);
 } catch (Exception $e) {
-    header('Location: ../register.php?error=' . urlencode('Rekisteröityminen epäonnistui. Yritä uudelleen.'));
+    header('Location: ../register.php?error=' . urlencode('Tunnuksen luominen epäonnistui. Yritä uudelleen.'));
     exit;
 }
 

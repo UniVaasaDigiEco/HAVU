@@ -103,12 +103,13 @@ Security::initSession();
                             <small id="description_help">Anna reitille lyhyt kuvaus. Esim. mitä reitillä voi nähdä, kuinka pitkä reitti on, kuinka vaikea reitti on, jne.</small>
                         </div>
 
-                        <div class="mb-3 d-none">
+                        <div class="mb-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" checked>
+                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" checked>
                                 <label class="form-check-label" for="is_published">
-                                    Julkaise heti
-                                </label>
+                                    Julkinen
+                                </label><br>
+                                <small id="public-help">Jos haluat, että reitti näkyy ja on pelattavissa kaikille pelaajille, merkkaa reitti julkiseksi</small>
                             </div>
                         </div>
 
@@ -144,6 +145,17 @@ Security::initSession();
                         <h5 class="mb-0"><i class="bi bi-map me-2"></i>Kartta</h5>
                     </div>
                     <div class="card-body">
+                        <!-- Location search -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" id="locationSearch" class="form-control" placeholder="Etsi sijaintia... (esim. Vaasa, Yliopisto)" autocomplete="off">
+                                <button class="btn btn-outline-secondary" type="button" id="locationSearchBtn">
+                                    Etsi
+                                </button>
+                            </div>
+                            <div id="searchResults" class="list-group mt-1" style="display:none; position:absolute; z-index:1000; max-width:600px;"></div>
+                        </div>
                         <div id="map"></div>
                         <div class="mt-2 text-muted small">
                             <i class="bi bi-info-circle"></i> Klikkaa mitä tahansa kohtaa kartalla lisätäksesi rastin. Voit muuttaa rastin paikkaa vetämällä (hiiren vasen nappi pohjaan rastin päällä ja liikuta hiirtä) sitä, tai muokata rastin tietoja klikkaamalla rastia. Voit zoomata karttaa hiiren rullalla, kosketusnäytöllä nipistämällä tai käyttämällä plus/miinus nappeja kartan vasemmassa yläreunassa.
@@ -185,6 +197,35 @@ Security::initSession();
                             <small>Lyhyt sisältö rastille. Esimerkiksi kuvaus ympäröivästä luonnosta, maamerkistä tai vaikka historiasta. Voit lisätä kuvia ja videoita.</small>
                         </div>
 
+                        <!-- Challenge panel -->
+                        <div class="mb-3 p-3 rounded" style="border: 2px solid #ffc107;">
+                            <label class="form-label fw-semibold mb-2">Haaste (valinnainen)</label>
+                            <div class="d-flex gap-2 mb-3 flex-wrap">
+                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')">Ei haastetta</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')">Monivalinta</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')">Tekstivastaus</button>
+                            </div>
+                            <div id="challengeMCFields" style="display:none;">
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Kysymys</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="Kirjoita kysymys...">
+                                </div>
+                                <div id="challengeOptions"></div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()">+ Lisää vaihtoehto</button>
+                            </div>
+                            <div id="challengeTextFields" style="display:none;">
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Kysymys</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextQuestion" placeholder="Kirjoita kysymys...">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Oikea vastaus</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextAnswer" placeholder="Oikea vastaus...">
+                                </div>
+                                <small class="text-muted">Vastaukset tarkistetaan automaattisella samanlaistuksella (~70 %).</small>
+                            </div>
+                        </div>
+
                         <div class="d-flex gap-2">
                             <button type="button" class="btn btn-primary" onclick="saveNodeEdit()">
                                 <i class="bi bi-check-lg"></i> Tallenna rasti
@@ -224,6 +265,7 @@ Security::initSession();
 <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
 <script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
 <script src="../../node_modules/summernote/dist/lang/summernote-fi-FI.min.js"></script>
+<script src="../../js/challenge-panel.js"></script>
 <script>
     // Global variables
     let map;
@@ -298,7 +340,7 @@ Security::initSession();
         });
     }
 
-    // Initialize map
+    // Initialize map — center on user's location, fall back to campus
     function initMap() {
         map = L.map('map').setView(CAMPUS_CENTER, 15);
 
@@ -308,6 +350,82 @@ Security::initSession();
         }).addTo(map);
 
         map.on('click', onMapClick);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    map.setView([pos.coords.latitude, pos.coords.longitude], 15);
+                },
+                function() { /* denied or unavailable — stay on campus center */ }
+            );
+        }
+    }
+
+    // Location search via Nominatim
+    let searchMarker = null;
+
+    function searchLocation() {
+        const query = document.getElementById('locationSearch').value.trim();
+        if (!query) return;
+
+        const btn = document.getElementById('locationSearchBtn');
+        btn.disabled = true;
+        btn.textContent = 'Haetaan...';
+
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=fi`, {
+            headers: { 'Accept-Language': 'fi' }
+        })
+        .then(r => r.json())
+        .then(results => {
+            const container = document.getElementById('searchResults');
+            if (!results.length) {
+                container.innerHTML = '<div class="list-group-item text-muted">Ei tuloksia</div>';
+                container.style.display = 'block';
+                return;
+            }
+            container.innerHTML = results.map((r, i) =>
+                `<button type="button" class="list-group-item list-group-item-action" data-idx="${i}"
+                    data-lat="${r.lat}" data-lon="${r.lon}">
+                    <i class="bi bi-geo-alt me-1"></i>${r.display_name}
+                </button>`
+            ).join('');
+            container.style.display = 'block';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.textContent = 'Etsi';
+        });
+    }
+
+    function setupSearch() {
+        document.getElementById('locationSearchBtn').addEventListener('click', searchLocation);
+        document.getElementById('locationSearch').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); searchLocation(); }
+        });
+
+        document.getElementById('searchResults').addEventListener('click', function(e) {
+            const btn = e.target.closest('button[data-lat]');
+            if (!btn) return;
+
+            const lat = parseFloat(btn.dataset.lat);
+            const lon = parseFloat(btn.dataset.lon);
+
+            map.setView([lat, lon], 16);
+
+            if (searchMarker) map.removeLayer(searchMarker);
+            searchMarker = L.marker([lat, lon], { opacity: 0.6 }).addTo(map)
+                .bindPopup(btn.textContent.trim()).openPopup();
+
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('locationSearch').value = '';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#locationSearch') && !e.target.closest('#locationSearchBtn') && !e.target.closest('#searchResults')) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
     }
 
     // Handle map click
@@ -316,7 +434,7 @@ Security::initSession();
     }
 
     // Add a new node
-    function addNode(lat, lng, title = '', content = '') {
+    function addNode(lat, lng, title = '', content = '', challenge_data = null) {
         const nodeIndex = nodes.length;
         const nodeNumber = nodeIndex + 1;
 
@@ -324,7 +442,8 @@ Security::initSession();
             lat: lat,
             lng: lng,
             title: title || `Node ${nodeNumber}`,
-            content: content
+            content: content,
+            challenge_data: challenge_data
         };
 
         nodes.push(node);
@@ -454,6 +573,7 @@ Security::initSession();
         document.getElementById('node_lat').value = node.lat.toFixed(6);
         document.getElementById('node_lng').value = node.lng.toFixed(6);
         $('#node_content').summernote('code', node.content || '');
+        setChallengeData(node.challenge_data || null);
 
         editor.style.display = 'block';
         editor.scrollIntoView({ behavior: 'smooth' });
@@ -472,6 +592,7 @@ Security::initSession();
 
         nodes[index].title = title;
         nodes[index].content = content;
+        nodes[index].challenge_data = getChallengeData();
 
         markers[index].setPopupContent(buildPopupContent(nodes[index]));
 
@@ -485,6 +606,7 @@ Security::initSession();
         document.getElementById('editNodeIndex').value = '';
         document.getElementById('node_title').value = '';
         $('#node_content').summernote('code', '');
+        resetChallengePanel();
     }
 
     // Delete node
@@ -562,6 +684,7 @@ Security::initSession();
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
         initEditor();
+        setupSearch();
 
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('publication_date').value = today;

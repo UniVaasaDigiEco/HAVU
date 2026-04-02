@@ -71,7 +71,7 @@ try {
             throw new Exception('Failed to prepare route update statement: ' . $db->error);
         }
 
-        $is_published = 1;
+        $is_published = isset($_POST['is_published']) ? 1 : 0;
         $route_update_stmt->bind_param('sssii', $route_title, $route_description, $formatted_publication_date, $is_published, $route_id);
         if (!$route_update_stmt->execute()) {
             throw new Exception('Failed to update route: ' . $route_update_stmt->error);
@@ -111,7 +111,7 @@ try {
         $clear_cross_stmt->close();
 
         // Prepare insert statements for fresh node set
-        $node_sql = 'INSERT INTO nodes (public_id, is_published, publication_date, created_by, title, content, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        $node_sql = 'INSERT INTO nodes (public_id, is_published, publication_date, created_by, title, content, latitude, longitude, challenge_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         $node_stmt = $db->prepare($node_sql);
         if (!$node_stmt) {
             throw new Exception('Failed to prepare node insert statement: ' . $db->error);
@@ -132,13 +132,14 @@ try {
             $node_content = trim($node->content ?? '');
             $node_latitude = floatval($node->lat);
             $node_longitude = floatval($node->lng);
+            $node_challenge_data = isset($node->challenge_data) ? json_encode($node->challenge_data) : null;
 
             if ($node_latitude < -90 || $node_latitude > 90 || $node_longitude < -180 || $node_longitude > 180) {
                 throw new Exception('Invalid coordinates at node index ' . $index);
             }
 
             $node_public_id = Uuid::uuid4()->toString();
-            $node_stmt->bind_param('sissssdd', $node_public_id, $is_published, $formatted_publication_date, $created_by, $node_title, $node_content, $node_latitude, $node_longitude);
+            $node_stmt->bind_param('sissssdds', $node_public_id, $is_published, $formatted_publication_date, $created_by, $node_title, $node_content, $node_latitude, $node_longitude, $node_challenge_data);
 
             if (!$node_stmt->execute()) {
                 throw new Exception('Failed to insert node at index ' . $index . ': ' . $node_stmt->error);

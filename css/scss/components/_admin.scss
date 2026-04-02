@@ -214,7 +214,7 @@ body.admin-dashboard {
   }
 
   // Route Testing section --
-  #route-testing {
+  .route-management-section {
     position: relative;
     z-index: 1;
     margin-top: 3rem;
@@ -322,6 +322,10 @@ body.admin-dashboard {
       }
     }
   }
+}
+
+h5{
+  color: $secondary !important;
 }
 
 // Animation for page load
