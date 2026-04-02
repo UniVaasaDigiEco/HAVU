@@ -174,6 +174,16 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                         </div>
 
                         <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" <?= !isset($route_data) || !empty($route_data['is_published']) ? 'checked' : '' ?>>
+                                <label class="form-check-label" for="is_published">
+                                    Julkinen
+                                </label><br>
+                                <small id="public-help">Jos haluat, että reitti näkyy ja on pelattavissa kaikille pelaajille, merkkaa reitti julkiseksi</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="publication_date" class="form-label">Julkaisupäivämäärä <span class="text-danger">*</span></label>
                             <input
                                 type="date"

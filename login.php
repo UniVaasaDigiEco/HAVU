@@ -16,7 +16,7 @@ Security::logout();
     <div class="row h-100">
         <div class="col-12 d-flex flex-column justify-content-center align-items-center">
             <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
-            <h1 class="mb-4">HAVU - Gamification</h1>
+            <h1 class="mb-4">HAVU-polkupeli</h1>
             <?php
             if (isset($_GET['error'])) {
                 require_once('classes/message.class.php');

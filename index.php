@@ -12,7 +12,7 @@
     <div class="row h-100">
         <div class="col-12 d-flex flex-column justify-content-center align-items-center">
             <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
-            <h1 class="mb-4">HAVU - Polkupeli</h1>
+            <h1 class="mb-4">HAVU-polkupeli</h1>
             <div class="d-flex flex-row gap-3 flex-wrap justify-content-center">
                 <a href="pages/routes.php" class="btn btn-success btn-lg text-white fw-bold">
                     <i class="bi bi-joystick me-1"></i> Pelaa nyt

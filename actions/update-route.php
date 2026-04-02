@@ -71,7 +71,7 @@ try {
             throw new Exception('Failed to prepare route update statement: ' . $db->error);
         }
 
-        $is_published = 1;
+        $is_published = isset($_POST['is_published']) ? 1 : 0;
         $route_update_stmt->bind_param('sssii', $route_title, $route_description, $formatted_publication_date, $is_published, $route_id);
         if (!$route_update_stmt->execute()) {
             throw new Exception('Failed to update route: ' . $route_update_stmt->error);

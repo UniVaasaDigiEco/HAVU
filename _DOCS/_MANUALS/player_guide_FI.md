@@ -92,7 +92,7 @@ Reitit, joita et ole vielä aloittanut — kuvauksineen ja rastimäärineen.
 
 ## Tunnuksen edut
 
-| Ominaisuus | Ilman tunnusta | Tunnuksella |
+| Toiminnallisuus | Ilman tunnusta | Tunnuksella |
 |---|---|---|
 | Selaa ja pelaa reittejä | ✅ | ✅ |
 | Ansaitse tammenterhoja pelin aikana | ✅ | ✅ |

@@ -103,12 +103,13 @@ Security::initSession();
                             <small id="description_help">Anna reitille lyhyt kuvaus. Esim. mitä reitillä voi nähdä, kuinka pitkä reitti on, kuinka vaikea reitti on, jne.</small>
                         </div>
 
-                        <div class="mb-3 d-none">
+                        <div class="mb-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" checked>
+                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" checked>
                                 <label class="form-check-label" for="is_published">
-                                    Julkaise heti
-                                </label>
+                                    Julkinen
+                                </label><br>
+                                <small id="public-help">Jos haluat, että reitti näkyy ja on pelattavissa kaikille pelaajille, merkkaa reitti julkiseksi</small>
                             </div>
                         </div>
 

@@ -41,7 +41,7 @@ try {
 
     // Prepare route data
     $public_id = Uuid::uuid4()->toString();
-    $is_published = 1;
+    $is_published = isset($_POST['is_published']) ? 1 : 0;
     $created_by = $_SESSION['user_public_id'];
     $title = $_POST['route_title'];
     $description = $_POST['route_description'];
