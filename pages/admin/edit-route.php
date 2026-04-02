@@ -255,6 +255,35 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                             <small>Lyhyt sisältö rastille. Voit lisätä kuvia ja videoita.</small>
                         </div>
 
+                        <!-- Challenge panel -->
+                        <div class="mb-3 p-3 rounded" style="border: 2px solid #ffc107;">
+                            <label class="form-label fw-semibold mb-2">Haaste (valinnainen)</label>
+                            <div class="d-flex gap-2 mb-3 flex-wrap">
+                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')">Ei haastetta</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')">Monivalinta</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')">Tekstivastaus</button>
+                            </div>
+                            <div id="challengeMCFields" style="display:none;">
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Kysymys</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="Kirjoita kysymys...">
+                                </div>
+                                <div id="challengeOptions"></div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()">+ Lisää vaihtoehto</button>
+                            </div>
+                            <div id="challengeTextFields" style="display:none;">
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Kysymys</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextQuestion" placeholder="Kirjoita kysymys...">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Oikea vastaus</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextAnswer" placeholder="Oikea vastaus...">
+                                </div>
+                                <small class="text-muted">Vastaukset tarkistetaan automaattisella samanlaistuksella (~70 %).</small>
+                            </div>
+                        </div>
+
                         <div class="d-flex gap-2">
                             <button type="button" class="btn btn-primary" onclick="saveNodeEdit()">
                                 <i class="bi bi-check-lg"></i> Tallenna rasti
@@ -293,6 +322,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
 <script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
 <script src="../../node_modules/summernote/dist/lang/summernote-fi-FI.min.js"></script>
+<script src="../../js/challenge-panel.js"></script>
 <script>
     let map;
     let markers = [];
@@ -388,7 +418,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         addNode(e.latlng.lat, e.latlng.lng);
     }
 
-    function addNode(lat, lng, title = '', content = '', openEditor = true) {
+    function addNode(lat, lng, title = '', content = '', openEditor = true, challenge_data = null) {
         const nodeIndex = nodes.length;
         const nodeNumber = nodeIndex + 1;
 
@@ -396,7 +426,8 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             lat: Number(lat),
             lng: Number(lng),
             title: title || `Node ${nodeNumber}`,
-            content: content || ''
+            content: content || '',
+            challenge_data: challenge_data
         };
 
         nodes.push(node);
@@ -521,6 +552,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         document.getElementById('node_lat').value = Number(node.lat).toFixed(6);
         document.getElementById('node_lng').value = Number(node.lng).toFixed(6);
         $('#node_content').summernote('code', node.content || '');
+        setChallengeData(node.challenge_data || null);
 
         editor.style.display = 'block';
         editor.scrollIntoView({ behavior: 'smooth' });
@@ -538,6 +570,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
         nodes[index].title = title;
         nodes[index].content = content;
+        nodes[index].challenge_data = getChallengeData();
         markers[index].setPopupContent(buildPopupContent(nodes[index]));
 
         updateNodesList();
@@ -549,6 +582,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         document.getElementById('editNodeIndex').value = '';
         document.getElementById('node_title').value = '';
         $('#node_content').summernote('code', '');
+        resetChallengePanel();
     }
 
     function deleteNode(index) {
@@ -623,7 +657,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
         routeNodes.forEach(routeNode => {
             const node = routeNode.node || {};
-            addNode(node.latitude, node.longitude, node.title || '', node.content || '', false);
+            addNode(node.latitude, node.longitude, node.title || '', node.content || '', false, node.challenge_data || null);
         });
 
         if (nodes.length > 0) {

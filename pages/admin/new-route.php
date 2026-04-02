@@ -197,6 +197,35 @@ Security::initSession();
                             <small>Lyhyt sisältö rastille. Esimerkiksi kuvaus ympäröivästä luonnosta, maamerkistä tai vaikka historiasta. Voit lisätä kuvia ja videoita.</small>
                         </div>
 
+                        <!-- Challenge panel -->
+                        <div class="mb-3 p-3 rounded" style="border: 2px solid #ffc107;">
+                            <label class="form-label fw-semibold mb-2">Haaste (valinnainen)</label>
+                            <div class="d-flex gap-2 mb-3 flex-wrap">
+                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')">Ei haastetta</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')">Monivalinta</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')">Tekstivastaus</button>
+                            </div>
+                            <div id="challengeMCFields" style="display:none;">
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Kysymys</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="Kirjoita kysymys...">
+                                </div>
+                                <div id="challengeOptions"></div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()">+ Lisää vaihtoehto</button>
+                            </div>
+                            <div id="challengeTextFields" style="display:none;">
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Kysymys</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextQuestion" placeholder="Kirjoita kysymys...">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Oikea vastaus</label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextAnswer" placeholder="Oikea vastaus...">
+                                </div>
+                                <small class="text-muted">Vastaukset tarkistetaan automaattisella samanlaistuksella (~70 %).</small>
+                            </div>
+                        </div>
+
                         <div class="d-flex gap-2">
                             <button type="button" class="btn btn-primary" onclick="saveNodeEdit()">
                                 <i class="bi bi-check-lg"></i> Tallenna rasti
@@ -236,6 +265,7 @@ Security::initSession();
 <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
 <script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
 <script src="../../node_modules/summernote/dist/lang/summernote-fi-FI.min.js"></script>
+<script src="../../js/challenge-panel.js"></script>
 <script>
     // Global variables
     let map;
@@ -404,7 +434,7 @@ Security::initSession();
     }
 
     // Add a new node
-    function addNode(lat, lng, title = '', content = '') {
+    function addNode(lat, lng, title = '', content = '', challenge_data = null) {
         const nodeIndex = nodes.length;
         const nodeNumber = nodeIndex + 1;
 
@@ -412,7 +442,8 @@ Security::initSession();
             lat: lat,
             lng: lng,
             title: title || `Node ${nodeNumber}`,
-            content: content
+            content: content,
+            challenge_data: challenge_data
         };
 
         nodes.push(node);
@@ -542,6 +573,7 @@ Security::initSession();
         document.getElementById('node_lat').value = node.lat.toFixed(6);
         document.getElementById('node_lng').value = node.lng.toFixed(6);
         $('#node_content').summernote('code', node.content || '');
+        setChallengeData(node.challenge_data || null);
 
         editor.style.display = 'block';
         editor.scrollIntoView({ behavior: 'smooth' });
@@ -560,6 +592,7 @@ Security::initSession();
 
         nodes[index].title = title;
         nodes[index].content = content;
+        nodes[index].challenge_data = getChallengeData();
 
         markers[index].setPopupContent(buildPopupContent(nodes[index]));
 
@@ -573,6 +606,7 @@ Security::initSession();
         document.getElementById('editNodeIndex').value = '';
         document.getElementById('node_title').value = '';
         $('#node_content').summernote('code', '');
+        resetChallengePanel();
     }
 
     // Delete node

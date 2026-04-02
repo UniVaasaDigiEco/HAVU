@@ -36,7 +36,7 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                 <button class="btn btn-primary text-white w-100" id="show-route-management" data-target="#route-management">
                     <i class="bi bi-map-fill"></i> Hallitse reittejä
                 </button>
-                <a class="btn btn-primary text-white w-100" id="goto-game" href="../routes.php"><i class="bi bi-joystick"></i> Siirry peliin</a>
+                <a class="btn btn-primary text-white w-100" id="goto-game" href="../player/dashboard.php"><i class="bi bi-joystick"></i> Siirry peliin</a>
                 <a class="btn btn-primary text-white w-100" id="logout" href="../../actions/logout.php"><i class="bi bi-box-arrow-left me-1"></i> Kirjaudu ulos</a>
             </div>
         </div>

@@ -65,7 +65,8 @@ try {
         $stmt->close();
 
         // Prepare node statement
-        $node_sql = "INSERT INTO nodes (public_id, is_published, publication_date, created_by, title, content, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $node_sql = "INSERT INTO nodes (public_id, is_published, publication_date, created_by, title, content, latitude, longitude, challenge_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // bind_param types for nodes: s:public_id, i:is_published, s:publication_date, s:created_by, s:title, s:content, d:latitude, d:longitude, s:challenge_data
         $node_stmt = $db->prepare($node_sql);
         if (!$node_stmt) {
             throw new Exception('Failed to prepare node statement: ' . $db->error);
@@ -90,13 +91,14 @@ try {
             $node_content = $node->content ?? '';
             $node_latitude = floatval($node->lat);
             $node_longitude = floatval($node->lng);
+            $node_challenge_data = isset($node->challenge_data) ? json_encode($node->challenge_data) : null;
 
             // Validate coordinates
             if ($node_latitude < -90 || $node_latitude > 90 || $node_longitude < -180 || $node_longitude > 180) {
                 throw new Exception("Invalid coordinates at node index $index");
             }
 
-            $node_stmt->bind_param('sissssdd', $node_public_id, $is_published, $formatted_publication_date, $created_by, $node_title, $node_content, $node_latitude, $node_longitude);
+            $node_stmt->bind_param('sissssdds', $node_public_id, $is_published, $formatted_publication_date, $created_by, $node_title, $node_content, $node_latitude, $node_longitude, $node_challenge_data);
 
             if (!$node_stmt->execute()) {
                 throw new Exception("Failed to insert node at index $index: " . $node_stmt->error);

@@ -34,35 +34,32 @@
 ## TODO List - Short Term
 
 - [X] Fix mobile UI
-- [ ] Polish UI/UX
-  - [ ] Add better styling to map and markers
-  - [ ] Improve user interface for status indicators
+- [X] Polish UI/UX
+  - [X] Add better styling to map and markers
+  - [X] Improve user interface for status indicators
 - [ ] Testing
   - [ ] Unit tests
   - [ ] User tests
 - [ ] Add more varied content to nodes (e.g., images, descriptions)
-  - [ ] Add YouTube video embeds to nodes
-  - [ ] Add quizzes or challenges at nodes
+  - [X] Add YouTube video embeds to nodes
+  - [X] Add quizzes or challenges at nodes
   - [ ] Add rewards or badges for completing nodes/routes
-  - [ ] Add Summernote or similar WYSIWYG editor for content creation in admin panel
-- [ ] Add User login
-- [ ] Implement progress tracking and rewards system
-- [ ] Admin console/panel to create and manage routes and nodes
-- [ ] Implement SQL Database and related stuff
-- [ ] Ensure mobile responsiveness and performance optimization
+  - [X] Add Summernote or similar WYSIWYG editor for content creation in admin panel
+- [X] Add User login
+- [X] Implement progress tracking and rewards system
+- [X] Admin console/panel to create and manage routes and nodes
+- [X] Implement SQL Database and related stuff
+- [X] Ensure mobile responsiveness and performance optimization
 
 ## TODO List - Long Term
 - [ ] Fix the url (away from /HavuGamication)]
 - [ ] Fix the YouTube video embeds (the width should be relative to the screen size/width)
 - [ ] Documentation, comments, cleanup & guides
-- [ ] Replicate map to a forest area
-  - [ ] More complex route with more nodes
-  - [ ] Different types of terrain
 - [ ] Contact Kallion Kamut for route and content ideas
 - [ ] Implement social features (leaderboards, friend challenges)
-  - [ ] If time permits
+  - If time permits
 - AR features
-  - [ ] If time permits
-- [ ] TTS if time permits
+  - If time permits
+- TTS if time permits
 - [ ] Multi-language support if time permits
 - [ ] Prepare for final presentation and demo
