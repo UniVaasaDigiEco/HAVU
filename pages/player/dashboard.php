@@ -165,6 +165,12 @@ try {
             </span>
         </div>
     </div>
+    <div class="ms-auto mb-5">
+        <h3>Käyttöohjeet</h3>
+        <a href="../files/Pikaopas_HAVUpelaaminen.pdf">Pelaajan pikaopas</a>
+        <br>
+        <a href="../files/HAVU_pelaajanopas.pdf">HAVU-polkupelin pelaajan opas</a>
+    </div>
 
     <!-- In progress -->
     <?php if (!empty($in_progress)): ?>

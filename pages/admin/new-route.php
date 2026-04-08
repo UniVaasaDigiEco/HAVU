@@ -164,7 +164,13 @@ Security::initSession();
                 </div>
 
                 <!-- Node Editor -->
-                <div id="nodeEditor" class="card shadow-sm" style="display: none;">
+                <div id="nodeEditor" class="card shadow-sm" style="display: none; position: relative;">
+                    <div id="uploadOverlay" style="display:none; position:absolute; inset:0; z-index:10; background:rgba(255,255,255,0.88); border-radius:0.375rem; align-items:center; justify-content:center; flex-direction:column;">
+                        <div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem;" role="status">
+                            <span class="visually-hidden">Ladataan...</span>
+                        </div>
+                        <p class="mt-3 mb-0 fw-semibold text-primary">Ladataan tiedostoa...</p>
+                    </div>
                     <div class="card-header bg-warning">
                         <h5 class="mb-0"><i class="bi bi-pencil-fill me-2"></i>Muokkaa rastia</h5>
                     </div>
@@ -275,6 +281,7 @@ Security::initSession();
 
     // Upload image or video file and insert into editor
     function uploadFile(file, type) {
+        showUploadOverlay();
         const formData = new FormData();
         formData.append('file', file);
 
@@ -285,8 +292,10 @@ Security::initSession();
             processData: false,
             contentType: false,
             success: function(response) {
+                hideUploadOverlay();
                 if (response.url) {
                     if (type === 'image') {
+                        $('#node_content').summernote('focus');
                         $('#node_content').summernote('insertImage', response.url);
                     } else {
                         const videoHtml = `<video controls style="max-width:100%"><source src="${response.url}" type="${file.type}"></video><p></p>`;
@@ -296,9 +305,21 @@ Security::initSession();
                     alert('Lataus epäonnistui: ' + (response.error || 'Tuntematon virhe'));
                 }
             },
-            error: function() {
-                alert('Lataus epäonnistui. Yritä uudelleen.');
+            error: function(xhr) {
+                hideUploadOverlay();
+                const msg = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : 'Yritä uudelleen.';
+                alert('Lataus epäonnistui: ' + msg);
             }
+        });
+    }
+
+    function showUploadOverlay() {
+        $('#uploadOverlay').css({display: 'flex', opacity: 0}).animate({opacity: 1}, 150);
+    }
+
+    function hideUploadOverlay() {
+        $('#uploadOverlay').animate({opacity: 0}, 300, function() {
+            $(this).css('display', 'none');
         });
     }
 
@@ -321,7 +342,7 @@ Security::initSession();
                         contents: '<i class="bi bi-camera-video-fill"></i>',
                         tooltip: 'Lataa videotiedosto',
                         click: function() {
-                            const input = $('<input type="file" accept="video/mp4,video/webm,video/quicktime">');
+                            const input = $('<input type="file" accept="video/mp4,video/webm,video/quicktime,video/x-m4v">');
                             input.on('change', function() {
                                 if (this.files[0]) {
                                     uploadFile(this.files[0], 'video');
