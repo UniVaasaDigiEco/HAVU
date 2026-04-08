@@ -50,7 +50,15 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                     <!--<p class="lead">Here you can manage the routes for the game. Create new routes, edit existing ones, or remove routes that are no longer needed.</p>-->
                     <p class="lead">Tästä voit hallita reittejäsi. Luo uusia reittejä, muokkaa olemassa olevia, tai poista reittejä, joita ei enää tarvita.</p>
                     <p>
-                        <a href="files/user_guide_FI.docx" download>Lataa ohjeet tästä</a>
+                        Tässä on eri oppaita HAVU-polkupelin käyttämiseen, alla myös vanhempi opas, jossa ei ole kaikkia ominaisuuksia mainittu, mutta sisältää enemmän kuvakaappauksia, mikä voi antaa paremmin apua.<br>
+                        <a target="_blank" href="files/HAVU_reitinluojan_opas.pdf">Opas reittien luomiseen</a>
+                        <br>
+                        <a target="_blank" href="files/HAVU_pelaajanopas.pdf">Opas pelaamiseen</a>
+                        <br>
+                        <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf">Pelaajan pikaopas</a>
+                    </p>
+                    <p>
+                        <a href="files/user_guide_FI.docx" download>Lataa ohjeet tästä (vanha)</a>
                     </p>
                 </div>
                 <div id="route-management-controls" class="d-flex flex-wrap gap-2">

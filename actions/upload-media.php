@@ -37,6 +37,7 @@ $allowed = [
     'video/mp4'       => 'mp4',
     'video/webm'      => 'webm',
     'video/quicktime' => 'mov',
+    'video/x-m4v'     => 'm4v',
 ];
 
 if (!array_key_exists($mime, $allowed)) {

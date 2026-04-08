@@ -6,8 +6,6 @@ use Ramsey\Uuid\Uuid;
 
 Security::initSession();
 
-header('Content-Type: application/json');
-
 $return_url = "pages/admin/dashboard.php";
 
 try {

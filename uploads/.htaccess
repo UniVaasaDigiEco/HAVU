@@ -1,2 +1,6 @@
-php_flag engine off
-Options -ExecCGI
+# Deny direct execution of PHP files in the uploads directory
+<FilesMatch "\.php[s5]?$">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes -ExecCGI

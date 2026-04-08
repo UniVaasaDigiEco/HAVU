@@ -120,6 +120,9 @@ try {
     <div class="text-center mb-5">
         <h1 class="fw-bold">Valitse reitti</h1>
         <p class="lead text-muted">Valitse alta reitti, jonka haluat kävellä. GPS opastaa sinut rastin luo.</p>
+        <p class="text-muted">
+            <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf">Pelaajan pikaopas</a>
+        </p>
         <?php if (!$is_logged_in): ?>
             <p class="text-muted small">
                 <i class="bi bi-info-circle me-1"></i>

@@ -20,14 +20,18 @@ $stmt->execute();
 $stmt->bind_result($public_id_string);
 $stmt->store_result();
 if($stmt->num_rows === 0){
-    die("Login failed: User not found");
+    $error_code = 1;
+    header("Location: " . ROOT_DIR . "login.php?error=" . urlencode($error_code));
+    die();
 }
 $stmt->fetch();
 try{
     $public_id = Uuid::fromString($public_id_string);
 }
 catch (Exception $exception){
-    die("Login failed: Invalid user ID");
+    $error_code = 1;
+    header("Location: " . ROOT_DIR . "login.php?error=" . urlencode($error_code));
+    die();
 }
 try{
     if(Security::authenticateUser($public_id, $_POST['password'])){
