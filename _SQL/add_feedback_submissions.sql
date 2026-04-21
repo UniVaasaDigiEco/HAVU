@@ -1,4 +1,4 @@
-CREATE TABLE `feedback_submissions` (
+CREATE TABLE IF NOT EXISTS `feedback_submissions` (
   `id`         INT            NOT NULL AUTO_INCREMENT,
   `type`       ENUM('contact','bug','feature') NOT NULL,
   `name`       VARCHAR(100)   NOT NULL,
