@@ -81,6 +81,7 @@ try {
     <link rel="stylesheet" href="../css/bs-custom.css">
     <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -205,5 +206,6 @@ try {
         </div>
     <?php endif; ?>
 </div>
+<?php require_once '../includes/_feedback_widget.php'; ?>
 </body>
 </html>

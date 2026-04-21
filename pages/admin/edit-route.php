@@ -92,6 +92,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             border-radius: 0.375rem;
         }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
 <div class="container-fluid py-4">
@@ -732,5 +733,6 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         }
     });
 </script>
+<?php require_once '../../includes/_feedback_widget.php'; ?>
 </body>
 </html>

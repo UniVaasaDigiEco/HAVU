@@ -21,6 +21,7 @@ $routes = $user->getCreatedRoutes();
     <title>HAVU Gamification - Poista Reitti</title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
 <div class="container-fluid vh-100">
@@ -54,5 +55,6 @@ $routes = $user->getCreatedRoutes();
         </div>
     </div>
 </div>
+<?php require_once '../../includes/_feedback_widget.php'; ?>
 </body>
 </html>

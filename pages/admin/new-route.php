@@ -61,6 +61,7 @@ Security::initSession();
             border-radius: 0.375rem;
         }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
 <div class="container-fluid py-4">
@@ -725,5 +726,6 @@ Security::initSession();
         document.getElementById('publication_date').value = today;
     });
 </script>
+<?php require_once '../../includes/_feedback_widget.php'; ?>
 </body>
 </html>
