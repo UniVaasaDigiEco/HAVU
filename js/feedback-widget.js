@@ -8,7 +8,7 @@
     const btnText = document.getElementById('feedback-submit-text');
     const submitBtn = document.getElementById('feedback-submit');
 
-    if (!form) return;
+    if (!form || !modal) return;
 
     const endpoint = modal.dataset.action;
 
