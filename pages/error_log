@@ -1,4 +1,0 @@
-[13-Apr-2026 19:18:17 Europe/Helsinki] PHP Fatal error:  Uncaught Error: Call to a member function getTitle() on null in /home/jansoftw/public_html/HavuGamification/pages/game.php:66
-Stack trace:
-#0 {main}
-  thrown in /home/jansoftw/public_html/HavuGamification/pages/game.php on line 66
