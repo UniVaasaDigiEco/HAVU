@@ -4,6 +4,16 @@
  */
 
 let challengeCurrentType = 'none';
+const challengePanelI18n = window.challengePanelTranslations || {
+    optionLabel: 'Vaihtoehto :number',
+    deleteTitle: 'Poista'
+};
+
+function formatChallengePanelMessage(template, params) {
+    return Object.keys(params).reduce(function(message, key) {
+        return message.replace(':' + key, params[key]);
+    }, template);
+}
 
 function setChallengeType(type) {
     challengeCurrentType = type;
@@ -38,13 +48,13 @@ function addChallengeOption(text) {
     const textInput = document.createElement('input');
     textInput.type = 'text';
     textInput.className = 'form-control form-control-sm';
-    textInput.placeholder = 'Vaihtoehto ' + (optIndex + 1);
+    textInput.placeholder = formatChallengePanelMessage(challengePanelI18n.optionLabel, { number: optIndex + 1 });
     textInput.value = text || '';
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'btn btn-sm btn-outline-danger flex-shrink-0';
-    removeBtn.title = 'Poista';
+    removeBtn.title = challengePanelI18n.deleteTitle;
     removeBtn.textContent = '✕';
     removeBtn.onclick = function() { removeChallengeOption(this); };
 
@@ -67,7 +77,7 @@ function removeChallengeOption(btn) {
     Array.from(container.children).forEach(function(row, i) {
         row.dataset.optIndex = i;
         row.querySelector('input[type="radio"]').value = i;
-        row.querySelector('input[type="text"]').placeholder = 'Vaihtoehto ' + (i + 1);
+        row.querySelector('input[type="text"]').placeholder = formatChallengePanelMessage(challengePanelI18n.optionLabel, { number: i + 1 });
     });
 
     document.getElementById('addOptionBtn').style.display = '';

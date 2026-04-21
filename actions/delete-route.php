@@ -15,7 +15,7 @@ if (empty($_SESSION['user_public_id']) || empty($_SESSION['is_admin'])) {
 $route_public_id = trim($_POST['route_public_id'] ?? '');
 
 if (empty($route_public_id)) {
-    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message' => 'Reitti-ID puuttuu.'];
+    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message_key' => 'actions.delete_route.missing_id'];
     header('Location: ' . ROOT_DIR . 'pages/admin/dashboard.php');
     exit;
 }
@@ -23,7 +23,7 @@ if (empty($route_public_id)) {
 try {
     $route = Tools::getRouteByPublicId($route_public_id);
 } catch (Exception $e) {
-    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message' => 'Reittiä ei löydy.'];
+    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message_key' => 'actions.delete_route.not_found'];
     header('Location: ' . ROOT_DIR . 'pages/admin/dashboard.php');
     exit;
 }
@@ -39,16 +39,16 @@ $stmt->close();
 $db->close();
 
 if (!$owns_route) {
-    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message' => 'Ei oikeutta poistaa tätä reittiä.'];
+    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message_key' => 'actions.delete_route.forbidden'];
     header('Location: ' . ROOT_DIR . 'pages/admin/dashboard.php');
     exit;
 }
 
 try {
     $route->delete();
-    $_SESSION['flash_messages'][] = ['type' => 'success', 'code' => 0, 'message' => 'Reitti poistettu onnistuneesti.'];
+    $_SESSION['flash_messages'][] = ['type' => 'success', 'code' => 0, 'message_key' => 'actions.delete_route.success'];
 } catch (Exception $e) {
-    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message' => 'Reitin poistaminen epäonnistui.'];
+    $_SESSION['flash_messages'][] = ['type' => 'error', 'code' => 0, 'message_key' => 'actions.delete_route.failed'];
 }
 
 header('Location: ' . ROOT_DIR . 'pages/admin/dashboard.php');

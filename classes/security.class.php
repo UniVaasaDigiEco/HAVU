@@ -59,6 +59,8 @@ class Security{
             session_name(SESSION_NAME);
             session_start();
         }
+
+        HavuLocale::init();
     }
 
     public static function logout(): void{

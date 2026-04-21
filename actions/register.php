@@ -18,22 +18,22 @@ $password2 = $_POST['password_confirm'] ?? '';
 
 // Validate
 if (empty($full_name) || mb_strlen($full_name) < 2) {
-    header('Location: ../register.php?error=' . urlencode('Nimi on pakollinen (vähintään 2 merkkiä).'));
+    header('Location: ../register.php?error_key=' . urlencode('actions.register.name_required'));
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    header('Location: ../register.php?error=' . urlencode('Anna kelvollinen sähköpostiosoite.'));
+    header('Location: ../register.php?error_key=' . urlencode('actions.register.invalid_email'));
     exit;
 }
 
 if (mb_strlen($password) < 8) {
-    header('Location: ../register.php?error=' . urlencode('Salasanan on oltava vähintään 8 merkkiä pitkä.'));
+    header('Location: ../register.php?error_key=' . urlencode('actions.register.password_length'));
     exit;
 }
 
 if ($password !== $password2) {
-    header('Location: ../register.php?error=' . urlencode('Salasanat eivät täsmää.'));
+    header('Location: ../register.php?error_key=' . urlencode('actions.register.password_mismatch'));
     exit;
 }
 
@@ -49,14 +49,14 @@ $stmt->close();
 $db->close();
 
 if ($exists) {
-    header('Location: ../register.php?error=' . urlencode('Sähköpostiosoite on jo käytössä.'));
+    header('Location: ../register.php?error_key=' . urlencode('actions.register.email_in_use'));
     exit;
 }
 
 try {
     Security::addUser($email, $password, $full_name, USER_TYPE_REGULAR);
 } catch (Exception $e) {
-    header('Location: ../register.php?error=' . urlencode('Tunnuksen luominen epäonnistui. Yritä uudelleen.'));
+    header('Location: ../register.php?error_key=' . urlencode('actions.register.create_failed'));
     exit;
 }
 

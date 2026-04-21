@@ -7,27 +7,28 @@ header('Content-Type: application/json');
 
 Security::initSession();
 
-if (empty($_SESSION['user_public_id'])) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Not authenticated']);
+function visitError(int $status, string $key): never
+{
+    http_response_code($status);
+    echo json_encode(['error' => t($key)]);
     exit;
+}
+
+if (empty($_SESSION['user_public_id'])) {
+    visitError(401, 'actions.track_visit.not_authenticated');
 }
 
 $node_id          = isset($_POST['node_id']) ? (int)$_POST['node_id'] : 0;
 $route_public_id  = trim($_POST['route_public_id'] ?? '');
 
 if ($node_id <= 0 || empty($route_public_id)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid parameters']);
-    exit;
+    visitError(400, 'actions.track_visit.invalid_parameters');
 }
 
 try {
     $user_id = Tools::getUserIdByPublicId($_SESSION['user_public_id']);
 } catch (Exception $e) {
-    http_response_code(401);
-    echo json_encode(['error' => 'User not found']);
-    exit;
+    visitError(401, 'actions.track_visit.user_not_found');
 }
 
 $db = Tools::getDb();
@@ -40,9 +41,7 @@ try {
     $stmt->bind_result($route_id);
     $stmt->store_result();
     if ($stmt->num_rows === 0) {
-        http_response_code(404);
-        echo json_encode(['error' => 'Route not found']);
-        exit;
+        visitError(404, 'actions.track_visit.route_not_found');
     }
     $stmt->fetch();
     $stmt->close();
@@ -53,9 +52,7 @@ try {
     $stmt->execute();
     $stmt->store_result();
     if ($stmt->num_rows === 0) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Node does not belong to this route']);
-        exit;
+        visitError(400, 'actions.track_visit.node_mismatch');
     }
     $stmt->close();
 
@@ -90,8 +87,7 @@ try {
     echo json_encode(['visited' => true, 'route_completed' => $route_completed]);
 
 } catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Server error']);
+    visitError(500, 'actions.track_visit.server_error');
 } finally {
     $db->close();
 }

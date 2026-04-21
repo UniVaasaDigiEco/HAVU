@@ -18,10 +18,10 @@ $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https'
 $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/game.php?route=';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
-    <title>HAVU - Gamification - Ylläpitäjän hallintapaneeli</title>
+    <title><?= htmlspecialchars(t('admin_dashboard.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
@@ -29,56 +29,57 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
+<?php require_once '../../includes/_language_switcher.php'; ?>
 <div class="container-fluid">
     <div class="d-flex flex-row py-3">
         <div id="menu" class="col-2 pe-2" style="position: sticky; top: 1rem; align-self: flex-start;">
             <div id="menu-content" class="p-3 bg-primary-subtle rounded-3 shadow">
-                <h3 class="text-center"><i class="bi bi-gear-fill me-2"></i>Ylläpitäjän hallintapaneeli</h3>
+                <h3 class="text-center"><i class="bi bi-gear-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.heading'), ENT_QUOTES, 'UTF-8') ?></h3>
                 <button class="btn btn-primary text-white w-100" id="show-route-management" data-target="#route-management">
-                    <i class="bi bi-map-fill"></i> Hallitse reittejä
+                    <i class="bi bi-map-fill"></i> <?= htmlspecialchars(t('admin_dashboard.route_management'), ENT_QUOTES, 'UTF-8') ?>
                 </button>
-                <a class="btn btn-primary text-white w-100" id="goto-game" href="../player/dashboard.php"><i class="bi bi-joystick"></i> Siirry peliin</a>
-                <a class="btn btn-primary text-white w-100" id="logout" href="../../actions/logout.php"><i class="bi bi-box-arrow-left me-1"></i> Kirjaudu ulos</a>
+                <a class="btn btn-primary text-white w-100" id="goto-game" href="../player/dashboard.php"><i class="bi bi-joystick"></i> <?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?></a>
+                <a class="btn btn-primary text-white w-100" id="logout" href="../../actions/logout.php"><i class="bi bi-box-arrow-left me-1"></i> <?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?></a>
             </div>
         </div>
         <div id="dashboard-content" class="col-10">
             <div id="route-management" class="p-4 bg-secondary-subtle rounded-3 shadow">
                 <div id="header" class="mb-4">
-                    <h3><i class="bi bi-map-fill me-2"></i>Reittien hallinta</h3>
+                    <h3><i class="bi bi-map-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_management'), ENT_QUOTES, 'UTF-8') ?></h3>
                     <?php
                     echo Message::displayFlashMessages();
                     ?>
                     <!--<p class="lead">Here you can manage the routes for the game. Create new routes, edit existing ones, or remove routes that are no longer needed.</p>-->
-                    <p class="lead">Tästä voit hallita reittejäsi. Luo uusia reittejä, muokkaa olemassa olevia, tai poista reittejä, joita ei enää tarvita.</p>
+                    <p class="lead"><?= htmlspecialchars(t('admin_dashboard.route_management_intro'), ENT_QUOTES, 'UTF-8') ?></p>
                     <p>
-                        Tässä on eri oppaita HAVU-polkupelin käyttämiseen, alla myös vanhempi opas, jossa ei ole kaikkia ominaisuuksia mainittu, mutta sisältää enemmän kuvakaappauksia, mikä voi antaa paremmin apua.<br>
-                        <a target="_blank" href="files/HAVU_reitinluojan_opas.pdf">Opas reittien luomiseen</a>
+                        <?= htmlspecialchars(t('admin_dashboard.manuals_intro'), ENT_QUOTES, 'UTF-8') ?><br>
+                        <a target="_blank" href="files/HAVU_reitinluojan_opas.pdf"><?= htmlspecialchars(t('admin_dashboard.route_creator_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                         <br>
-                        <a target="_blank" href="files/HAVU_pelaajanopas.pdf">Opas pelaamiseen</a>
+                        <a target="_blank" href="files/HAVU_pelaajanopas.pdf"><?= htmlspecialchars(t('admin_dashboard.player_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                         <br>
-                        <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf">Pelaajan pikaopas</a>
+                        <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('admin_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                     </p>
                     <p>
-                        <a href="files/user_guide_FI.docx" download>Lataa ohjeet tästä (vanha)</a>
+                        <a href="files/user_guide_FI.docx" download><?= htmlspecialchars(t('admin_dashboard.download_old_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                     </p>
                 </div>
                 <div id="route-management-controls" class="d-flex flex-wrap gap-2">
                     <a href="new-route.php" class="btn btn-primary text-white" id="btn-newRoute">
-                        <i class="bi bi-plus-circle-fill"></i> Lisää uusi reitti
+                        <i class="bi bi-plus-circle-fill"></i> <?= htmlspecialchars(t('admin_dashboard.new_route'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                     <a href="edit-route.php" class="btn btn-primary text-white" id="btn-editRoute">
-                        <i class="bi bi-pencil-fill"></i> Muokkaa reittiä
+                        <i class="bi bi-pencil-fill"></i> <?= htmlspecialchars(t('admin_dashboard.edit_route'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                     <a href="delete-route.php" class="btn btn-danger text-white" id="btn-deleteRoute">
-                        <i class="bi bi-trash-fill"></i> Poista reitti
+                        <i class="bi bi-trash-fill"></i> <?= htmlspecialchars(t('admin_dashboard.delete_route'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </div>
                 <div id="route-testing" class="mt-4 route-management-section">
-                    <h3><i class="bi bi-map-fill me-2"></i>Reittien testaaminen</h3>
+                    <h3><i class="bi bi-map-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_testing'), ENT_QUOTES, 'UTF-8') ?></h3>
                     <div class="mb-3">
-                        <label for="route-select" class="form-label">Valitse testattava reitti, ja klikkaa "Pelaa" testataksesi reittiä:</label>
+                        <label for="route-select" class="form-label"><?= htmlspecialchars(t('admin_dashboard.route_testing_label'), ENT_QUOTES, 'UTF-8') ?></label>
                         <select class="form-select" id="route-select">
-                            <option selected disabled>Valitse reitti</option>
+                            <option selected disabled><?= htmlspecialchars(t('admin_dashboard.choose_route'), ENT_QUOTES, 'UTF-8') ?></option>
                             <?php
                             if($routes){
                                 foreach ($routes as $route){
@@ -88,12 +89,12 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                             ?>
                         </select>
                     </div>
-                    <button type="button" id="btn-play" class="btn btn-primary text-white"><i class="bi bi-joystick"></i> Pelaa</button>
+                    <button type="button" id="btn-play" class="btn btn-primary text-white"><i class="bi bi-joystick"></i> <?= htmlspecialchars(t('admin_dashboard.play'), ENT_QUOTES, 'UTF-8') ?></button>
                     <script>
                         $('#btn-play').on('click', function(){
                             const selectedRoutePublicId = $('#route-select').val();
                             if(!selectedRoutePublicId){
-                                alert("Please select a route to test.");
+                                alert(<?= json_encode(t('admin_dashboard.choose_route_alert'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>);
                                 return;
                             }
                             window.location.href = `testGame.php?route=${selectedRoutePublicId}`;
@@ -102,16 +103,16 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                 </div>
 
                 <div id="route-sharing" class="mt-4" style="border-top: 2px solid rgba(123,162,90,.2); margin-top: 3rem; padding-top: 2rem;">
-                    <h3><i class="bi bi-share-fill me-2"></i>Reittien jakaminen</h3>
-                    <p class="lead">Jaa reitti pelaajille linkin tai QR-koodin avulla. Julkiset reitit näkyvät kaikille pelaajille; yksityiset ovat pelattavissa vain jaetun linkin kautta.</p>
+                    <h3><i class="bi bi-share-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_sharing'), ENT_QUOTES, 'UTF-8') ?></h3>
+                    <p class="lead"><?= htmlspecialchars(t('admin_dashboard.route_sharing_intro'), ENT_QUOTES, 'UTF-8') ?></p>
                     <?php if ($routes): ?>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th>Reitti</th>
-                                    <th>Tila</th>
-                                    <th>Toiminnot</th>
+                                    <th><?= htmlspecialchars(t('admin_dashboard.table_route'), ENT_QUOTES, 'UTF-8') ?></th>
+                                    <th><?= htmlspecialchars(t('admin_dashboard.table_status'), ENT_QUOTES, 'UTF-8') ?></th>
+                                    <th><?= htmlspecialchars(t('admin_dashboard.table_actions'), ENT_QUOTES, 'UTF-8') ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,9 +121,9 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                                     <td><?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?></td>
                                     <td>
                                         <?php if ($route->getIsPublished()): ?>
-                                            <span class="badge bg-success"><i class="bi bi-eye me-1"></i>Julkinen</span>
+                                            <span class="badge bg-success"><i class="bi bi-eye me-1"></i><?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?></span>
                                         <?php else: ?>
-                                            <span class="badge bg-secondary"><i class="bi bi-eye-slash me-1"></i>Yksityinen</span>
+                                            <span class="badge bg-secondary"><i class="bi bi-eye-slash me-1"></i><?= htmlspecialchars(t('common.private'), ENT_QUOTES, 'UTF-8') ?></span>
                                         <?php endif; ?>
                                     </td>
                                     <td>
@@ -130,17 +131,17 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                                             <button class="btn btn-sm btn-outline-primary btn-share"
                                                     data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
                                                     data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
-                                                <i class="bi bi-qr-code me-1"></i>Jaa
+                                                <i class="bi bi-qr-code me-1"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
                                             </button>
                                             <form action="../../actions/toggle_publish.php" method="POST" class="m-0">
                                                 <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <?php if ($route->getIsPublished()): ?>
                                                     <button type="submit" class="btn btn-sm btn-outline-warning">
-                                                        <i class="bi bi-eye-slash me-1"></i>Tee yksityiseksi
+                                                        <i class="bi bi-eye-slash me-1"></i><?= htmlspecialchars(t('admin_dashboard.make_private'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 <?php else: ?>
                                                     <button type="submit" class="btn btn-sm btn-outline-success">
-                                                        <i class="bi bi-eye me-1"></i>Julkaise
+                                                        <i class="bi bi-eye me-1"></i><?= htmlspecialchars(t('admin_dashboard.publish'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 <?php endif; ?>
                                             </form>
@@ -152,7 +153,7 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                         </table>
                     </div>
                     <?php else: ?>
-                        <p class="text-muted">Sinulla ei ole vielä reittejä.</p>
+                        <p class="text-muted"><?= htmlspecialchars(t('admin_dashboard.no_routes'), ENT_QUOTES, 'UTF-8') ?></p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -166,22 +167,22 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="shareModalLabel">
-                    <i class="bi bi-share me-2"></i>Jaa: <span id="shareModalTitle"></span>
+                    <i class="bi bi-share me-2"></i><?= htmlspecialchars(t('admin_dashboard.share_modal_title'), ENT_QUOTES, 'UTF-8') ?><span id="shareModalTitle"></span>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulje"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
             </div>
             <div class="modal-body text-center">
                 <p class="text-muted mb-3">
-                    <label for="shareUrl">Jaa tämä linkki tai QR-koodi pelaajille — he pääsevät reitille suoraan, myös ilman kirjautumista.</label>
+                    <label for="shareUrl"><?= htmlspecialchars(t('admin_dashboard.share_modal_intro'), ENT_QUOTES, 'UTF-8') ?></label>
                 </p>
                 <div class="input-group mb-4">
                     <input type="text" class="form-control font-monospace small" id="shareUrl" readonly>
-                    <button class="btn btn-outline-secondary" id="btnCopyUrl" type="button" title="Kopioi linkki">
+                    <button class="btn btn-outline-secondary" id="btnCopyUrl" type="button" title="<?= htmlspecialchars(t('admin_dashboard.copy_link'), ENT_QUOTES, 'UTF-8') ?>">
                         <i class="bi bi-clipboard"></i>
                     </button>
                 </div>
                 <img id="shareQr" src="" alt="QR-koodi" class="border rounded p-2" style="width:200px;height:200px;">
-                <p class="text-muted small mt-2"><i class="bi bi-info-circle me-1"></i>QR-koodi vie suoraan reitille</p>
+                <p class="text-muted small mt-2"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('admin_dashboard.qr_info'), ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
     </div>

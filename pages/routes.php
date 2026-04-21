@@ -73,44 +73,45 @@ try {
 }
 ?>
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU Gamification - Valitse reitti</title>
+    <title><?= htmlspecialchars(t('routes.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="stylesheet" href="../css/bs-custom.css">
     <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body>
+<?php require_once '../includes/_language_switcher.php'; ?>
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="../index.php">
             <img src="../images/havu_logo.png" alt="HAVU" height="30" class="me-2">
-            HAVU Gamification
+            <?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?>
         </a>
         <div class="ms-auto d-flex align-items-center gap-2">
             <?php if ($is_admin): ?>
                 <a href="admin/dashboard.php" class="btn btn-sm btn-warning">
-                    <i class="bi bi-gear-fill me-1"></i>Hallintapaneeli
+                    <i class="bi bi-gear-fill me-1"></i><?= htmlspecialchars(t('common.admin_panel'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
                 <a href="../actions/logout.php" class="btn btn-sm btn-outline-light">
-                    <i class="bi bi-box-arrow-right me-1"></i>Kirjaudu ulos
+                    <i class="bi bi-box-arrow-right me-1"></i><?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php elseif ($is_logged_in): ?>
                 <a href="player/dashboard.php" class="btn btn-sm btn-outline-light">
-                    <i class="bi bi-person-fill me-1"></i>Oma profiili
+                    <i class="bi bi-person-fill me-1"></i><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
                 <a href="../actions/logout.php" class="btn btn-sm btn-outline-light">
-                    <i class="bi bi-box-arrow-right me-1"></i>Kirjaudu ulos
+                    <i class="bi bi-box-arrow-right me-1"></i><?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php else: ?>
                 <a href="../login.php" class="btn btn-sm btn-outline-light">
-                    <i class="bi bi-box-arrow-in-right me-1"></i>Kirjaudu sisään
+                    <i class="bi bi-box-arrow-in-right me-1"></i><?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
                 <a href="../register.php" class="btn btn-sm btn-light">
-                    <i class="bi bi-person-plus-fill me-1"></i>Luo tunnus
+                    <i class="bi bi-person-plus-fill me-1"></i><?= htmlspecialchars(t('common.create_account'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php endif; ?>
         </div>
@@ -119,15 +120,15 @@ try {
 
 <div class="container py-5">
     <div class="text-center mb-5">
-        <h1 class="fw-bold">Valitse reitti</h1>
-        <p class="lead text-muted">Valitse alta reitti, jonka haluat kävellä. GPS opastaa sinut rastin luo.</p>
+        <h1 class="fw-bold"><?= htmlspecialchars(t('routes.heading'), ENT_QUOTES, 'UTF-8') ?></h1>
+        <p class="lead text-muted"><?= htmlspecialchars(t('routes.intro'), ENT_QUOTES, 'UTF-8') ?></p>
         <p class="text-muted">
-            <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf">Pelaajan pikaopas</a>
+            <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('routes.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
         </p>
         <?php if (!$is_logged_in): ?>
             <p class="text-muted small">
                 <i class="bi bi-info-circle me-1"></i>
-                <a href="../register.php">Luo tunnus ilmaiseksi</a> seurataksesi edistymistäsi — tai pelaa suoraan ilman tunnusta.
+                <?= t('routes.register_prompt') ?>
             </p>
         <?php endif; ?>
     </div>
@@ -135,7 +136,7 @@ try {
     <?php if (empty($routes)): ?>
         <div class="text-center py-5 text-muted">
             <i class="bi bi-map" style="font-size: 3rem;"></i>
-            <p class="mt-3">Ei reittejä saatavilla tällä hetkellä.</p>
+            <p class="mt-3"><?= htmlspecialchars(t('routes.empty'), ENT_QUOTES, 'UTF-8') ?></p>
         </div>
     <?php else: ?>
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
@@ -154,11 +155,11 @@ try {
                                 <h5 class="card-title mb-0"><?= htmlspecialchars($route['title'], ENT_QUOTES, 'UTF-8') ?></h5>
                                 <?php if ($is_complete): ?>
                                     <span class="badge bg-success ms-2 text-nowrap">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Suoritettu
+                                        <i class="bi bi-check-circle-fill me-1"></i><?= htmlspecialchars(t('common.status_completed'), ENT_QUOTES, 'UTF-8') ?>
                                     </span>
                                 <?php elseif ($is_started): ?>
                                     <span class="badge bg-warning text-dark ms-2 text-nowrap">
-                                        <i class="bi bi-hourglass-split me-1"></i>Kesken
+                                        <i class="bi bi-hourglass-split me-1"></i><?= htmlspecialchars(t('common.status_in_progress'), ENT_QUOTES, 'UTF-8') ?>
                                     </span>
                                 <?php endif; ?>
                             </div>
@@ -169,13 +170,13 @@ try {
 
                             <div class="d-flex align-items-center gap-2 mb-3 text-muted small">
                                 <i class="bi bi-geo-alt-fill text-primary"></i>
-                                <span><?= $total ?> rastia</span>
+                                <span><?= htmlspecialchars(t('common.node_count', ['count' => $total]), ENT_QUOTES, 'UTF-8') ?></span>
                             </div>
 
                             <?php if ($is_started && $is_logged_in): ?>
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between small mb-1">
-                                        <span>Edistyminen</span>
+                                        <span><?= htmlspecialchars(t('common.progress'), ENT_QUOTES, 'UTF-8') ?></span>
                                         <span><?= $visited ?>/<?= $total ?></span>
                                     </div>
                                     <div class="progress" style="height: 6px;">
@@ -188,7 +189,7 @@ try {
                                         <div class="progress-bar bg-success" style="width: 100%"></div>
                                     </div>
                                     <small class="text-muted">
-                                        Suoritettu <?= date('d.m.Y', strtotime($completed_route_ids[$route_id])) ?>
+                                        <?= htmlspecialchars(t('common.route_completed_on', ['date' => date('d.m.Y', strtotime($completed_route_ids[$route_id]))]), ENT_QUOTES, 'UTF-8') ?>
                                     </small>
                                 </div>
                             <?php endif; ?>
@@ -197,7 +198,7 @@ try {
                             <a href="game.php?route=<?= htmlspecialchars($route['public_id'], ENT_QUOTES, 'UTF-8') ?>"
                                class="btn btn-primary w-100">
                                 <i class="bi bi-joystick me-1"></i>
-                                <?= $is_complete ? 'Pelaa uudelleen' : ($is_started ? 'Jatka reittiä' : 'Aloita reitti') ?>
+                                <?= htmlspecialchars($is_complete ? t('common.play_again') : ($is_started ? t('common.continue_route') : t('common.start_route')), ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </div>
                     </div>

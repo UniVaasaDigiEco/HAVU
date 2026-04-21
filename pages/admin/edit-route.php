@@ -5,9 +5,15 @@ require_once('../../classes/security.class.php');
 require_once('../../classes/message.class.php');
 Security::initSession();
 
+$summernote_locale = [
+    'fi' => 'fi-FI',
+    'en' => 'en-US',
+    'sv' => 'sv-SE',
+][current_locale()] ?? 'fi-FI';
+
 try {
     if (empty($_SESSION['user_public_id'])) {
-        throw new Exception('User not authenticated');
+        throw new Exception(t('actions.route_form.user_not_authenticated'));
     }
     $user = Tools::getUserWithPublicId($_SESSION['user_public_id']);
 } catch (Exception $e) {
@@ -25,23 +31,23 @@ if (!empty($selected_route_public_id)) {
         $candidate_route_data = $selected_route->toArray();
 
         if (($candidate_route_data['user_id'] ?? '') !== $_SESSION['user_public_id']) {
-            throw new Exception('You can only edit your own routes.');
+            throw new Exception(t('admin_edit_route.only_own_routes'));
         }
 
         $route_data = $candidate_route_data;
     } catch (Exception $e) {
-        $error = 'Failed to load route: ' . $e->getMessage();
+        $error = t('admin_edit_route.load_error', ['message' => $e->getMessage()]);
     }
 }
 
 $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 ?>
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU - Muokkaa reittiä</title>
+    <title><?= htmlspecialchars(t('admin_edit_route.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css">
@@ -95,16 +101,17 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
+<?php require_once '../../includes/_language_switcher.php'; ?>
 <div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2><i class="bi bi-pencil-fill me-2"></i>Muokkaa reittiä</h2>
-                    <p class="text-muted mb-0">Valitse reitti ja muokkaa sen tietoja ja rasteja</p>
+                    <h2><i class="bi bi-pencil-fill me-2"></i><?= htmlspecialchars(t('admin_edit_route.heading'), ENT_QUOTES, 'UTF-8') ?></h2>
+                    <p class="text-muted mb-0"><?= htmlspecialchars(t('admin_edit_route.subheading'), ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
                 <a href="dashboard.php" class="btn btn-warning">
-                    <i class="bi bi-arrow-left"></i> Takaisin hallintapaneeliin
+                    <i class="bi bi-arrow-left"></i> <?= htmlspecialchars(t('common.back_to_dashboard'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             </div>
         </div>
@@ -112,14 +119,14 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i>Valitse muokattava reitti</h5>
-        </div>
-        <div class="card-body">
-            <form id="routeSelectForm" method="GET" class="row g-3 align-items-end">
-                <div class="col-lg-8">
-                    <label for="route_public_id" class="form-label">Omat reitit</label>
-                    <select class="form-select" id="route_public_id" name="route_public_id">
-                        <option value="">-- Valitse reitti --</option>
+                        <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i><?= htmlspecialchars(t('admin_edit_route.select_route'), ENT_QUOTES, 'UTF-8') ?></h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="routeSelectForm" method="GET" class="row g-3 align-items-end">
+                            <div class="col-lg-8">
+                                <label for="route_public_id" class="form-label"><?= htmlspecialchars(t('admin_edit_route.my_routes'), ENT_QUOTES, 'UTF-8') ?></label>
+                                <select class="form-select" id="route_public_id" name="route_public_id">
+                                    <option value=""><?= htmlspecialchars(t('admin_edit_route.route_select_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
                         <?php foreach ($user_routes as $route): ?>
                             <?php
                             $route_public_id = $route->getPublicId();
@@ -129,14 +136,14 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                                 <?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>
                             </option>
                         <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-lg-4">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-arrow-repeat me-2"></i>Lataa reitti
-                    </button>
-                </div>
-            </form>
+                                </select>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-arrow-repeat me-2"></i><?= htmlspecialchars(t('admin_edit_route.load_route'), ENT_QUOTES, 'UTF-8') ?>
+                                </button>
+                            </div>
+                        </form>
         </div>
     </div>
 
@@ -154,11 +161,11 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i>Reitin tiedot</h5>
+                        <h5 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i><?= htmlspecialchars(t('route_editor.route_details'), ENT_QUOTES, 'UTF-8') ?></h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="route_title" class="form-label">Reitin nimi <span class="text-danger">*</span></label>
+                            <label for="route_title" class="form-label"><?= htmlspecialchars(t('common.route_name'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -170,7 +177,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                         </div>
 
                         <div class="mb-3">
-                            <label for="route_description" class="form-label">Reitin kuvaus</label>
+                            <label for="route_description" class="form-label"><?= htmlspecialchars(t('common.route_description'), ENT_QUOTES, 'UTF-8') ?></label>
                             <textarea class="form-control" id="route_description" name="route_description" rows="4"><?= htmlspecialchars($route_data['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                         </div>
 
@@ -178,14 +185,14 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" <?= !isset($route_data) || !empty($route_data['is_published']) ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="is_published">
-                                    Julkinen
+                                    <?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
                                 </label><br>
-                                <small id="public-help">Jos haluat, että reitti näkyy ja on pelattavissa kaikille pelaajille, merkkaa reitti julkiseksi</small>
+                                <small id="public-help"><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="publication_date" class="form-label">Julkaisupäivämäärä <span class="text-danger">*</span></label>
+                            <label for="publication_date" class="form-label"><?= htmlspecialchars(t('common.publication_date'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
                             <input
                                 type="date"
                                 class="form-control"
@@ -200,13 +207,13 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i>Rasti(t) (<span id="nodeCount">0</span>)</h5>
+                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i><?= htmlspecialchars(t('common.nodes'), ENT_QUOTES, 'UTF-8') ?> (<span id="nodeCount">0</span>)</h5>
                     </div>
                     <div class="card-body p-0">
                         <div id="nodesList" class="list-group list-group-flush">
                             <div class="node-list-empty">
                                 <i class="bi bi-cursor-fill" style="font-size: 3rem;"></i>
-                                <p class="mt-3">Klikkaa paikkaa kartalla, lisätäksesi rastin reitille</p>
+                                <p class="mt-3"><?= htmlspecialchars(t('route_editor.nodes_empty'), ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                         </div>
                     </div>
@@ -216,87 +223,87 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             <div class="col-lg-8">
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="bi bi-map me-2"></i>Kartta</h5>
+                        <h5 class="mb-0"><i class="bi bi-map me-2"></i><?= htmlspecialchars(t('common.map'), ENT_QUOTES, 'UTF-8') ?></h5>
                     </div>
                     <div class="card-body">
                         <div id="map"></div>
                         <div class="mt-2 text-muted small">
-                            <i class="bi bi-info-circle"></i> Klikkaa mitä tahansa kohtaa kartalla lisätäksesi rastin. Voit muuttaa rastin paikkaa vetämällä sitä, tai muokata rastin tietoja klikkaamalla rastia.
+                            <i class="bi bi-info-circle"></i> <?= htmlspecialchars(t('route_editor.map_help'), ENT_QUOTES, 'UTF-8') ?>
                         </div>
                     </div>
                 </div>
 
                 <div id="nodeEditor" class="card shadow-sm" style="display: none; position: relative;">
                     <div id="uploadOverlay" style="display:none; position:absolute; inset:0; z-index:10; background:rgba(255,255,255,0.88); border-radius:0.375rem; align-items:center; justify-content:center; flex-direction:column;">
-                        <div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem;" role="status">
-                            <span class="visually-hidden">Ladataan...</span>
+                            <div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem;" role="status">
+                            <span class="visually-hidden"><?= htmlspecialchars(t('common.loading'), ENT_QUOTES, 'UTF-8') ?></span>
                         </div>
-                        <p class="mt-3 mb-0 fw-semibold text-primary">Ladataan tiedostoa...</p>
+                        <p class="mt-3 mb-0 fw-semibold text-primary"><?= htmlspecialchars(t('common.loading_file'), ENT_QUOTES, 'UTF-8') ?></p>
                     </div>
                     <div class="card-header bg-warning">
-                        <h5 class="mb-0"><i class="bi bi-pencil-fill me-2"></i>Muokkaa rastia</h5>
+                        <h5 class="mb-0"><i class="bi bi-pencil-fill me-2"></i><?= htmlspecialchars(t('route_editor.node_edit'), ENT_QUOTES, 'UTF-8') ?></h5>
                     </div>
                     <div class="card-body">
                         <input type="hidden" id="editNodeIndex">
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="node_title" class="form-label">Rastin nimi <span class="text-danger">*</span></label>
+                                <label for="node_title" class="form-label"><?= htmlspecialchars(t('common.node_name'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="node_title">
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label for="node_lat" class="form-label">Leveyspiiri</label>
+                                <label for="node_lat" class="form-label"><?= htmlspecialchars(t('route_editor.latitude'), ENT_QUOTES, 'UTF-8') ?></label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lat" readonly>
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label for="node_lng" class="form-label">Pituuspiiri</label>
+                                <label for="node_lng" class="form-label"><?= htmlspecialchars(t('route_editor.longitude'), ENT_QUOTES, 'UTF-8') ?></label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lng" readonly>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="node_content" class="form-label">Rastin sisältö</label>
+                            <label for="node_content" class="form-label"><?= htmlspecialchars(t('common.node_content'), ENT_QUOTES, 'UTF-8') ?></label>
                             <textarea id="node_content"></textarea>
-                            <small>Lyhyt sisältö rastille. Voit lisätä kuvia ja videoita.</small>
+                            <small><?= htmlspecialchars(t('route_editor.node_content_help_short'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
 
                         <!-- Challenge panel -->
                         <div class="mb-3 p-3 rounded" style="border: 2px solid #ffc107;">
-                            <label class="form-label fw-semibold mb-2">Haaste (valinnainen)</label>
+                            <label class="form-label fw-semibold mb-2"><?= htmlspecialchars(t('route_editor.challenge'), ENT_QUOTES, 'UTF-8') ?></label>
                             <div class="d-flex gap-2 mb-3 flex-wrap">
-                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')">Ei haastetta</button>
-                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')">Monivalinta</button>
-                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')">Tekstivastaus</button>
+                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')"><?= htmlspecialchars(t('route_editor.challenge_none'), ENT_QUOTES, 'UTF-8') ?></button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')"><?= htmlspecialchars(t('route_editor.challenge_multiple_choice'), ENT_QUOTES, 'UTF-8') ?></button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')"><?= htmlspecialchars(t('route_editor.challenge_text'), ENT_QUOTES, 'UTF-8') ?></button>
                             </div>
                             <div id="challengeMCFields" style="display:none;">
                                 <div class="mb-2">
-                                    <label class="form-label form-label-sm">Kysymys</label>
-                                    <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="Kirjoita kysymys...">
+                                    <label class="form-label form-label-sm"><?= htmlspecialchars(t('route_editor.challenge_question'), ENT_QUOTES, 'UTF-8') ?></label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="<?= htmlspecialchars(t('route_editor.challenge_question_placeholder'), ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                                 <div id="challengeOptions"></div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()">+ Lisää vaihtoehto</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()"><?= htmlspecialchars(t('route_editor.challenge_add_option'), ENT_QUOTES, 'UTF-8') ?></button>
                             </div>
                             <div id="challengeTextFields" style="display:none;">
                                 <div class="mb-2">
-                                    <label class="form-label form-label-sm">Kysymys</label>
-                                    <input type="text" class="form-control form-control-sm" id="challengeTextQuestion" placeholder="Kirjoita kysymys...">
+                                    <label class="form-label form-label-sm"><?= htmlspecialchars(t('route_editor.challenge_question'), ENT_QUOTES, 'UTF-8') ?></label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextQuestion" placeholder="<?= htmlspecialchars(t('route_editor.challenge_question_placeholder'), ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                                 <div class="mb-2">
-                                    <label class="form-label form-label-sm">Oikea vastaus</label>
-                                    <input type="text" class="form-control form-control-sm" id="challengeTextAnswer" placeholder="Oikea vastaus...">
+                                    <label class="form-label form-label-sm"><?= htmlspecialchars(t('route_editor.challenge_correct_answer'), ENT_QUOTES, 'UTF-8') ?></label>
+                                    <input type="text" class="form-control form-control-sm" id="challengeTextAnswer" placeholder="<?= htmlspecialchars(t('route_editor.challenge_correct_answer_placeholder'), ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
-                                <small class="text-muted">Vastaukset tarkistetaan automaattisella samanlaistuksella (~70 %).</small>
+                                <small class="text-muted"><?= htmlspecialchars(t('route_editor.challenge_similarity_hint'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                         </div>
 
                         <div class="d-flex gap-2">
                             <button type="button" class="btn btn-primary" onclick="saveNodeEdit()">
-                                <i class="bi bi-check-lg"></i> Tallenna rasti
+                                <i class="bi bi-check-lg"></i> <?= htmlspecialchars(t('route_editor.save_node'), ENT_QUOTES, 'UTF-8') ?>
                             </button>
                             <button type="button" class="btn btn-outline-secondary" onclick="cancelNodeEdit()">
-                                Peruuta
+                                <?= htmlspecialchars(t('common.cancel'), ENT_QUOTES, 'UTF-8') ?>
                             </button>
                         </div>
                     </div>
@@ -310,11 +317,11 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="mb-1">Valmis päivittämään reitin?</h5>
-                                <p class="text-muted mb-0">Tarkista reitin tiedot ja rastit, ja tallenna muutokset</p>
+                                <h5 class="mb-1"><?= htmlspecialchars(t('route_editor.update_ready'), ENT_QUOTES, 'UTF-8') ?></h5>
+                                <p class="text-muted mb-0"><?= htmlspecialchars(t('route_editor.update_ready_help'), ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                             <button type="submit" class="btn btn-success btn-lg" id="updateRouteBtn" <?= empty($selected_route_public_id) ? 'disabled' : '' ?>>
-                                <i class="bi bi-save-fill me-2"></i> Tallenna muutokset
+                                <i class="bi bi-save-fill me-2"></i> <?= htmlspecialchars(t('route_editor.save_changes'), ENT_QUOTES, 'UTF-8') ?>
                             </button>
                         </div>
                     </div>
@@ -328,7 +335,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
 <script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
-<script src="../../node_modules/summernote/dist/lang/summernote-fi-FI.min.js"></script>
+<script src="../../node_modules/summernote/dist/lang/summernote-<?= htmlspecialchars($summernote_locale, ENT_QUOTES, 'UTF-8') ?>.min.js"></script>
 <script src="../../js/challenge-panel.js"></script>
 <script>
     let map;
@@ -338,6 +345,17 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     const CAMPUS_CENTER = [63.1055, 21.5929];
     const selectedRoutePublicId = <?= json_encode($selected_route_public_id, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     const selectedRouteData = <?= $route_data_json ?: 'null' ?>;
+    const translations = <?= HavuLocale::jsonNamespace('common', 'route_editor') ?>;
+    const commonTranslations = translations.common;
+    const routeEditorTranslations = translations.route_editor;
+    window.challengePanelTranslations = routeEditorTranslations;
+
+    function translate(template, params = {}) {
+        return Object.entries(params).reduce(
+            (value, [key, replacement]) => value.replaceAll(`:${key}`, replacement),
+            template
+        );
+    }
 
     // Upload image or video file and insert into editor
     function uploadFile(file, type) {
@@ -362,13 +380,15 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                         $('#node_content').summernote('pasteHTML', videoHtml);
                     }
                 } else {
-                    alert('Lataus epäonnistui: ' + (response.error || 'Tuntematon virhe'));
+                    alert(translate(routeEditorTranslations.upload_failed, {
+                        message: response.error || commonTranslations.unknown_error
+                    }));
                 }
             },
             error: function(xhr) {
                 hideUploadOverlay();
-                const msg = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : 'Yritä uudelleen.';
-                alert('Lataus epäonnistui: ' + msg);
+                const msg = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : commonTranslations.try_again;
+                alert(translate(routeEditorTranslations.upload_failed, { message: msg }));
             }
         });
     }
@@ -386,7 +406,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     // Initialize Summernote editor
     function initEditor() {
         $('#node_content').summernote({
-            lang: 'fi-FI',
+            lang: <?= json_encode($summernote_locale, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
             height: 220,
             toolbar: [
                 ['style',  ['style']],
@@ -400,7 +420,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                     const ui = $.summernote.ui;
                     return ui.button({
                         contents: '<i class="bi bi-camera-video-fill"></i>',
-                        tooltip: 'Lataa videotiedosto',
+                        tooltip: routeEditorTranslations.video_upload_tooltip,
                         click: function() {
                             const input = $('<input type="file" accept="video/mp4,video/webm,video/quicktime,video/x-m4v">');
                             input.on('change', function() {
@@ -438,7 +458,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         osmLayer.addTo(map);
 
         L.control.layers(
-            { 'Kartta': osmLayer, 'Satelliitti': satelliteLayer },
+            { [commonTranslations.map]: osmLayer, [commonTranslations.satellite]: satelliteLayer },
             null,
             { position: 'topleft' }
         ).addTo(map);
@@ -448,7 +468,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
 
     function onMapClick(e) {
         if (!selectedRoutePublicId) {
-            alert('Ole hyvä ja valitse reitti ensin.');
+            alert(routeEditorTranslations.select_route_first);
             return;
         }
         addNode(e.latlng.lat, e.latlng.lng);
@@ -461,7 +481,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         const node = {
             lat: Number(lat),
             lng: Number(lng),
-            title: title || `Node ${nodeNumber}`,
+            title: title || translate(routeEditorTranslations.default_node_title, { number: String(nodeNumber) }),
             content: content || '',
             challenge_data: challenge_data
         };
@@ -499,7 +519,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     }
 
     function buildPopupContent(node) {
-        return `<b>${escapeHtml(node.title)}</b><div class="mt-1">${node.content || '<em>Ei sisältöä</em>'}</div>`;
+        return `<b>${escapeHtml(node.title)}</b><div class="mt-1">${node.content || `<em>${routeEditorTranslations.node_no_content}</em>`}</div>`;
     }
 
     function createNumberedIcon(number) {
@@ -543,7 +563,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             nodesList.innerHTML = `
                 <div class="node-list-empty">
                     <i class="bi bi-cursor-fill" style="font-size: 3rem;"></i>
-                    <p class="mt-3">Klikkaa paikkaa kartalla, lisätäksesi rastin reitille</p>
+                    <p class="mt-3">${routeEditorTranslations.nodes_empty}</p>
                 </div>
             `;
             return;
@@ -555,22 +575,22 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
                     <div class="node-number">${index + 1}</div>
                     <div class="flex-grow-1">
                         <h6 class="mb-1">${escapeHtml(node.title)}</h6>
-                        <p class="mb-1 small text-muted">${escapeHtml(stripHtml(node.content)) || '<em>Ei sisältöä</em>'}</p>
+                        <p class="mb-1 small text-muted">${escapeHtml(stripHtml(node.content)) || `<em>${routeEditorTranslations.node_no_content}</em>`}</p>
                         <small class="text-muted">
                             <i class="bi bi-geo-alt"></i> ${Number(node.lat).toFixed(6)}, ${Number(node.lng).toFixed(6)}
                         </small>
                     </div>
                     <div class="d-flex flex-column gap-1">
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNode(${index})" title="Muokkaa">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNode(${index})" title="${routeEditorTranslations.node_action_edit}">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteNode(${index})" title="Poista">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteNode(${index})" title="${routeEditorTranslations.node_action_delete}">
                             <i class="bi bi-trash"></i>
                         </button>
-                        ${index > 0 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeUp(${index})" title="Siirrä ylös">
+                        ${index > 0 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeUp(${index})" title="${routeEditorTranslations.node_action_move_up}">
                             <i class="bi bi-arrow-up"></i>
                         </button>` : ''}
-                        ${index < nodes.length - 1 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeDown(${index})" title="Siirrä alas">
+                        ${index < nodes.length - 1 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeDown(${index})" title="${routeEditorTranslations.node_action_move_down}">
                             <i class="bi bi-arrow-down"></i>
                         </button>` : ''}
                     </div>
@@ -600,7 +620,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         const content = $('#node_content').summernote('code');
 
         if (!title) {
-            alert('Rastin nimi on pakollinen');
+            alert(routeEditorTranslations.node_name_required);
             return;
         }
 
@@ -622,7 +642,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     }
 
     function deleteNode(index) {
-        if (!confirm('Oletko varma, että haluat poistaa tämän rastin?')) {
+        if (!confirm(routeEditorTranslations.confirm_delete_node)) {
             return;
         }
 
@@ -705,13 +725,13 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     document.getElementById('routeForm').addEventListener('submit', function(event) {
         if (!selectedRoutePublicId) {
             event.preventDefault();
-            alert('Ole hyvä ja valitse reitti ensin.');
+            alert(routeEditorTranslations.select_route_first);
             return false;
         }
 
         if (nodes.length === 0) {
             event.preventDefault();
-            alert('Ole hyvä ja lisää vähintään yksi rasti reitille.');
+            alert(routeEditorTranslations.update_need_node);
             return false;
         }
 

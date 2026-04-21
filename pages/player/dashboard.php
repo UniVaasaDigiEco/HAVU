@@ -114,34 +114,35 @@ try {
 }
 ?>
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU Gamification - Oma profiili</title>
+    <title><?= htmlspecialchars(t('player_dashboard.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body>
+<?php require_once '../../includes/_language_switcher.php'; ?>
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="../../index.php">
             <img src="../../images/havu_logo.png" alt="HAVU" height="30" class="me-2">
-            HAVU Gamification
+            <?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?>
         </a>
         <div class="ms-auto d-flex align-items-center gap-2">
             <a href="../routes.php" class="btn btn-sm btn-outline-light">
-                <i class="bi bi-map me-1"></i>Kaikki reitit
+                <i class="bi bi-map me-1"></i><?= htmlspecialchars(t('common.all_routes'), ENT_QUOTES, 'UTF-8') ?>
             </a>
             <?php if (!empty($_SESSION['is_admin'])): ?>
                 <a href="../admin/dashboard.php" class="btn btn-sm btn-outline-light">
-                    <i class="bi bi-gear-fill me-1"></i>Hallintapaneeli
+                    <i class="bi bi-gear-fill me-1"></i><?= htmlspecialchars(t('common.admin_panel'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             <?php endif; ?>
             <a href="../../actions/logout.php" class="btn btn-sm btn-outline-light">
-                <i class="bi bi-box-arrow-right me-1"></i>Kirjaudu ulos
+                <i class="bi bi-box-arrow-right me-1"></i><?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?>
             </a>
         </div>
     </div>
@@ -162,20 +163,20 @@ try {
         <div class="ms-auto text-end">
             <span class="badge bg-success fs-6 px-3 py-2">
                 <i class="bi bi-check-circle-fill me-1"></i>
-                <?= count($completed_routes) ?> suoritettua reittiä
+                <?= htmlspecialchars(t('player_dashboard.completed_summary', ['count' => count($completed_routes)]), ENT_QUOTES, 'UTF-8') ?>
             </span>
         </div>
     </div>
     <div class="ms-auto mb-5">
-        <h3>Käyttöohjeet</h3>
-        <a href="../files/Pikaopas_HAVUpelaaminen.pdf">Pelaajan pikaopas</a>
+        <h3><?= htmlspecialchars(t('player_dashboard.instructions'), ENT_QUOTES, 'UTF-8') ?></h3>
+        <a href="../files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('player_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
         <br>
-        <a href="../files/HAVU_pelaajanopas.pdf">HAVU-polkupelin pelaajan opas</a>
+        <a href="../files/HAVU_pelaajanopas.pdf"><?= htmlspecialchars(t('player_dashboard.full_guide'), ENT_QUOTES, 'UTF-8') ?></a>
     </div>
 
     <!-- In progress -->
     <?php if (!empty($in_progress)): ?>
-        <h4 class="mb-3"><i class="bi bi-hourglass-split text-warning me-2"></i>Kesken olevat reitit</h4>
+        <h4 class="mb-3"><i class="bi bi-hourglass-split text-warning me-2"></i><?= htmlspecialchars(t('common.in_progress_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-5">
             <?php foreach ($in_progress as $r):
                 $pct = $r['node_count'] > 0 ? round($r['visited'] / $r['node_count'] * 100) : 0;
@@ -185,7 +186,7 @@ try {
                         <div class="card-body">
                             <h6 class="card-title"><?= htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8') ?></h6>
                             <div class="d-flex justify-content-between small text-muted mb-1">
-                                <span>Rasteja käyty</span>
+                                <span><?= htmlspecialchars(t('player_dashboard.visited_nodes'), ENT_QUOTES, 'UTF-8') ?></span>
                                 <span><?= $r['visited'] ?>/<?= $r['node_count'] ?></span>
                             </div>
                             <div class="progress mb-3" style="height: 8px;">
@@ -195,7 +196,7 @@ try {
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
                                class="btn btn-warning w-100">
-                                <i class="bi bi-play-fill me-1"></i>Jatka reittiä
+                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.continue_route'), ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </div>
                     </div>
@@ -206,7 +207,7 @@ try {
 
     <!-- Completed routes -->
     <?php if (!empty($completed_routes)): ?>
-        <h4 class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Suoritetut reitit</h4>
+        <h4 class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><?= htmlspecialchars(t('common.completed_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-5">
             <?php foreach ($completed_routes as $r): ?>
                 <div class="col">
@@ -218,13 +219,13 @@ try {
                             </div>
                             <small class="text-muted">
                                 <i class="bi bi-calendar-check me-1"></i>
-                                Suoritettu <?= date('d.m.Y', strtotime($r['completed_at'])) ?>
+                                <?= htmlspecialchars(t('common.route_completed_on', ['date' => date('d.m.Y', strtotime($r['completed_at']))]), ENT_QUOTES, 'UTF-8') ?>
                             </small>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
                                class="btn btn-outline-success w-100 btn-sm">
-                                <i class="bi bi-arrow-repeat me-1"></i>Pelaa uudelleen
+                                <i class="bi bi-arrow-repeat me-1"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </div>
                     </div>
@@ -234,11 +235,11 @@ try {
     <?php endif; ?>
 
     <!-- Available routes -->
-    <h4 class="mb-3"><i class="bi bi-map text-primary me-2"></i>Saatavilla olevat reitit</h4>
+    <h4 class="mb-3"><i class="bi bi-map text-primary me-2"></i><?= htmlspecialchars(t('common.available_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
     <?php if (empty($available_routes)): ?>
         <div class="text-center py-4 text-muted">
             <i class="bi bi-trophy-fill text-warning" style="font-size: 3rem;"></i>
-            <p class="mt-3 fw-bold">Olet suorittanut kaikki reitit!</p>
+            <p class="mt-3 fw-bold"><?= htmlspecialchars(t('player_dashboard.all_completed'), ENT_QUOTES, 'UTF-8') ?></p>
         </div>
     <?php else: ?>
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
@@ -251,13 +252,13 @@ try {
                                 <?= htmlspecialchars($r['description'], ENT_QUOTES, 'UTF-8') ?>
                             </p>
                             <small class="text-muted">
-                                <i class="bi bi-geo-alt-fill text-primary me-1"></i><?= $r['node_count'] ?> rastia
+                                <i class="bi bi-geo-alt-fill text-primary me-1"></i><?= htmlspecialchars(t('common.node_count', ['count' => $r['node_count']]), ENT_QUOTES, 'UTF-8') ?>
                             </small>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
                                class="btn btn-primary w-100">
-                                <i class="bi bi-play-fill me-1"></i>Aloita reitti
+                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </div>
                     </div>

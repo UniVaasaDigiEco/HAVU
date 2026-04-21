@@ -27,7 +27,7 @@ try {
     $stmt->execute();
 
     if ($stmt->affected_rows === 0) {
-        throw new Exception('Reittiä ei löydy tai sinulla ei ole oikeutta muokata sitä.');
+        throw new Exception('actions.toggle_publish.not_found');
     }
 
     // Read the new state to show the right message
@@ -42,16 +42,17 @@ try {
     $db->close();
 
     $_SESSION['flash_messages'][] = [
-        'type'    => 'success',
-        'code'    => 0,
-        'message' => $new_state ? 'Reitti on nyt julkinen.' : 'Reitti on nyt yksityinen.',
+        'type'        => 'success',
+        'code'        => 0,
+        'message_key' => $new_state ? 'actions.toggle_publish.public_now' : 'actions.toggle_publish.private_now',
     ];
 
 } catch (Exception $e) {
     $_SESSION['flash_messages'][] = [
-        'type'    => 'error',
-        'code'    => 0,
-        'message' => $e->getMessage(),
+        'type'        => 'error',
+        'code'        => 0,
+        'message_key' => str_starts_with($e->getMessage(), 'actions.') ? $e->getMessage() : null,
+        'message'     => str_starts_with($e->getMessage(), 'actions.') ? null : $e->getMessage(),
     ];
 }
 

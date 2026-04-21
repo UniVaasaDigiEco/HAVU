@@ -13,7 +13,7 @@ function jsonError(string $msg): never {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    jsonError('Invalid request method.');
+    jsonError(t('actions.submit_feedback.invalid_method'));
 }
 
 $type     = trim($_POST['type']            ?? '');
@@ -27,19 +27,19 @@ if (mb_strlen($page_url) > 500) {
 $token    = trim($_POST['recaptcha_token'] ?? '');
 
 if (!in_array($type, ['contact', 'bug', 'feature'], true)) {
-    jsonError('Virheellinen viestityyppi.');
+    jsonError(t('actions.submit_feedback.invalid_type'));
 }
 if ($name === '' || mb_strlen($name) > 100) {
-    jsonError('Nimi on pakollinen (max 100 merkkiä).');
+    jsonError(t('actions.submit_feedback.name_required'));
 }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    jsonError('Anna kelvollinen sähköpostiosoite.');
+    jsonError(t('actions.submit_feedback.invalid_email'));
 }
 if ($message === '' || mb_strlen($message) > 5000) {
-    jsonError('Viesti on pakollinen (max 5000 merkkiä).');
+    jsonError(t('actions.submit_feedback.message_required'));
 }
 if ($token === '') {
-    jsonError('reCAPTCHA-tarkistus epäonnistui.');
+    jsonError(t('actions.submit_feedback.recaptcha_failed'));
 }
 
 // Verify reCAPTCHA v3 via cURL
@@ -60,7 +60,7 @@ curl_close($ch);
 
 $rc = json_decode($raw, true);
 if (!$rc || !($rc['success'] ?? false) || ($rc['score'] ?? 0) < 0.5) {
-    jsonError('reCAPTCHA-tarkistus epäonnistui. Yritä uudelleen.');
+    jsonError(t('actions.submit_feedback.recaptcha_retry'));
 }
 
 // Resolve internal user_id from session if logged in
@@ -82,18 +82,18 @@ try {
     );
     if (!$stmt) {
         $db->close();
-        jsonError('Palautteen tallentaminen epäonnistui.');
+        jsonError(t('actions.submit_feedback.save_failed'));
     }
     $stmt->bind_param('ssssis', $type, $name, $email, $message, $user_id, $page_url);
     if (!$stmt->execute()) {
         $stmt->close();
         $db->close();
-        jsonError('Palautteen tallentaminen epäonnistui.');
+        jsonError(t('actions.submit_feedback.save_failed'));
     }
     $stmt->close();
     $db->close();
 } catch (Exception $e) {
-    jsonError('Palautteen tallentaminen epäonnistui.');
+    jsonError(t('actions.submit_feedback.save_failed'));
 }
 
 // Send email (plain text — do NOT htmlspecialchars the body)

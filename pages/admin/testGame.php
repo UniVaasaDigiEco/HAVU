@@ -35,6 +35,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
 header_remove('X-Powered-By');
 
 $default_route_public_id = "417bef1b-1b00-46f5-ac85-4774ff20d0ed";
+$route_error_message = null;
 
 $route = null;
 if(isset($_GET['route']))
@@ -43,7 +44,7 @@ if(isset($_GET['route']))
     try {
         $route = Tools::getRouteByPublicId($route_public_id);
     } catch (Exception $e) {
-        echo "<div class='alert alert-danger m-3'>Error: Route not found: ". $e->getMessage() ."<br>Please check the route ID and try again.</div>";
+        $route_error_message = t('game.route_not_found', ['message' => $e->getMessage()]);
     }
 }
 else {
@@ -51,16 +52,38 @@ else {
     try {
         $route = Tools::getRouteByPublicId($default_route_public_id);
     } catch (Exception $e) {
-        echo "<div class='alert alert-danger m-3'>Error: Default route not found: " . $e->getMessage() . "<br>Please check the default route ID and try again.</div>";
+        $route_error_message = t('game.default_route_not_found', ['message' => $e->getMessage()]);
     }
+}
+
+if (!$route) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?></title>
+        <link href="../../css/bs-custom.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+    <?php require_once '../../includes/_language_switcher.php'; ?>
+    <div class="container py-5">
+        <div class="alert alert-danger"><?= $route_error_message ?></div>
+        <a href="dashboard.php" class="btn btn-primary"><?= htmlspecialchars(t('common.back_to_dashboard'), ENT_QUOTES, 'UTF-8') ?></a>
+    </div>
+    </body>
+    </html>
+    <?php
+    exit;
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HAVU Gamification - <?php echo htmlspecialchars($route->getTitle()); ?></title>
+    <title><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?> - <?php echo htmlspecialchars($route->getTitle()); ?></title>
 
     <!-- Bootstrap CSS -->
     <link href="../../css/bs-custom.css" rel="stylesheet">
@@ -80,11 +103,21 @@ else {
         // Configuration
         const PROXIMITY_THRESHOLD = 50; // meters - distance to trigger node popup
         const UPDATE_INTERVAL = 3000; // ms - how often to check GPS position
+        const translations = <?= HavuLocale::jsonNamespace('common', 'game') ?>;
+        const commonTranslations = translations.common;
+        const gameTranslations = translations.game;
+
+        function translate(template, params = {}) {
+            return Object.entries(params).reduce(
+                (value, [key, replacement]) => value.replaceAll(`:${key}`, replacement),
+                template
+            );
+        }
 
         // Load route data from PHP
         const routeData = <?php echo $route->toJavaScript(); ?>;
         if(!routeData){
-            alert("Error loading route data. Please check the console for details.");
+            alert(gameTranslations.route_data_error);
             throw new Error("Route data is null or undefined");
         }
         console.log("Loaded route data:", routeData);
@@ -105,7 +138,7 @@ else {
 
         if(!routeData){
             console.error("Route data is null or undefined. Cannot initialize game.");
-             alert("Error loading route data. Please check the console for details.");
+             alert(gameTranslations.route_data_error);
              throw new Error("Route data is null or undefined");
         }
         // Transform route data into the format expected by the game
@@ -212,14 +245,14 @@ else {
                     title: node.name
                 }).addTo(map);
 
-                const nodeLabel = index === 0 ? '🚀 LÄHTÖ' : (index === routeNodes.length - 1 ? '🏁 MAALI' : '');
+                const nodeLabel = index === 0 ? gameTranslations.start_label : (index === routeNodes.length - 1 ? gameTranslations.finish_label : '');
                 const popupContent = `
                     <div class="node-popup">
                         ${nodeLabel ? `<div class="text-center mb-2"><strong>${nodeLabel}</strong></div>` : ''}
                         <h5>${node.name}</h5>
                         <p>${node.description}</p>
                         <button class="btn btn-sm btn-primary" onclick="markAsVisited(${node.id})">
-                            Merkkaa käydyksi ✓
+                            ${gameTranslations.mark_visited}
                         </button>
                     </div>
                 `;
@@ -265,9 +298,9 @@ else {
             if (nearestNode) {
                 $('#distance-info').html(`
                     <div class="alert alert-success mb-0 py-2">
-                        <strong>📍 Nearby!</strong><br>
+                        <strong>${gameTranslations.in_range}</strong><br>
                         <small>${nearestNode.name}<br>
-                        ${Math.round(nearestDistance)}m päässä</small>
+                        ${translate(commonTranslations.distance_meters, { count: String(Math.round(nearestDistance)) })}</small>
                     </div>
                 `);
 
@@ -293,9 +326,9 @@ else {
                 if (closestNode) {
                     $('#distance-info').html(`
                         <div class="alert alert-info mb-0 py-2">
-                            <strong>Seuraava:</strong><br>
+                            <strong>${gameTranslations.next}</strong><br>
                             <small>${closestNode.name}<br>
-                            ${Math.round(closestDistance)}m päässä</small>
+                            ${translate(commonTranslations.distance_meters, { count: String(Math.round(closestDistance)) })}</small>
                         </div>
                     `);
                 }
@@ -311,7 +344,7 @@ else {
             } else {
                 userMarker = L.marker([lat, lng], {
                     icon: userIcon,
-                    title: 'Your Location'
+                    title: commonTranslations.your_location
                 }).addTo(map);
 
                 // Optionally add accuracy circle
@@ -353,8 +386,8 @@ else {
                 setTimeout(() => {
                     const celebrationPopup = `
                         <div class="node-popup text-center">
-                            <h5>🎉 Hienoa!</h5>
-                            <p>Olet löytänyt rastin: <strong>${node.name}</strong></p>
+                            <h5>${gameTranslations.celebration_title}</h5>
+                            <p>${translate(gameTranslations.celebration_message, { name: `<strong>${node.name}</strong>` })}</p>
                         </div>
                     `;
                     markers[nodeId].bindPopup(celebrationPopup).openPopup();
@@ -368,7 +401,7 @@ else {
             const visitedNodes = routeNodes.filter(n => n.visited).length;
             const percentage = (visitedNodes / totalNodes) * 100;
 
-            $('#progress-text').text(`${visitedNodes}/${totalNodes} rastia`);
+            $('#progress-text').text(translate(gameTranslations.progress_text, { visited: String(visitedNodes), total: String(totalNodes) }));
             $('#progress-bar').css('width', percentage + '%');
 
             // Update acorn count with animation
@@ -382,7 +415,7 @@ else {
 
             if (visitedNodes === totalNodes) {
                 setTimeout(() => {
-                    alert('🎉 Onneksi olkoon! Olet kiertänyt koko ' + routeData.title + ' reitin!');
+                    alert(`${gameTranslations.completion_title} ${gameTranslations.completion_subtitle.toLowerCase()} ${routeData.title}!`);
                 }, 500);
             }
         }
@@ -410,7 +443,7 @@ else {
                     },
                     (error) => {
                         console.error('GPS Error:', error);
-                        alert('GPS Error: Sijaintijasi ei voida määrittää. Varmista, että sijaintipalvelut (Sijainti/Location) ovat päällä asetuksistasi, ja että selaimella on lupa käyttää niitä.\n\nVirhe: ' + error.message);
+                        alert(translate(gameTranslations.gps_error, { message: error.message }));
                     },
                     {
                         enableHighAccuracy: true,
@@ -419,13 +452,14 @@ else {
                     }
                 );
             } else {
-                alert('GPS palvelut eivät ole tuettuja tällä selaimella. Varmista, että käytät modernia selainta ja että laitteesi tukee GPS:ää.');
+                alert(gameTranslations.gps_unsupported);
                 console.log('Geolokaatiota ei ole tuettu tässä selaimessa.');
             }
         }
     </script>
 </head>
 <body>
+<?php require_once '../../includes/_language_switcher.php'; ?>
 
     <!-- Info Panel Toggle Button -->
     <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()">
@@ -436,7 +470,7 @@ else {
     <div class="info-panel" id="info-panel">
         <div class="d-flex justify-content-between align-items-start mb-2">
             <h5 class="mb-0">📍 <?php echo htmlspecialchars($route->getTitle()); ?></h5>
-            <button type="button" class="btn-close ms-2" onclick="hideInfoPanel()" aria-label="Sulje"></button>
+            <button type="button" class="btn-close ms-2" onclick="hideInfoPanel()" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
         </div>
         <p class="mb-2"><small><?php echo htmlspecialchars($route->getDescription()); ?></small></p>
         <div class="mb-2">
@@ -449,8 +483,8 @@ else {
     <!-- Progress Indicator -->
     <div class="progress-container">
         <div class="d-flex justify-content-between mb-2">
-            <span><strong>Eteneminen</strong></span>
-            <span id="progress-text">0/0 rastia</span>
+            <span><strong><?= htmlspecialchars(t('game.progress_label'), ENT_QUOTES, 'UTF-8') ?></strong></span>
+            <span id="progress-text"><?= htmlspecialchars(t('game.progress_text', ['visited' => 0, 'total' => 0]), ENT_QUOTES, 'UTF-8') ?></span>
         </div>
         <div class="progress">
             <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>

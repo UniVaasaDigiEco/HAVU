@@ -44,3 +44,5 @@ define('UPLOAD_MAX_VIDEO_BYTES', ($env['UPLOAD_MAX_VIDEO_MB'] ?? 100) * 1024 * 1
 // reCAPTCHA configuration from environment file
 define('RECAPTCHA_SITE_KEY',   $env['RECAPTCHA_SITE_KEY']   ?? '');
 define('RECAPTCHA_SECRET_KEY', $env['RECAPTCHA_SECRET_KEY'] ?? '');
+
+require_once(__DIR__ . '/../includes/i18n.php');

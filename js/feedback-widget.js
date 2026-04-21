@@ -1,6 +1,14 @@
 (function () {
     'use strict';
 
+    const i18n = window.feedbackWidgetTranslations || {
+        cancel: 'Peruuta',
+        close: 'Sulje',
+        success: 'Kiitos! Viestisi on lähetetty.',
+        genericError: 'Jokin meni pieleen. Yritä uudelleen.',
+        networkError: 'Verkkovirhe. Tarkista yhteytesi ja yritä uudelleen.'
+    };
+
     const modal     = document.getElementById('feedbackModal');
     const form      = document.getElementById('feedback-form');
     const alertEl   = document.getElementById('feedback-alert');
@@ -28,7 +36,7 @@
     modal.addEventListener('hidden.bs.modal', function () {
         alertEl.classList.add('d-none');
         setLoading(false);
-        cancelBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>&nbsp;Peruuta';
+        cancelBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>&nbsp;' + i18n.cancel;
     });
 
     form.addEventListener('submit', function (e) {
@@ -51,17 +59,17 @@
                         .then(function (json) {
                             setLoading(false);
                             if (json.ok) {
-                                showAlert('Kiitos! Viestisi on lähetetty.', false);
+                                showAlert(i18n.success, false);
                                 form.reset();
                                 form.classList.remove('was-validated');
-                                cancelBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>&nbsp;Sulje';
+                                cancelBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>&nbsp;' + i18n.close;
                             } else {
-                                showAlert(json.error || 'Jokin meni pieleen. Yritä uudelleen.', true);
+                                showAlert(json.error || i18n.genericError, true);
                             }
                         })
                         .catch(function () {
                             setLoading(false);
-                            showAlert('Verkkovirhe. Tarkista yhteytesi ja yritä uudelleen.', true);
+                            showAlert(i18n.networkError, true);
                         });
                 });
         });

@@ -21,23 +21,22 @@ if (!empty($_SESSION['user_public_id'])) {
         id="feedback-float-btn"
         data-bs-toggle="modal"
         data-bs-target="#feedbackModal"
-        title="Lähetä palaute">
-    <i class="bi bi-chat-dots-fill me-1"></i>Palaute
+        title="<?= htmlspecialchars(t('feedback.button_title'), ENT_QUOTES, 'UTF-8') ?>">
+    <i class="bi bi-chat-dots-fill me-1"></i><?= htmlspecialchars(t('feedback.button_label'), ENT_QUOTES, 'UTF-8') ?>
 </button>
 <?php endif; ?>
 
 <!-- Feedback Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1"
-     style="z-index: 2001;"
      aria-labelledby="feedbackModalLabel" aria-hidden="true"
      data-action="<?= htmlspecialchars(ROOT_DIR . 'actions/submit-feedback.php', ENT_QUOTES, 'UTF-8') ?>">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="feedbackModalLabel">
-                    <i class="bi bi-chat-dots-fill me-2"></i>Palaute &amp; yhteydenotto
+                    <i class="bi bi-chat-dots-fill me-2"></i><?= htmlspecialchars(t('feedback.modal_title'), ENT_QUOTES, 'UTF-8') ?>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulje"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
             </div>
             <div class="modal-body">
                 <div id="feedback-alert" class="alert d-none" role="alert"></div>
@@ -48,19 +47,19 @@ if (!empty($_SESSION['user_public_id'])) {
 
                     <div class="mb-3">
                         <label for="feedback-type" class="form-label fw-semibold">
-                            Tyyppi <span class="text-danger">*</span>
+                            <?= htmlspecialchars(t('feedback.type_label'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span>
                         </label>
                         <select class="form-select" id="feedback-type" name="type" required>
-                            <option value="" disabled selected>Valitse...</option>
-                            <option value="contact">Ota yhteyttä</option>
-                            <option value="bug">Ilmoita virheestä</option>
-                            <option value="feature">Ehdota ominaisuutta</option>
+                            <option value="" disabled selected><?= htmlspecialchars(t('feedback.type_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
+                            <option value="contact"><?= htmlspecialchars(t('feedback.type_contact'), ENT_QUOTES, 'UTF-8') ?></option>
+                            <option value="bug"><?= htmlspecialchars(t('feedback.type_bug'), ENT_QUOTES, 'UTF-8') ?></option>
+                            <option value="feature"><?= htmlspecialchars(t('feedback.type_feature'), ENT_QUOTES, 'UTF-8') ?></option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="feedback-name" class="form-label fw-semibold">
-                            Nimi <span class="text-danger">*</span>
+                            <?= htmlspecialchars(t('feedback.name_label'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span>
                         </label>
                         <input type="text" class="form-control" id="feedback-name" name="name"
                                value="<?= htmlspecialchars($_fw_name, ENT_QUOTES, 'UTF-8') ?>"
@@ -69,7 +68,7 @@ if (!empty($_SESSION['user_public_id'])) {
 
                     <div class="mb-3">
                         <label for="feedback-email" class="form-label fw-semibold">
-                            Sähköposti <span class="text-danger">*</span>
+                            <?= htmlspecialchars(t('feedback.email_label'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span>
                         </label>
                         <input type="email" class="form-control" id="feedback-email" name="email"
                                value="<?= htmlspecialchars($_fw_email, ENT_QUOTES, 'UTF-8') ?>"
@@ -78,29 +77,29 @@ if (!empty($_SESSION['user_public_id'])) {
 
                     <div class="mb-3">
                         <label for="feedback-message" class="form-label fw-semibold">
-                            Viesti <span class="text-danger">*</span>
+                            <?= htmlspecialchars(t('feedback.message_label'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control" id="feedback-message" name="message"
                                   rows="4" required></textarea>
                     </div>
 
                     <p class="text-muted small mb-3">
-                        Tämä lomake on suojattu reCAPTCHA:lla.
-                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Tietosuoja</a>
+                        <?= htmlspecialchars(t('feedback.recaptcha_notice'), ENT_QUOTES, 'UTF-8') ?>
+                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?></a>
                         ja
-                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener">käyttöehdot</a>.
+                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.terms'), ENT_QUOTES, 'UTF-8') ?></a>.
                     </p>
 
                     <div class="d-flex gap-2">
                         <button type="button" class="btn btn-warning w-100" id="feedback-cancel"
-                                data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i>&nbsp;Peruuta</button>
+                                data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i>&nbsp;<?= htmlspecialchars(t('common.cancel'), ENT_QUOTES, 'UTF-8') ?></button>
                         <button type="submit" class="btn btn-primary w-100" id="feedback-submit">
                             <span id="feedback-submit-text">
-                                <i class="bi bi-send me-1"></i>Lähetä
+                                <i class="bi bi-send me-1"></i><?= htmlspecialchars(t('feedback.submit'), ENT_QUOTES, 'UTF-8') ?>
                             </span>
                             <span id="feedback-submit-spinner" class="d-none">
                                 <span class="spinner-border spinner-border-sm me-1" role="status"
-                                      aria-hidden="true"></span>Lähetetään…
+                                      aria-hidden="true"></span><?= htmlspecialchars(t('feedback.sending'), ENT_QUOTES, 'UTF-8') ?>
                             </span>
                         </button>
                     </div>
@@ -111,4 +110,13 @@ if (!empty($_SESSION['user_public_id'])) {
 </div>
 
 <script>const RECAPTCHA_SITE_KEY = <?= json_encode(RECAPTCHA_SITE_KEY, JSON_HEX_TAG) ?>;</script>
+<script>
+    window.feedbackWidgetTranslations = <?= json_encode([
+        'cancel' => t('common.cancel'),
+        'close' => t('feedback.close_after_submit'),
+        'success' => t('feedback.success'),
+        'genericError' => t('feedback.generic_error'),
+        'networkError' => t('feedback.network_error'),
+    ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+</script>
 <script src="<?= htmlspecialchars(ROOT_DIR, ENT_QUOTES, 'UTF-8') ?>js/feedback-widget.js"></script>
