@@ -176,12 +176,25 @@ else {
             // Initialize map
             map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(CAMPUS_CENTER, 16);
 
-            // Add OpenStreetMap tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19
-            }).addTo(map);
+            });
+
+            const satelliteLayer = L.tileLayer(
+                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics',
+                maxZoom: 19
+            });
+
+            osmLayer.addTo(map);
             map.attributionControl.setPosition('topleft');
+
+            L.control.layers(
+                { 'Kartta': osmLayer, 'Satelliitti': satelliteLayer },
+                null,
+                { position: 'topleft' }
+            ).addTo(map);
 
             drawRouteLine();
             initializeMarkers();
@@ -198,7 +211,7 @@ else {
             }
 
             routeLine = L.polyline(latlngs, {
-                color: '#0066cc',
+                color: '#bfd7ff',
                 weight: 3,
                 opacity: 0.6,
                 dashArray: '10, 10'

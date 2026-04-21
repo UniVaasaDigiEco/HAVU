@@ -60,5 +60,23 @@ try {
     exit;
 }
 
+if (isset($_POST['request_admin'])) {
+    $to      = 'support@havupeli.jansoftworks.fi';
+    $subject = 'HAVU: Uusi käyttäjä pyytää reitinluontioikeuksia';
+    $time    = (new DateTime())->format('d.m.Y H:i');
+    $body    = "Hei,\n\n"
+             . "Uusi käyttäjä on rekisteröitynyt HAVU-peliin ja pyytää oikeuksia reittien luomiseen.\n\n"
+             . "Käyttäjätiedot:\n"
+             . "  Nimi:               {$full_name}\n"
+             . "  Sähköposti:         {$email}\n"
+             . "  Rekisteröitymisaika: {$time}\n\n"
+             . "Voit muuttaa käyttäjän tyypiksi admin ylläpitopaneelissa.\n\n"
+             . "---\nHAVU-pelialusta";
+    $headers = "From: noreply@havupeli.jansoftworks.fi\r\n"
+             . "Reply-To: {$email}\r\n"
+             . "Content-Type: text/plain; charset=UTF-8\r\n";
+    mail($to, $subject, $body, $headers);
+}
+
 header('Location: ../login.php?registered=1');
 exit;

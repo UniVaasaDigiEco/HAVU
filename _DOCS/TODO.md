@@ -29,10 +29,21 @@
     - UserJourney.png
 
 ## TODO List - Persistent
+
 - **KEEP DOCUMENTATION UP TO DATE**
 
 ## TODO List - Short Term
 
+- [ ] Feedback forms
+  - Player feedback to route owner
+  - User feedback to UWASA
+- [ ] Player stats tracking
+  - How many routes completed, how many nodes collected, etc.
+- [ ] Language switching system
+  - EN/FI/SE
+- [ ] Satellite map layer
+- [ ] GDPR thing from the University
+- [ ] Logos for the project and funders
 - [X] Fix mobile UI
 - [X] Polish UI/UX
   - [X] Add better styling to map and markers
@@ -52,7 +63,8 @@
 - [X] Ensure mobile responsiveness and performance optimization
 
 ## TODO List - Long Term
-- [ ] Fix the url (away from /HavuGamication)]
+
+- [X] Fix the url (away from /HavuGamication)]
 - [ ] Fix the YouTube video embeds (the width should be relative to the screen size/width)
 - [ ] Documentation, comments, cleanup & guides
 - [ ] Contact Kallion Kamut for route and content ideas

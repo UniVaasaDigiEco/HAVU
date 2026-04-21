@@ -47,7 +47,7 @@ if (!array_key_exists($mime, $allowed)) {
 }
 
 $is_video = str_starts_with($mime, 'video/');
-$max_size = $is_video ? 100 * 1024 * 1024 : 10 * 1024 * 1024;
+$max_size = $is_video ? UPLOAD_MAX_VIDEO_BYTES : UPLOAD_MAX_IMAGE_BYTES;
 
 if ($file['size'] > $max_size) {
     $limit_mb = $max_size / (1024 * 1024);

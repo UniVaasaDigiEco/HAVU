@@ -29,10 +29,14 @@ const USER_TYPE_ADMIN = 0;
 const HOME_URL = ROOT_DIR . "index.php";
 
 // Set to false to skip GPS proximity checks (useful for development/testing)
-const REQUIRE_GPS_PROXIMITY = false;
+const REQUIRE_GPS_PROXIMITY = true;
 
 // Database configuration from environment file
 define('DB_HOST', $env['DB_HOST']);
 define('DB_NAME', $env['DB_NAME']);
 define('DB_USER', $env['DB_USER']);
 define('DB_PASS', $env['DB_PASS']);
+
+// Upload size limits (in bytes); configured per environment in .env
+define('UPLOAD_MAX_IMAGE_BYTES', ($env['UPLOAD_MAX_IMAGE_MB'] ?? 10) * 1024 * 1024);
+define('UPLOAD_MAX_VIDEO_BYTES', ($env['UPLOAD_MAX_VIDEO_MB'] ?? 100) * 1024 * 1024);
