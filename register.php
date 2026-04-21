@@ -59,6 +59,19 @@ if (!empty($_SESSION['user_public_id'])) {
                         <input id="password_confirm" name="password_confirm" type="password" class="form-control"
                                required autocomplete="new-password">
                     </div>
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                   id="request_admin" name="request_admin">
+                            <label class="form-check-label fw-semibold" for="request_admin">
+                                Haluatko lisätä reittejä itse?
+                            </label>
+                        </div>
+                        <small id="request_admin_hint" class="text-muted" style="display:none;">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Tunnuksesi pelaajana luodaan ja aktivoidaan heti. Ylläpitäjälle lähetetään ilmoitus pyynnostäsi luoda reittejä. Saat reitinluontioikeudet, kun pyyntösi on hyväksytty.
+                        </small>
+                    </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-success text-white w-100">
                             <i class="bi bi-person-plus-fill me-1"></i> Luo tunnus
@@ -79,5 +92,10 @@ if (!empty($_SESSION['user_public_id'])) {
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('request_admin').addEventListener('change', function () {
+        document.getElementById('request_admin_hint').style.display = this.checked ? 'block' : 'none';
+    });
+</script>
 </body>
 </html>

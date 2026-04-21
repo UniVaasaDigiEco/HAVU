@@ -92,6 +92,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
             border-radius: 0.375rem;
         }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
 <div class="container-fluid py-4">
@@ -421,12 +422,26 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     }
 
     function initMap() {
-        map = L.map('map').setView(CAMPUS_CENTER, 15);
+        map = L.map('map', { zoomControl: true }).setView(CAMPUS_CENTER, 15);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19
-        }).addTo(map);
+        });
+
+        const satelliteLayer = L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics',
+            maxZoom: 19
+        });
+
+        osmLayer.addTo(map);
+
+        L.control.layers(
+            { 'Kartta': osmLayer, 'Satelliitti': satelliteLayer },
+            null,
+            { position: 'topleft' }
+        ).addTo(map);
 
         map.on('click', onMapClick);
     }
@@ -718,5 +733,6 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
         }
     });
 </script>
+<?php require_once '../../includes/_feedback_widget.php'; ?>
 </body>
 </html>
