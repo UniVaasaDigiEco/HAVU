@@ -40,3 +40,7 @@ define('DB_PASS', $env['DB_PASS']);
 // Upload size limits (in bytes); configured per environment in .env
 define('UPLOAD_MAX_IMAGE_BYTES', ($env['UPLOAD_MAX_IMAGE_MB'] ?? 10) * 1024 * 1024);
 define('UPLOAD_MAX_VIDEO_BYTES', ($env['UPLOAD_MAX_VIDEO_MB'] ?? 100) * 1024 * 1024);
+
+// reCAPTCHA configuration from environment file
+define('RECAPTCHA_SITE_KEY',   $env['RECAPTCHA_SITE_KEY']   ?? '');
+define('RECAPTCHA_SECRET_KEY', $env['RECAPTCHA_SECRET_KEY'] ?? '');
