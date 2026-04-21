@@ -34,7 +34,7 @@
 
 ## TODO List - Short Term
 
-- [ ] Feedback forms
+- [X] Feedback forms
   - Player feedback to route owner
   - User feedback to UWASA
 - [ ] Player stats tracking

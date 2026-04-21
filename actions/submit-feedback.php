@@ -74,23 +74,27 @@ if (!empty($_SESSION['user_public_id'])) {
 }
 
 // Save to DB
-$db   = Tools::getDb();
-$stmt = $db->prepare(
-    "INSERT INTO feedback_submissions (type, name, email, message, user_id, page_url)
-     VALUES (?, ?, ?, ?, ?, ?)"
-);
-if (!$stmt) {
-    $db->close();
-    jsonError('Palautteen tallentaminen epäonnistui.');
-}
-$stmt->bind_param('ssssis', $type, $name, $email, $message, $user_id, $page_url);
-if (!$stmt->execute()) {
+try {
+    $db   = Tools::getDb();
+    $stmt = $db->prepare(
+        "INSERT INTO feedback_submissions (type, name, email, message, user_id, page_url)
+         VALUES (?, ?, ?, ?, ?, ?)"
+    );
+    if (!$stmt) {
+        $db->close();
+        jsonError('Palautteen tallentaminen epäonnistui.');
+    }
+    $stmt->bind_param('ssssis', $type, $name, $email, $message, $user_id, $page_url);
+    if (!$stmt->execute()) {
+        $stmt->close();
+        $db->close();
+        jsonError('Palautteen tallentaminen epäonnistui.');
+    }
     $stmt->close();
     $db->close();
+} catch (Exception $e) {
     jsonError('Palautteen tallentaminen epäonnistui.');
 }
-$stmt->close();
-$db->close();
 
 // Send email (plain text — do NOT htmlspecialchars the body)
 $type_labels = ['contact' => 'Contact Request', 'bug' => 'Bug Report', 'feature' => 'Feature Suggestion'];

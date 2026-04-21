@@ -654,7 +654,7 @@ else {
         <div id="distance-info"></div>
         <div class="mt-2 pt-2 border-top">
             <a href="#" class="small text-muted text-decoration-none"
-               onclick="openFeedbackModal(); return false;">
+               onclick="hideInfoPanel(); openFeedbackModal(); return false;">
                 <i class="bi bi-chat-dots me-1"></i>Palaute
             </a>
         </div>

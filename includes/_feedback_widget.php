@@ -28,6 +28,7 @@ if (!empty($_SESSION['user_public_id'])) {
 
 <!-- Feedback Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1"
+     style="z-index: 2001;"
      aria-labelledby="feedbackModalLabel" aria-hidden="true"
      data-action="<?= htmlspecialchars(ROOT_DIR . 'actions/submit-feedback.php', ENT_QUOTES, 'UTF-8') ?>">
     <div class="modal-dialog modal-dialog-centered">
@@ -90,15 +91,19 @@ if (!empty($_SESSION['user_public_id'])) {
                         <a href="https://policies.google.com/terms" target="_blank" rel="noopener">käyttöehdot</a>.
                     </p>
 
-                    <button type="submit" class="btn btn-primary w-100" id="feedback-submit">
-                        <span id="feedback-submit-text">
-                            <i class="bi bi-send me-1"></i>Lähetä
-                        </span>
-                        <span id="feedback-submit-spinner" class="d-none">
-                            <span class="spinner-border spinner-border-sm me-1" role="status"
-                                  aria-hidden="true"></span>Lähetetään…
-                        </span>
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-warning w-100" id="feedback-cancel"
+                                data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i>&nbsp;Peruuta</button>
+                        <button type="submit" class="btn btn-primary w-100" id="feedback-submit">
+                            <span id="feedback-submit-text">
+                                <i class="bi bi-send me-1"></i>Lähetä
+                            </span>
+                            <span id="feedback-submit-spinner" class="d-none">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"
+                                      aria-hidden="true"></span>Lähetetään…
+                            </span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

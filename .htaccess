@@ -2,5 +2,8 @@
 RewriteEngine On
 
 # If the request is not HTTPS, redirect to the same URL on HTTPS
+# Skip redirect for localhost / 127.0.0.1 (local development)
 RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^localhost$ [NC]
+RewriteCond %{HTTP_HOST} !^127\.0\.0\.1$
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
