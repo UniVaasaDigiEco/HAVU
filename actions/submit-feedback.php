@@ -21,6 +21,9 @@ $name     = trim($_POST['name']            ?? '');
 $email    = trim($_POST['email']           ?? '');
 $message  = trim($_POST['message']         ?? '');
 $page_url = trim($_POST['page_url']        ?? '');
+if (mb_strlen($page_url) > 500) {
+    $page_url = mb_substr($page_url, 0, 500);
+}
 $token    = trim($_POST['recaptcha_token'] ?? '');
 
 if (!in_array($type, ['contact', 'bug', 'feature'], true)) {
@@ -32,8 +35,8 @@ if ($name === '' || mb_strlen($name) > 100) {
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     jsonError('Anna kelvollinen sähköpostiosoite.');
 }
-if ($message === '') {
-    jsonError('Viesti on pakollinen.');
+if ($message === '' || mb_strlen($message) > 5000) {
+    jsonError('Viesti on pakollinen (max 5000 merkkiä).');
 }
 if ($token === '') {
     jsonError('reCAPTCHA-tarkistus epäonnistui.');
@@ -47,8 +50,10 @@ curl_setopt_array($ch, [
     CURLOPT_POSTFIELDS     => http_build_query([
         'secret'   => RECAPTCHA_SECRET_KEY,
         'response' => $token,
-        'remoteip' => $_SERVER['REMOTE_ADDR'],
+        'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
     ]),
+    CURLOPT_TIMEOUT        => 5,
+    CURLOPT_CONNECTTIMEOUT => 3,
 ]);
 $raw = curl_exec($ch);
 curl_close($ch);
@@ -75,6 +80,7 @@ $stmt = $db->prepare(
      VALUES (?, ?, ?, ?, ?, ?)"
 );
 if (!$stmt) {
+    $db->close();
     jsonError('Palautteen tallentaminen epäonnistui.');
 }
 $stmt->bind_param('ssssis', $type, $name, $email, $message, $user_id, $page_url);
