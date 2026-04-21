@@ -30,7 +30,7 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 
 // Content Security Policy - most powerful XSS protection
 // Defines where resources can be loaded from
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com;");
 
 // Hide PHP version for security through obscurity
 header_remove('X-Powered-By');
@@ -586,6 +586,7 @@ else {
             overflow-y: auto;
         }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body>
 
@@ -651,6 +652,12 @@ else {
             <strong style="font-size: 1.1em; vertical-align: middle;"><span id="acorn-count">0</span></strong>
         </div>
         <div id="distance-info"></div>
+        <div class="mt-2 pt-2 border-top">
+            <a href="#" class="small text-muted text-decoration-none"
+               onclick="openFeedbackModal(); return false;">
+                <i class="bi bi-chat-dots me-1"></i>Palaute
+            </a>
+        </div>
     </div>
 
     <!-- Progress Indicator -->
@@ -666,5 +673,9 @@ else {
 
     <!-- Map Container -->
     <div id="map"></div>
+<?php
+$feedback_widget_no_float = true;
+require_once '../includes/_feedback_widget.php';
+?>
 </body>
 </html>
