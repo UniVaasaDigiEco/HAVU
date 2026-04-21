@@ -2,7 +2,7 @@
 
 return [
     'common' => [
-        'app_name' => 'HAVU Gamification',
+        'app_name' => 'HAVU-stigspelet',
         'language' => 'Språk',
         'close' => 'Stäng',
         'cancel' => 'Avbryt',
@@ -82,7 +82,7 @@ return [
         'heading' => 'HAVU-stigspelet',
     ],
     'login' => [
-        'title' => 'HAVU - Gamification - Logga in',
+        'title' => 'HAVU-stigspelet - Logga in',
         'heading' => 'HAVU-stigspelet',
         'registered_success' => 'Kontot skapades! Du kan nu logga in.',
         'username_label' => 'E-post',
@@ -91,7 +91,7 @@ return [
         'create_free_account' => 'Skapa ett gratis konto',
     ],
     'register' => [
-        'title' => 'HAVU - Gamification - Skapa konto',
+        'title' => 'HAVU-stigspelet - Skapa konto',
         'heading' => 'Skapa konto',
         'name_label' => 'Namn',
         'email_label' => 'E-post',
@@ -125,7 +125,7 @@ return [
         'close_after_submit' => 'Stäng',
     ],
     'routes' => [
-        'title' => 'HAVU Gamification - Välj rutt',
+        'title' => 'HAVU-stigspelet - Välj rutt',
         'heading' => 'Välj en rutt',
         'intro' => 'Välj rutten du vill gå nedan. GPS leder dig till nästa kontrollpunkt.',
         'quick_guide' => 'Snabbguide för spelare',
@@ -133,7 +133,7 @@ return [
         'empty' => 'Inga rutter finns tillgängliga just nu.',
     ],
     'player_dashboard' => [
-        'title' => 'HAVU Gamification - Min profil',
+        'title' => 'HAVU-stigspelet - Min profil',
         'completed_summary' => ':count genomförda rutter',
         'instructions' => 'Instruktioner',
         'quick_guide' => 'Snabbguide för spelare',
@@ -169,7 +169,7 @@ return [
         'feedback' => 'Feedback',
     ],
     'admin_dashboard' => [
-        'title' => 'HAVU - Gamification - Adminpanel',
+        'title' => 'HAVU-stigspelet - Adminpanel',
         'heading' => 'Adminpanel',
         'route_management' => 'Ruttadministration',
         'route_management_intro' => 'Här kan du hantera dina rutter. Skapa nya, redigera befintliga eller ta bort rutter som inte längre behövs.',
@@ -253,7 +253,7 @@ return [
         'confirm_delete_route' => 'Är du säker på att du vill ta bort den här rutten? Åtgärden kan inte ångras.',
     ],
     'admin_new_route' => [
-        'title' => 'HAVU Gamification - Skapa rutt',
+        'title' => 'HAVU-stigspelet - Skapa rutt',
         'heading' => 'Skapa en ny rutt',
         'subheading' => 'Ge rutten ett namn och en beskrivning',
     ],
@@ -269,7 +269,7 @@ return [
         'only_own_routes' => 'Du kan bara redigera dina egna rutter.',
     ],
     'admin_delete_route' => [
-        'title' => 'HAVU Gamification - Ta bort rutt',
+        'title' => 'HAVU-stigspelet - Ta bort rutt',
         'heading' => 'Ta bort rutt',
         'select_label' => 'Välj rutt att ta bort',
         'select_placeholder' => '-- Välj --',

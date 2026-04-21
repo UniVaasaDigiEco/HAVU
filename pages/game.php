@@ -72,6 +72,7 @@ if (!$route) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?></title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico">
         <link href="../css/bs-custom.css" rel="stylesheet">
     </head>
     <body class="bg-light">
@@ -92,6 +93,7 @@ if (!$route) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?> - <?php echo htmlspecialchars($route->getTitle()); ?></title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
 
     <!-- Bootstrap CSS -->
     <link href="../css/bs-custom.css" rel="stylesheet">

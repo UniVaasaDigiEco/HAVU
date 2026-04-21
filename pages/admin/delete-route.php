@@ -20,6 +20,7 @@ $routes = $user->getCreatedRoutes();
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars(t('admin_delete_route.title'), ENT_QUOTES, 'UTF-8') ?></title>
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>

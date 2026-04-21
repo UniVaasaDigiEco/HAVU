@@ -2,7 +2,7 @@
 
 return [
     'common' => [
-        'app_name' => 'HAVU Gamification',
+        'app_name' => 'HAVU-polkupeli',
         'language' => 'Kieli',
         'close' => 'Sulje',
         'cancel' => 'Peruuta',
@@ -82,7 +82,7 @@ return [
         'heading' => 'HAVU-polkupeli',
     ],
     'login' => [
-        'title' => 'HAVU - Gamification - Kirjaudu sisään',
+        'title' => 'HAVU-polkupeli - Kirjaudu sisään',
         'heading' => 'HAVU-polkupeli',
         'registered_success' => 'Tunnus luotu onnistuneesti! Voit nyt kirjautua sisään.',
         'username_label' => 'Tunnus',
@@ -91,7 +91,7 @@ return [
         'create_free_account' => 'Luo tunnus ilmaiseksi',
     ],
     'register' => [
-        'title' => 'HAVU - Gamification - Luo tunnus',
+        'title' => 'HAVU-polkupeli - Luo tunnus',
         'heading' => 'Luo tunnus',
         'name_label' => 'Nimi',
         'email_label' => 'Sähköposti',
@@ -125,7 +125,7 @@ return [
         'close_after_submit' => 'Sulje',
     ],
     'routes' => [
-        'title' => 'HAVU Gamification - Valitse reitti',
+        'title' => 'HAVU-polkupeli - Valitse reitti',
         'heading' => 'Valitse reitti',
         'intro' => 'Valitse alta reitti, jonka haluat kävellä. GPS opastaa sinut rastin luo.',
         'quick_guide' => 'Pelaajan pikaopas',
@@ -133,7 +133,7 @@ return [
         'empty' => 'Ei reittejä saatavilla tällä hetkellä.',
     ],
     'player_dashboard' => [
-        'title' => 'HAVU Gamification - Oma profiili',
+        'title' => 'HAVU-polkupeli - Oma profiili',
         'completed_summary' => ':count suoritettua reittiä',
         'instructions' => 'Käyttöohjeet',
         'quick_guide' => 'Pelaajan pikaopas',
@@ -169,7 +169,7 @@ return [
         'feedback' => 'Palaute',
     ],
     'admin_dashboard' => [
-        'title' => 'HAVU - Gamification - Ylläpitäjän hallintapaneeli',
+        'title' => 'HAVU-polkupeli - Ylläpitäjän hallintapaneeli',
         'heading' => 'Ylläpitäjän hallintapaneeli',
         'route_management' => 'Reittien hallinta',
         'route_management_intro' => 'Tästä voit hallita reittejäsi. Luo uusia reittejä, muokkaa olemassa olevia, tai poista reittejä, joita ei enää tarvita.',
@@ -253,7 +253,7 @@ return [
         'confirm_delete_route' => 'Oletko varma, että haluat poistaa tämän reitin? Tätä toimintoa ei voi peruuttaa.',
     ],
     'admin_new_route' => [
-        'title' => 'HAVU Gamification - Luo uusi reitti',
+        'title' => 'HAVU-polkupeli - Luo uusi reitti',
         'heading' => 'Luo uusi reitti',
         'subheading' => 'Anna reitille nimi ja kuvaus',
     ],
@@ -269,7 +269,7 @@ return [
         'only_own_routes' => 'Voit muokata vain omia reittejäsi.',
     ],
     'admin_delete_route' => [
-        'title' => 'HAVU Gamification - Poista reitti',
+        'title' => 'HAVU-polkupeli - Poista reitti',
         'heading' => 'Poista reitti',
         'select_label' => 'Valitse poistettava reitti',
         'select_placeholder' => '-- Valitse --',

@@ -15,6 +15,7 @@ if (!empty($_SESSION['user_public_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars(t('register.title'), ENT_QUOTES, 'UTF-8') ?></title>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="css/bs-custom.css">
     <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

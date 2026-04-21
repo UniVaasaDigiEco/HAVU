@@ -9,6 +9,7 @@ Security::initSession();
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars(t('index.title'), ENT_QUOTES, 'UTF-8') ?></title>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="css/bs-custom.css">
     <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -30,6 +31,17 @@ Security::initSession();
                 <a href="login.php" class="btn btn-success btn-lg text-white fw-bold">
                     <i class="bi bi-box-arrow-in-right me-1"></i> <?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
+            </div>
+        </div>
+        <div id="logoContainer" class="col-12">
+            <div class="logo-row logo-row--primary">
+                <img id="co-funded-eu-logo" alt="Logo, Co-Funded by the European Union" src="images/logos/cofunded-eu.png">
+                <img id="epliitto" alt="Logo, Eteläpohjanmaan liitto" src="images/logos/epliitto.svg">
+            </div>
+            <div class="logo-row logo-row--secondary">
+                <img id="vyy" alt="Logo, Vaasan yliopisto" src="images/logos/vyy.svg">
+                <img id="seamk" alt="Logo, Seinäjoen Ammattikorkeakoulu" src="images/logos/seamk.png">
+                <img id="metsakeskus" alt="Logo, Metsäkeskus" src="images/logos/metsakeskus.png">
             </div>
         </div>
     </div>

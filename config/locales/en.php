@@ -2,7 +2,7 @@
 
 return [
     'common' => [
-        'app_name' => 'HAVU Gamification',
+        'app_name' => 'HAVU-trailgame',
         'language' => 'Language',
         'close' => 'Close',
         'cancel' => 'Cancel',
@@ -82,7 +82,7 @@ return [
         'heading' => 'HAVU trail game',
     ],
     'login' => [
-        'title' => 'HAVU - Gamification - Log in',
+        'title' => 'HAVU-trailgame - Log in',
         'heading' => 'HAVU trail game',
         'registered_success' => 'Account created successfully! You can now log in.',
         'username_label' => 'Email',
@@ -91,7 +91,7 @@ return [
         'create_free_account' => 'Create a free account',
     ],
     'register' => [
-        'title' => 'HAVU - Gamification - Create account',
+        'title' => 'HAVU-trailgame - Create account',
         'heading' => 'Create account',
         'name_label' => 'Name',
         'email_label' => 'Email',
@@ -125,7 +125,7 @@ return [
         'close_after_submit' => 'Close',
     ],
     'routes' => [
-        'title' => 'HAVU Gamification - Choose route',
+        'title' => 'HAVU-trailgame - Choose route',
         'heading' => 'Choose a route',
         'intro' => 'Choose the route you want to walk below. GPS will guide you to the next checkpoint.',
         'quick_guide' => 'Player quick guide',
@@ -133,7 +133,7 @@ return [
         'empty' => 'No routes are currently available.',
     ],
     'player_dashboard' => [
-        'title' => 'HAVU Gamification - My profile',
+        'title' => 'HAVU-trailgame - My profile',
         'completed_summary' => ':count completed routes',
         'instructions' => 'Instructions',
         'quick_guide' => 'Player quick guide',
@@ -169,7 +169,7 @@ return [
         'feedback' => 'Feedback',
     ],
     'admin_dashboard' => [
-        'title' => 'HAVU - Gamification - Admin dashboard',
+        'title' => 'HAVU-trailgame - Admin dashboard',
         'heading' => 'Admin dashboard',
         'route_management' => 'Route management',
         'route_management_intro' => 'Here you can manage your routes. Create new ones, edit existing ones, or delete routes that are no longer needed.',
@@ -253,7 +253,7 @@ return [
         'confirm_delete_route' => 'Are you sure you want to delete this route? This action cannot be undone.',
     ],
     'admin_new_route' => [
-        'title' => 'HAVU Gamification - Create route',
+        'title' => 'HAVU-trailgame - Create route',
         'heading' => 'Create a new route',
         'subheading' => 'Give the route a name and description',
     ],
@@ -269,7 +269,7 @@ return [
         'only_own_routes' => 'You can only edit your own routes.',
     ],
     'admin_delete_route' => [
-        'title' => 'HAVU Gamification - Delete route',
+        'title' => 'HAVU-trailgame - Delete route',
         'heading' => 'Delete route',
         'select_label' => 'Select route to delete',
         'select_placeholder' => '-- Select --',

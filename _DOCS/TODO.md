@@ -34,28 +34,30 @@
 
 ## TODO List - Short Term
 
-- [X] Feedback forms
-  - Player feedback to route owner
-  - User feedback to UWASA
 - [ ] Player stats tracking
   - How many routes completed, how many nodes collected, etc.
-- [ ] Language switching system
-  - EN/FI/SE
-- [ ] Satellite map layer
 - [ ] GDPR thing from the University
-- [ ] Logos for the project and funders
-- [X] Fix mobile UI
-- [X] Polish UI/UX
-  - [X] Add better styling to map and markers
-  - [X] Improve user interface for status indicators
-- [ ] Testing
-  - [ ] Unit tests
-  - [ ] User tests
 - [ ] Add more varied content to nodes (e.g., images, descriptions)
   - [X] Add YouTube video embeds to nodes
   - [X] Add quizzes or challenges at nodes
   - [ ] Add rewards or badges for completing nodes/routes
   - [X] Add Summernote or similar WYSIWYG editor for content creation in admin panel
+- [ ] UI Polish (check buttons, colors, fonts, etc.)
+  - Specifically the floating buttons (Language & feedback)
+- [ ] Testing
+  - [ ] Unit tests
+  - [ ] User tests
+- [X] Feedback forms
+  - Player feedback to route owner
+  - User feedback to UWASA
+- [X] Language switching system
+  - EN/FI/SE
+- [X] Satellite map layer
+- [X] Logos for the project and funders
+- [X] Fix mobile UI
+- [X] Polish UI/UX
+  - [X] Add better styling to map and markers
+  - [X] Improve user interface for status indicators
 - [X] Add User login
 - [X] Implement progress tracking and rewards system
 - [X] Admin console/panel to create and manage routes and nodes
