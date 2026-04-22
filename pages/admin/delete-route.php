@@ -32,10 +32,20 @@ require_once '../../includes/_admin_nav.php';
 ?>
 <div class="container-fluid py-4" style="margin-bottom: 101px;">
     <div class="row h-100 align-items-center justify-content-center">
-        <div class="col-md-6 text-center">
-            <div class="p-5 bg-white rounded-3 shadow">
+        <div class="col-lg-8 col-xl-7">
+            <div class="admin-page-hero p-4 mb-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <h3><i class="bi bi-trash-fill me-2"></i><?= htmlspecialchars(t('admin_delete_route.heading'), ENT_QUOTES, 'UTF-8') ?></h3>
+                        <p class="lead mb-0"><?= htmlspecialchars(t('admin_delete_route.subheading'), ENT_QUOTES, 'UTF-8') ?></p>
+                    </div>
+                    <a href="dashboard.php" class="btn btn-warning">
+                        <i class="bi bi-arrow-left"></i> <?= htmlspecialchars(t('common.back_to_dashboard'), ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                </div>
+            </div>
+            <div class="p-5 bg-white rounded-3 shadow text-center">
                 <i class="bi bi-trash-fill text-danger" style="font-size: 4rem;"></i>
-                <h2 class="mt-4"><?= htmlspecialchars(t('admin_delete_route.heading'), ENT_QUOTES, 'UTF-8') ?></h2>
                 <?= Message::displayFlashMessages() ?>
                 <form action="../../actions/delete-route.php" method="post" class="mt-4">
                     <div class="mb-3">
@@ -55,9 +65,6 @@ require_once '../../includes/_admin_nav.php';
                         <i class="bi bi-trash-fill"></i> <?= htmlspecialchars(t('admin_delete_route.submit'), ENT_QUOTES, 'UTF-8') ?>
                     </button>
                 </form>
-                <a href="dashboard.php" class="btn btn-primary mt-3">
-                    <i class="bi bi-arrow-left"></i> <?= htmlspecialchars(t('common.back_to_dashboard'), ENT_QUOTES, 'UTF-8') ?>
-                </a>
             </div>
         </div>
     </div>

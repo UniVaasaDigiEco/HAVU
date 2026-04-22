@@ -292,6 +292,7 @@ return [
     'admin_delete_route' => [
         'title' => 'HAVU-stigspelet - Ta bort rutt',
         'heading' => 'Ta bort rutt',
+        'subheading' => 'Välj den rutt som du vill ta bort permanent.',
         'select_label' => 'Välj rutt att ta bort',
         'select_placeholder' => '-- Välj --',
         'submit' => 'Ta bort vald rutt',

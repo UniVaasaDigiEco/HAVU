@@ -292,6 +292,7 @@ return [
     'admin_delete_route' => [
         'title' => 'HAVU-trailgame - Delete route',
         'heading' => 'Delete route',
+        'subheading' => 'Select the route you want to remove permanently.',
         'select_label' => 'Select route to delete',
         'select_placeholder' => '-- Select --',
         'submit' => 'Delete selected route',

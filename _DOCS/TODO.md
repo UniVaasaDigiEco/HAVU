@@ -34,7 +34,7 @@
 
 ## TODO List - Short Term
 
-- [ ] Player stats tracking
+- [X] Player stats tracking
   - How many routes completed, how many nodes collected, etc.
 - [ ] GDPR thing from the University
 - [ ] Add more varied content to nodes (e.g., images, descriptions)

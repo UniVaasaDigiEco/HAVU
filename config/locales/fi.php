@@ -292,6 +292,7 @@ return [
     'admin_delete_route' => [
         'title' => 'HAVU-polkupeli - Poista reitti',
         'heading' => 'Poista reitti',
+        'subheading' => 'Valitse reitti, jonka haluat poistaa pysyvästi.',
         'select_label' => 'Valitse poistettava reitti',
         'select_placeholder' => '-- Valitse --',
         'submit' => 'Poista valittu reitti',

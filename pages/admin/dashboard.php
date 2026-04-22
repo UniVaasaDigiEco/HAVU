@@ -42,7 +42,6 @@ require_once '../../includes/_admin_nav.php';
                     <?php
                     echo Message::displayFlashMessages();
                     ?>
-                    <!--<p class="lead">Here you can manage the routes for the game. Create new routes, edit existing ones, or remove routes that are no longer needed.</p>-->
                     <p class="lead"><?= htmlspecialchars(t('admin_dashboard.route_management_intro'), ENT_QUOTES, 'UTF-8') ?></p>
                     <p>
                         <?= htmlspecialchars(t('admin_dashboard.manuals_intro'), ENT_QUOTES, 'UTF-8') ?><br>

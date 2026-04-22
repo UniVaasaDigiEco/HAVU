@@ -107,17 +107,15 @@ $admin_nav_current = 'edit-route';
 require_once '../../includes/_admin_nav.php';
 ?>
 <div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2><i class="bi bi-pencil-fill me-2"></i><?= htmlspecialchars(t('admin_edit_route.heading'), ENT_QUOTES, 'UTF-8') ?></h2>
-                    <p class="text-muted mb-0"><?= htmlspecialchars(t('admin_edit_route.subheading'), ENT_QUOTES, 'UTF-8') ?></p>
-                </div>
-                <a href="dashboard.php" class="btn btn-warning">
-                    <i class="bi bi-arrow-left"></i> <?= htmlspecialchars(t('common.back_to_dashboard'), ENT_QUOTES, 'UTF-8') ?>
-                </a>
+    <div class="admin-page-hero p-4 mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3><i class="bi bi-pencil-fill me-2"></i><?= htmlspecialchars(t('admin_edit_route.heading'), ENT_QUOTES, 'UTF-8') ?></h3>
+                <p class="lead mb-0"><?= htmlspecialchars(t('admin_edit_route.subheading'), ENT_QUOTES, 'UTF-8') ?></p>
             </div>
+            <a href="dashboard.php" class="btn btn-warning">
+                <i class="bi bi-arrow-left"></i> <?= htmlspecialchars(t('common.back_to_dashboard'), ENT_QUOTES, 'UTF-8') ?>
+            </a>
         </div>
     </div>
 
