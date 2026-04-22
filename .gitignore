@@ -13,6 +13,7 @@ vendor/
 CLAUDE.md
 .claude/
 .superpowers/
+.github/
 
 # OS
 .DS_Store
@@ -43,5 +44,3 @@ _SQL-BACKUP/
 *.swp
 *.swo
 *~
-tempAddUser.php
-tempAddUser.OFF

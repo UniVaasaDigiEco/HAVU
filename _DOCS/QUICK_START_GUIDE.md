@@ -237,8 +237,7 @@ While in node editor:
 - `classes/node.class.php` - Node class reference
 
 ### Database
-- `_SQL/jansoftw_havu_structure.sql` - Database schema
-- `_SQL/migration_add_user_type.sql` - User type migration
+- `_SQL/havu_structure.sql` - Database schema
 
 ---
 

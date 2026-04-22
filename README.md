@@ -1,125 +1,142 @@
-# HAVU Gamification - Campus Route Geocaching App
+# HAVU-trailgame
 
-A geocaching-style map application for creating and playing interactive campus tours. Admins create routes with GPS waypoints; players walk the route and check in at each waypoint when within 50 metres.
+HAVU-trailgame is a geocaching-style web application for creating and playing interactive outdoor routes. Admins build routes with GPS checkpoints, rich content, and optional challenges; players walk the route and check in at each checkpoint when they are close enough.
+
+The app is localized in Finnish, English, and Swedish. The localized product names are **HAVU-polkupeli** (Finnish) and **HAVU-stigspelet** (Swedish).
 
 ## Features
 
 ### Player
-- 📍 **GPS Tracking**: Real-time location tracking via the browser Geolocation API
-- 🗺️ **Interactive Map**: Leaflet-powered map with OpenStreetMap tiles
-- 🎯 **Proximity Detection**: Popup opens automatically when within 50 m of a waypoint
-- 💬 **Rich Content**: Waypoints can contain formatted text, images, and videos
-- ✅ **Progress Tracking**: Visual progress bar showing visited waypoints
-- 🎨 **Visual Feedback**: Different icons for start, finish, visited, and unvisited waypoints
-- 📏 **Distance Display**: Shows distance to the nearest unvisited waypoint
-- 🎉 **Completion Screen**: Full-screen celebration shown when all waypoints are visited
-- 👤 **Player Accounts**: Optional free registration to track progress across routes
-- 🗂️ **Route Selection**: Public route picker — browse and start any available route without an account
+- 📍 **GPS-based gameplay** with browser Geolocation API and Leaflet maps
+- 🗺️ **Public route browser** for starting any published route without an account
+- 🎯 **Proximity-based check-ins** with a 20 m default interaction range
+- ❓ **Checkpoint challenges** with multiple-choice and text-answer support
+- 💬 **Rich checkpoint content** with formatted text, images, and embedded media
+- ✅ **Progress tracking** for registered players, including checkpoint visits and completed routes
+- 🌍 **Language switcher** for Finnish, English, and Swedish
+- 📨 **Feedback widget** for contact requests, bug reports, and feature suggestions
 
 ### Admin
-- 🛠️ **Route Management**: Create, edit, and delete routes via a web dashboard
-- 🖊️ **WYSIWYG Editor**: Summernote editor for waypoint content with image and video upload
-- 🗺️ **Map-based Node Placement**: Click the map to place waypoints; drag to reposition
-- 📂 **Media Uploads**: Images (max 10 MB) and videos (max 100 MB) stored per-user
+- 🛠️ **Route management** for creating, editing, publishing, and deleting routes
+- 🗺️ **Map-based checkpoint editor** with drag-and-drop positioning and route ordering
+- 🖊️ **Summernote WYSIWYG editor** for checkpoint content
+- 📂 **Media uploads** for images and videos stored under the creator's upload directory
+- ❓ **Challenge authoring** for checkpoint-specific tasks
+- 🧪 **Route testing view** from the admin area
 
 ## Tech Stack
 
 - **Backend**: PHP 8.4, MySQLi, Composer (`ramsey/uuid`)
-- **Frontend**: Bootstrap 5, jQuery, Leaflet.js, Summernote (WYSIWYG)
+- **Frontend**: Bootstrap 5, Bootstrap Icons, jQuery, Leaflet.js, Summernote
+- **Localization**: PHP-based translation files (`fi`, `en`, `sv`)
+- **Security / integrations**: Google reCAPTCHA v3, CSP/security headers on gameplay pages
 - **Server**: XAMPP (Apache + MySQL)
-- **CSS**: SCSS compiled to `css/bs-custom.css`
+- **Styling**: SCSS compiled to `css/bs-custom.css`
 
 ## Setup
 
 ### Requirements
 
 - XAMPP (Apache + MySQL + PHP 8.4)
-- Node.js / npm (for SCSS compilation only)
 - Composer
+- Node.js / npm (for SCSS compilation)
 
 ### Installation
 
-1. Clone/copy the project into `xampp/htdocs/HavuGamification/`
-2. Import the database schema in order:
+1. Clone or copy the project into `xampp/htdocs/HavuGamification/`.
+2. Import the database schema:
+   ```sql
+   _SQL/havu_structure.sql
    ```
-   _SQL/jansoftw_havu_structure.sql
-   _SQL/add_progress_tables.sql
-   ```
-3. Copy `.env.example` to `.env` and fill in your database credentials:
+3. Copy `.env.example` to `.env` and fill in the environment values:
    ```php
    return [
        'DB_HOST' => 'localhost',
-       'DB_NAME' => 'jansoftw_havu',
-       'DB_USER' => 'root',
-       'DB_PASS' => '',
+       'DB_NAME' => 'your_database_name',
+       'DB_USER' => 'your_database_user',
+       'DB_PASS' => 'your_database_password',
+       'UPLOAD_MAX_IMAGE_MB' => 10,
+       'UPLOAD_MAX_VIDEO_MB' => 100,
+       'RECAPTCHA_SITE_KEY'   => '',
+       'RECAPTCHA_SECRET_KEY' => '',
    ];
    ```
 4. Install PHP dependencies:
    ```bash
    composer install
    ```
-5. Node modules are committed — no `npm install` needed unless starting fresh:
+5. Install frontend dependencies if needed in a fresh environment:
    ```bash
    npm install
    ```
-6. Open in browser: `http://localhost/HavuGamification/`
+6. Open the app in your browser:
+   ```text
+   http://localhost/HavuGamification/
+   ```
 
 ### SCSS Compilation
 
 ```bash
-npm run scss-compile   # one-time build
-npm run scss-watch     # watch mode during development
+npm run scss-compile
+npm run scss-watch
 ```
 
 ## Usage
 
 ### Admin
 
-1. Log in at `http://localhost/HavuGamification/login.php`
-2. From the dashboard, create a new route — give it a name, description, and publication date
-3. Click the map to place waypoints; drag to reposition them
-4. Click a waypoint to edit its name and content in the WYSIWYG editor
-5. Upload images via the toolbar picture button, or drag-and-drop into the editor
-6. Embed YouTube/Vimeo videos via the video URL button, or upload a video file via the camera icon button
-7. Reorder waypoints using the up/down arrows in the waypoint list
-8. Submit the form to save the route, then test it from the dashboard
+1. Log in at `http://localhost/HavuGamification/login.php`.
+2. Open the admin dashboard and create a new route.
+3. Set the route title, description, visibility, and publication date.
+4. Add checkpoints on the map, drag them into place, and reorder them as needed.
+5. Edit each checkpoint's title, content, and optional challenge.
+6. Upload images or videos through the Summernote editor.
+7. Save the route and test it from the dashboard.
 
 ### Player (anonymous)
 
-1. Open `http://localhost/HavuGamification/` and click **Pelaa nyt**
-2. Choose a route from the list and click **Aloita reitti**
-3. Allow GPS access when prompted
-4. Walk towards each waypoint — a popup opens automatically within 50 m
-5. Click "Merkkaa käydyksi" to mark the waypoint as visited
-6. A completion screen is shown when all waypoints are visited
+1. Open `http://localhost/HavuGamification/`.
+2. Choose a published route from the route list.
+3. Allow location access when prompted.
+4. Move close to a checkpoint to open its content and complete any challenge.
+5. Mark checkpoints as visited to finish the route.
 
 ### Player (registered)
 
-1. Register at `register.php` or log in at `login.php`
-2. After login, the player dashboard shows completed routes, in-progress routes, and available routes
-3. Progress (individual node visits and route completions) is saved automatically during play
+1. Register at `register.php` or log in at `login.php`.
+2. Use the player dashboard to view available, in-progress, and completed routes.
+3. Play routes normally; checkpoint visits and route completions are stored automatically.
 
 ## Media Uploads
 
-Uploaded files are stored at:
-```
+Uploaded files are stored under:
+
+```text
 uploads/{user_public_id}/{uuid}.{ext}
 ```
 
-PHP execution is disabled in the uploads directory via `.htaccess`. Allowed types:
+PHP execution is disabled in the uploads directory via `.htaccess`.
 
-| Type   | Formats               | Max size |
-|--------|-----------------------|----------|
-| Image  | JPEG, PNG, GIF, WebP  | 10 MB    |
-| Video  | MP4, WebM, MOV        | 100 MB   |
+| Type  | Formats              | Default max size |
+| --- | --- | --- |
+| Image | JPEG, PNG, GIF, WebP | 10 MB |
+| Video | MP4, WebM, MOV | 100 MB |
 
 ## Configuration
 
-Game proximity and GPS update frequency can be adjusted in `pages/game.php`:
+- `pages/game.php`
+  - `PROXIMITY_THRESHOLD` controls the gameplay distance threshold (currently 20 m)
+  - `UPDATE_INTERVAL` controls how often the player's GPS position is refreshed
+- `config/constants.php`
+  - `REQUIRE_GPS_PROXIMITY` can be set to `false` for local/manual testing
+  - upload size limits and reCAPTCHA keys are loaded from `.env`
+- Localization is handled through `config/locales/*.php`, and users can switch language via the shared language menu
 
-```javascript
-const PROXIMITY_THRESHOLD = 50; // metres — distance to trigger waypoint popup
-```
+## Development Notes
+
+- The app is server-rendered PHP running directly under XAMPP.
+- `node_modules/` is committed and assets are served directly from it.
+- There is no automated lint or test suite configured in this repository.
 
 ## Authors
 
