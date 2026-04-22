@@ -1,0 +1,71 @@
+.site-footer {
+  background: linear-gradient(180deg, rgba($white, 0.88) 0%, rgba($light, 0.98) 100%);
+  border-top: 1px solid rgba($primary, 0.18);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.05);
+  margin-top: 3rem;
+}
+
+.site-footer__inner {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.site-footer__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.site-footer__summary {
+  max-width: 48rem;
+}
+
+.site-footer__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+  color: $secondary;
+}
+
+.site-footer__text {
+  margin: 0;
+  color: $gray-700;
+  font-size: 0.95rem;
+  line-height: 1.5;
+
+  a {
+    color: $primary;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+}
+
+.site-footer__feedback-btn {
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.has-site-footer .grecaptcha-badge {
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .site-footer__content {
+    align-items: stretch;
+  }
+
+  .site-footer__actions {
+    width: 100%;
+  }
+
+  .site-footer__feedback-btn {
+    width: 100%;
+  }
+}

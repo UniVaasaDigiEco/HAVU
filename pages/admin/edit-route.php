@@ -101,7 +101,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     </style>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
-<body class="admin-dashboard">
+<body class="admin-dashboard has-site-footer">
 <?php
 $admin_nav_current = 'edit-route';
 require_once '../../includes/_admin_nav.php';
@@ -757,6 +757,6 @@ require_once '../../includes/_admin_nav.php';
         }
     });
 </script>
-<?php require_once '../../includes/_feedback_widget.php'; ?>
+<?php require_once '../../includes/_footer.php'; ?>
 </body>
 </html>

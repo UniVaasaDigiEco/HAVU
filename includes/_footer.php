@@ -1,0 +1,25 @@
+<footer class="site-footer mt-5">
+    <div class="container-fluid site-footer__inner">
+        <div class="site-footer__content">
+            <div class="site-footer__summary">
+                <h2 class="site-footer__title"><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?></h2>
+                <p class="site-footer__text">
+                    <?= htmlspecialchars(t('feedback.recaptcha_notice'), ENT_QUOTES, 'UTF-8') ?>
+                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?></a>
+                    ja
+                    <a href="https://policies.google.com/terms" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.terms'), ENT_QUOTES, 'UTF-8') ?></a>.
+                </p>
+            </div>
+            <div class="site-footer__actions">
+                <button type="button"
+                        class="btn btn-primary site-footer__feedback-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#feedbackModal"
+                        title="<?= htmlspecialchars(t('feedback.button_title'), ENT_QUOTES, 'UTF-8') ?>">
+                    <i class="bi bi-chat-dots-fill me-1"></i><?= htmlspecialchars(t('feedback.button_label'), ENT_QUOTES, 'UTF-8') ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</footer>
+<?php require __DIR__ . '/_feedback_widget.php'; ?>

@@ -25,12 +25,12 @@ $routes = $user->getCreatedRoutes();
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
-<body class="admin-dashboard">
+<body class="admin-dashboard has-site-footer">
 <?php
 $admin_nav_current = 'delete-route';
 require_once '../../includes/_admin_nav.php';
 ?>
-<div class="container-fluid min-vh-100 py-4">
+<div class="container-fluid py-4" style="margin-bottom: 101px;">
     <div class="row h-100 align-items-center justify-content-center">
         <div class="col-md-6 text-center">
             <div class="p-5 bg-white rounded-3 shadow">
@@ -62,6 +62,6 @@ require_once '../../includes/_admin_nav.php';
         </div>
     </div>
 </div>
-<?php require_once '../../includes/_feedback_widget.php'; ?>
+<?php require_once '../../includes/_footer.php'; ?>
 </body>
 </html>

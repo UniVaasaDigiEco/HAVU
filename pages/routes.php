@@ -84,8 +84,7 @@ try {
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
-<body>
-<?php require_once '../includes/_language_switcher.php'; ?>
+<body class="has-site-footer">
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="../index.php">
@@ -97,6 +96,10 @@ try {
                 <a href="admin/dashboard.php" class="btn btn-sm btn-warning">
                     <i class="bi bi-gear-fill me-1"></i><?= htmlspecialchars(t('common.admin_panel'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
+                <?php
+                $language_switcher_mode = 'navbar';
+                require '../includes/_language_switcher.php';
+                ?>
                 <a href="../actions/logout.php" class="btn btn-sm btn-outline-light">
                     <i class="bi bi-box-arrow-right me-1"></i><?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
@@ -104,6 +107,10 @@ try {
                 <a href="player/dashboard.php" class="btn btn-sm btn-outline-light">
                     <i class="bi bi-person-fill me-1"></i><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
+                <?php
+                $language_switcher_mode = 'navbar';
+                require '../includes/_language_switcher.php';
+                ?>
                 <a href="../actions/logout.php" class="btn btn-sm btn-outline-light">
                     <i class="bi bi-box-arrow-right me-1"></i><?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
@@ -111,6 +118,10 @@ try {
                 <a href="../login.php" class="btn btn-sm btn-outline-light">
                     <i class="bi bi-box-arrow-in-right me-1"></i><?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
+                <?php
+                $language_switcher_mode = 'navbar';
+                require '../includes/_language_switcher.php';
+                ?>
                 <a href="../register.php" class="btn btn-sm btn-light">
                     <i class="bi bi-person-plus-fill me-1"></i><?= htmlspecialchars(t('common.create_account'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
@@ -208,6 +219,6 @@ try {
         </div>
     <?php endif; ?>
 </div>
-<?php require_once '../includes/_feedback_widget.php'; ?>
+<?php require_once '../includes/_footer.php'; ?>
 </body>
 </html>

@@ -29,7 +29,7 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
-<body class="admin-dashboard">
+<body class="admin-dashboard has-site-footer">
 <?php
 $admin_nav_current = 'dashboard';
 require_once '../../includes/_admin_nav.php';
@@ -206,6 +206,6 @@ require_once '../../includes/_admin_nav.php';
         });
     });
 </script>
-<?php require_once '../../includes/_feedback_widget.php'; ?>
+<?php require_once '../../includes/_footer.php'; ?>
 </body>
 </html>

@@ -15,17 +15,6 @@ if (!empty($_SESSION['user_public_id'])) {
 }
 ?>
 
-<?php if (empty($feedback_widget_no_float)): ?>
-<button type="button"
-        class="btn btn-primary shadow feedback-float-btn"
-        id="feedback-float-btn"
-        data-bs-toggle="modal"
-        data-bs-target="#feedbackModal"
-        title="<?= htmlspecialchars(t('feedback.button_title'), ENT_QUOTES, 'UTF-8') ?>">
-    <i class="bi bi-chat-dots-fill me-1"></i><?= htmlspecialchars(t('feedback.button_label'), ENT_QUOTES, 'UTF-8') ?>
-</button>
-<?php endif; ?>
-
 <!-- Feedback Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1"
      aria-labelledby="feedbackModalLabel" aria-hidden="true"
