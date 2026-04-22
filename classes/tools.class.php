@@ -162,4 +162,116 @@ class Tools{
         }
         return $routes;
     }
+
+    /**
+     * Load anonymised statistics for all routes owned by a creator.
+     *
+     * @param string $creator_public_id
+     * @return array{summary: array{total_routes: int, total_completions: int, total_nodes_collected: int}, routes: array<int, array{public_id: string, title: string, is_published: int, total_nodes: int, started_count: int, finished_count: int, avg_nodes_collected: float, completion_rate: float}>}
+     */
+    public static function getRouteStatisticsForCreator(string $creator_public_id): array {
+        $db = self::getDb();
+
+        try {
+            $summary_sql = "
+                SELECT
+                    COUNT(r.id) AS total_routes,
+                    COALESCE(SUM(route_completion_totals.completed_count), 0) AS total_completions,
+                    COALESCE(SUM(route_visit_totals.collected_nodes), 0) AS total_nodes_collected
+                FROM routes r
+                LEFT JOIN (
+                    SELECT route_id, COUNT(*) AS completed_count
+                    FROM route_completions
+                    GROUP BY route_id
+                ) route_completion_totals ON route_completion_totals.route_id = r.id
+                LEFT JOIN (
+                    SELECT route_id, COUNT(*) AS collected_nodes
+                    FROM node_visits
+                    GROUP BY route_id
+                ) route_visit_totals ON route_visit_totals.route_id = r.id
+                WHERE r.user_id = ?
+            ";
+
+            $summary_stmt = $db->prepare($summary_sql);
+            $summary_stmt->bind_param('s', $creator_public_id);
+            $summary_stmt->execute();
+            $summary_stmt->bind_result($total_routes, $total_completions, $total_nodes_collected);
+            $summary_stmt->fetch();
+            $summary_stmt->close();
+
+            $route_sql = "
+                SELECT
+                    r.public_id,
+                    r.title,
+                    r.is_published,
+                    COALESCE(node_totals.total_nodes, 0) AS total_nodes,
+                    COALESCE(started_totals.started_count, 0) AS started_count,
+                    COALESCE(finished_totals.finished_count, 0) AS finished_count,
+                    COALESCE(avg_visit_totals.avg_nodes_collected, 0) AS avg_nodes_collected
+                FROM routes r
+                LEFT JOIN (
+                    SELECT route_id, COUNT(*) AS total_nodes
+                    FROM node_route_cross
+                    GROUP BY route_id
+                ) node_totals ON node_totals.route_id = r.id
+                LEFT JOIN (
+                    SELECT route_id, COUNT(DISTINCT user_id) AS started_count
+                    FROM node_visits
+                    GROUP BY route_id
+                ) started_totals ON started_totals.route_id = r.id
+                LEFT JOIN (
+                    SELECT route_id, COUNT(DISTINCT user_id) AS finished_count
+                    FROM route_completions
+                    GROUP BY route_id
+                ) finished_totals ON finished_totals.route_id = r.id
+                LEFT JOIN (
+                    SELECT route_id, AVG(visited_nodes) AS avg_nodes_collected
+                    FROM (
+                        SELECT route_id, user_id, COUNT(DISTINCT node_id) AS visited_nodes
+                        FROM node_visits
+                        GROUP BY route_id, user_id
+                    ) route_user_visits
+                    GROUP BY route_id
+                ) avg_visit_totals ON avg_visit_totals.route_id = r.id
+                WHERE r.user_id = ?
+                ORDER BY r.created_at DESC, r.id DESC
+            ";
+
+            $route_stmt = $db->prepare($route_sql);
+            $route_stmt->bind_param('s', $creator_public_id);
+            $route_stmt->execute();
+            $route_stmt->bind_result($public_id, $title, $is_published, $total_nodes, $started_count, $finished_count, $avg_nodes_collected);
+
+            $route_stats = [];
+
+            while ($route_stmt->fetch()) {
+                $started_count = (int)$started_count;
+                $finished_count = (int)$finished_count;
+
+                $route_stats[] = [
+                    'public_id' => $public_id,
+                    'title' => $title,
+                    'is_published' => (int)$is_published,
+                    'total_nodes' => (int)$total_nodes,
+                    'started_count' => $started_count,
+                    'finished_count' => $finished_count,
+                    'avg_nodes_collected' => (float)$avg_nodes_collected,
+                    'completion_rate' => $started_count > 0 ? ($finished_count / $started_count) * 100 : 0.0
+                ];
+            }
+
+            $route_stmt->close();
+
+            return [
+                'summary' => [
+                    'total_routes' => (int)$total_routes,
+                    'total_completions' => (int)$total_completions,
+                    'total_nodes_collected' => (int)$total_nodes_collected
+                ],
+                'routes' => $route_stats
+            ];
+        } finally {
+            $db->close();
+        }
+    }
 }
