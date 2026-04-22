@@ -102,7 +102,10 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
-<?php require_once '../../includes/_language_switcher.php'; ?>
+<?php
+$admin_nav_current = 'edit-route';
+require_once '../../includes/_admin_nav.php';
+?>
 <div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col">

@@ -30,21 +30,13 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
-<?php require_once '../../includes/_language_switcher.php'; ?>
-<div class="container-fluid">
-    <div class="d-flex flex-row py-3">
-        <div id="menu" class="col-2 pe-2" style="position: sticky; top: 1rem; align-self: flex-start;">
-            <div id="menu-content" class="p-3 bg-primary-subtle rounded-3 shadow">
-                <h3 class="text-center"><i class="bi bi-gear-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.heading'), ENT_QUOTES, 'UTF-8') ?></h3>
-                <button class="btn btn-primary text-white w-100" id="show-route-management" data-target="#route-management">
-                    <i class="bi bi-map-fill"></i> <?= htmlspecialchars(t('admin_dashboard.route_management'), ENT_QUOTES, 'UTF-8') ?>
-                </button>
-                <a class="btn btn-primary text-white w-100" id="goto-game" href="../player/dashboard.php"><i class="bi bi-joystick"></i> <?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?></a>
-                <a class="btn btn-primary text-white w-100" id="logout" href="../../actions/logout.php"><i class="bi bi-box-arrow-left me-1"></i> <?= htmlspecialchars(t('common.log_out'), ENT_QUOTES, 'UTF-8') ?></a>
-            </div>
-        </div>
-        <div id="dashboard-content" class="col-10">
-            <div id="route-management" class="p-4 bg-secondary-subtle rounded-3 shadow">
+<?php
+$admin_nav_current = 'dashboard';
+require_once '../../includes/_admin_nav.php';
+?>
+<div class="container-fluid py-4">
+    <div id="dashboard-content" class="admin-page-content">
+        <div id="route-management" class="p-4 bg-secondary-subtle rounded-3 shadow">
                 <div id="header" class="mb-4">
                     <h3><i class="bi bi-map-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_management'), ENT_QUOTES, 'UTF-8') ?></h3>
                     <?php
@@ -157,7 +149,6 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
                         <p class="text-muted"><?= htmlspecialchars(t('admin_dashboard.no_routes'), ENT_QUOTES, 'UTF-8') ?></p>
                     <?php endif; ?>
                 </div>
-            </div>
         </div>
     </div>
 </div>

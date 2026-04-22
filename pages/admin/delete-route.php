@@ -26,9 +26,12 @@ $routes = $user->getCreatedRoutes();
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
-<?php require_once '../../includes/_language_switcher.php'; ?>
-<div class="container-fluid vh-100">
-    <div class="row py-3 h-100 align-items-center justify-content-center">
+<?php
+$admin_nav_current = 'delete-route';
+require_once '../../includes/_admin_nav.php';
+?>
+<div class="container-fluid min-vh-100 py-4">
+    <div class="row h-100 align-items-center justify-content-center">
         <div class="col-md-6 text-center">
             <div class="p-5 bg-white rounded-3 shadow">
                 <i class="bi bi-trash-fill text-danger" style="font-size: 4rem;"></i>

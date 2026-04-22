@@ -71,7 +71,10 @@ $summernote_locale = [
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard">
-<?php require_once '../../includes/_language_switcher.php'; ?>
+<?php
+$admin_nav_current = 'new-route';
+require_once '../../includes/_admin_nav.php';
+?>
 <div class="container-fluid py-4">
     <!-- Header -->
     <div class="row mb-4">

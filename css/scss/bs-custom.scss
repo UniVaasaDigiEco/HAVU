@@ -5,13 +5,16 @@
 @import "base";
 @import "components/map";
 @import "components/panels";
-@import "components/admin";
 @import "effects/progress";
 @import "components/markers";
 @import "effects/animations";
 
 // Import Bootstrap
 @import "../../node_modules/bootstrap/scss/bootstrap";
+
+// Import admin overrides after Bootstrap so navbar states and other admin styles
+// win against Bootstrap's component defaults.
+@import "components/admin";
 
 // Feedback floating button
 .feedback-float-btn {
