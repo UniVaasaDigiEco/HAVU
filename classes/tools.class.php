@@ -9,11 +9,25 @@ class Tools{
      */
     public static function getDb(): mysqli{
         try{
-            $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT, DB_SOCKET);
             $db->set_charset('utf8mb4');
             return $db;
         }
         catch (Exception $exception){
+            $message = $exception->getMessage();
+
+            // On Linux/shared hosting, "localhost" may force a Unix socket connection.
+            // If the socket path is unavailable, retry over TCP via 127.0.0.1.
+            if (DB_HOST === 'localhost' && str_contains($message, 'No such file or directory')) {
+                try {
+                    $db = new mysqli('127.0.0.1', DB_USER, DB_PASS, DB_NAME, DB_PORT);
+                    $db->set_charset('utf8mb4');
+                    return $db;
+                } catch (Exception $fallbackException) {
+                    throw new RuntimeException("Database connection failed: " . $fallbackException->getMessage());
+                }
+            }
+
             throw new RuntimeException("Database connection failed: " . $exception->getMessage());
         }
     }

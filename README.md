@@ -52,6 +52,8 @@ The app is localized in Finnish, English, and Swedish. The localized product nam
    ```php
    return [
        'DB_HOST' => 'localhost',
+       'DB_PORT' => 3306,
+       'DB_SOCKET' => null,
        'DB_NAME' => 'your_database_name',
        'DB_USER' => 'your_database_user',
        'DB_PASS' => 'your_database_password',
@@ -59,8 +61,11 @@ The app is localized in Finnish, English, and Swedish. The localized product nam
        'UPLOAD_MAX_VIDEO_MB' => 100,
        'RECAPTCHA_SITE_KEY'   => '',
        'RECAPTCHA_SECRET_KEY' => '',
-   ];
-   ```
+       'MAINTENANCE_MODE' => false,
+    ];
+    ```
+   On some Linux/shared-hosting environments, using `localhost` may try a Unix socket. If that fails, set `DB_HOST` to `127.0.0.1`, or provide the correct `DB_PORT` / `DB_SOCKET`.
+   Set `MAINTENANCE_MODE` to `true` if you want `index.php` to show a temporary maintenance notice instead of the normal homepage action buttons.
 4. Install PHP dependencies:
    ```bash
    composer install

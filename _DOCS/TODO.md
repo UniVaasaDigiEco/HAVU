@@ -34,19 +34,20 @@
 
 ## TODO List - Short Term
 
-- [X] Player stats tracking
-  - How many routes completed, how many nodes collected, etc.
-- [ ] GDPR thing from the University
+- [ ] Convert the GDPR/Privacy thing into a PDF and add a link to it on the site
 - [ ] Add more varied content to nodes (e.g., images, descriptions)
   - [X] Add YouTube video embeds to nodes
   - [X] Add quizzes or challenges at nodes
   - [ ] Add rewards or badges for completing nodes/routes
   - [X] Add Summernote or similar WYSIWYG editor for content creation in admin panel
-- [ ] UI Polish (check buttons, colors, fonts, etc.)
-  - Specifically the floating buttons (Language & feedback)
 - [ ] Testing
   - [ ] Unit tests
   - [ ] User tests
+- [X] GDPR thing from the University
+- [X] Player stats tracking
+  - How many routes completed, how many nodes collected, etc.
+- [X] UI Polish (check buttons, colors, fonts, etc.)
+  - Specifically the floating buttons (Language & feedback)
 - [X] Feedback forms
   - Player feedback to route owner
   - User feedback to UWASA

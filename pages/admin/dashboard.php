@@ -21,6 +21,7 @@ $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/g
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars(t('admin_dashboard.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../css/bs-custom.css">

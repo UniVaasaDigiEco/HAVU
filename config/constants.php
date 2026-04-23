@@ -36,6 +36,8 @@ define('DB_HOST', $env['DB_HOST']);
 define('DB_NAME', $env['DB_NAME']);
 define('DB_USER', $env['DB_USER']);
 define('DB_PASS', $env['DB_PASS']);
+define('DB_PORT', isset($env['DB_PORT']) ? (int)$env['DB_PORT'] : 3306);
+define('DB_SOCKET', $env['DB_SOCKET'] ?? null);
 
 // Upload size limits (in bytes); configured per environment in .env
 define('UPLOAD_MAX_IMAGE_BYTES', ($env['UPLOAD_MAX_IMAGE_MB'] ?? 10) * 1024 * 1024);
@@ -44,5 +46,12 @@ define('UPLOAD_MAX_VIDEO_BYTES', ($env['UPLOAD_MAX_VIDEO_MB'] ?? 100) * 1024 * 1
 // reCAPTCHA configuration from environment file
 define('RECAPTCHA_SITE_KEY',   $env['RECAPTCHA_SITE_KEY']   ?? '');
 define('RECAPTCHA_SECRET_KEY', $env['RECAPTCHA_SECRET_KEY'] ?? '');
+
+$maintenance_mode = $env['MAINTENANCE_MODE'] ?? false;
+if (is_string($maintenance_mode)) {
+    $parsed_maintenance_mode = filter_var($maintenance_mode, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    $maintenance_mode = $parsed_maintenance_mode ?? false;
+}
+define('MAINTENANCE_MODE', (bool)$maintenance_mode);
 
 require_once(__DIR__ . '/../includes/i18n.php');

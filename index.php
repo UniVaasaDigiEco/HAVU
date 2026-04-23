@@ -8,6 +8,7 @@ Security::initSession();
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars(t('index.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="css/bs-custom.css">
@@ -16,11 +17,22 @@ Security::initSession();
 </head>
 <body>
 <?php require_once 'includes/_language_switcher.php'; ?>
-<div class="container-fluid vh-100">
-    <div class="row h-100">
-        <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-            <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
-            <h1 class="mb-4"><?= htmlspecialchars(t('index.heading'), ENT_QUOTES, 'UTF-8') ?></h1>
+<div class="container-fluid min-vh-100 d-flex flex-column">
+    <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center text-center py-4">
+        <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
+        <h1 class="mb-4"><?= htmlspecialchars(t('index.heading'), ENT_QUOTES, 'UTF-8') ?></h1>
+        <?php if (MAINTENANCE_MODE): ?>
+            <div class="card shadow-sm border-warning-subtle" style="max-width: 42rem;">
+                <div class="card-body p-4 text-center">
+                    <div class="text-warning-emphasis mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-tools"></i>
+                    </div>
+                    <h2 class="h3 mb-3"><?= htmlspecialchars(t('index.maintenance_heading'), ENT_QUOTES, 'UTF-8') ?></h2>
+                    <p class="lead mb-3"><?= htmlspecialchars(t('index.maintenance_message'), ENT_QUOTES, 'UTF-8') ?></p>
+                    <p class="text-muted mb-0"><?= htmlspecialchars(t('index.maintenance_retry'), ENT_QUOTES, 'UTF-8') ?></p>
+                </div>
+            </div>
+        <?php else: ?>
             <div class="d-flex flex-row gap-3 flex-wrap justify-content-center">
                 <a href="pages/routes.php" class="btn btn-success btn-lg text-white fw-bold">
                     <i class="bi bi-joystick me-1"></i> <?= htmlspecialchars(t('common.play_now'), ENT_QUOTES, 'UTF-8') ?>
@@ -32,17 +44,17 @@ Security::initSession();
                     <i class="bi bi-box-arrow-in-right me-1"></i> <?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             </div>
+        <?php endif; ?>
+    </div>
+    <div id="logoContainer" class="mt-auto">
+        <div class="logo-row logo-row--primary">
+            <img id="co-funded-eu-logo" alt="Logo, Co-Funded by the European Union" src="images/logos/cofunded-eu.png">
+            <img id="epliitto" alt="Logo, Eteläpohjanmaan liitto" src="images/logos/epliitto.svg">
         </div>
-        <div id="logoContainer" class="col-12">
-            <div class="logo-row logo-row--primary">
-                <img id="co-funded-eu-logo" alt="Logo, Co-Funded by the European Union" src="images/logos/cofunded-eu.png">
-                <img id="epliitto" alt="Logo, Eteläpohjanmaan liitto" src="images/logos/epliitto.svg">
-            </div>
-            <div class="logo-row logo-row--secondary">
-                <img id="vyy" alt="Logo, Vaasan yliopisto" src="images/logos/vyy.svg">
-                <img id="seamk" alt="Logo, Seinäjoen Ammattikorkeakoulu" src="images/logos/seamk.png">
-                <img id="metsakeskus" alt="Logo, Metsäkeskus" src="images/logos/metsakeskus.png">
-            </div>
+        <div class="logo-row logo-row--secondary">
+            <img id="vyy" alt="Logo, Vaasan yliopisto" src="images/logos/vyy.svg">
+            <img id="seamk" alt="Logo, Seinäjoen Ammattikorkeakoulu" src="images/logos/seamk.png">
+            <img id="metsakeskus" alt="Logo, Metsäkeskus" src="images/logos/metsakeskus.png">
         </div>
     </div>
 </div>

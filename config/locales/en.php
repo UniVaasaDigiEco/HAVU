@@ -80,6 +80,9 @@ return [
     'index' => [
         'title' => 'HAVU - Trail Game',
         'heading' => 'HAVU trail game',
+        'maintenance_heading' => 'Game temporarily under maintenance',
+        'maintenance_message' => 'HAVU-trailgame is currently unavailable while maintenance or recovery work is in progress.',
+        'maintenance_retry' => 'Please try again later.',
     ],
     'login' => [
         'title' => 'HAVU-trailgame - Log in',
