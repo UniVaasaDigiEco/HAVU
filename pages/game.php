@@ -692,12 +692,20 @@ if (!$route) {
             <strong style="font-size: 1.1em; vertical-align: middle;"><span id="acorn-count">0</span></strong>
         </div>
         <div id="distance-info"></div>
-        <?php require_once '../includes/_language_switcher.php'; ?>
-        <div class="mt-2 pt-2 border-top">
-            <a href="#" class="small text-muted text-decoration-none"
-               onclick="hideInfoPanel(); openFeedbackModal(); return false;">
-                <i class="bi bi-chat-dots me-1"></i><?= htmlspecialchars(t('game.feedback'), ENT_QUOTES, 'UTF-8') ?>
-            </a>
+        <div class="info-panel-footer mt-3 pt-2 border-top">
+            <div class="info-panel-actions">
+                <a href="#" class="btn btn-sm btn-outline-secondary"
+                   onclick="hideInfoPanel(); openFeedbackModal(); return false;">
+                    <i class="bi bi-chat-dots me-1"></i><?= htmlspecialchars(t('game.feedback'), ENT_QUOTES, 'UTF-8') ?>
+                </a>
+                <?php
+                $language_switcher_mode = 'inline';
+                require_once '../includes/_language_switcher.php';
+                ?>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="hideInfoPanel()">
+                    <i class="bi bi-x-lg me-1"></i><?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>
+                </button>
+            </div>
         </div>
     </div>
 

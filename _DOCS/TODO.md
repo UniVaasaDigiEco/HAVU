@@ -35,6 +35,12 @@
 ## TODO List - Short Term
 
 - [ ] Convert the GDPR/Privacy thing into a PDF and add a link to it on the site
+- [X] Game.php
+  - [X] Add close button for the stat window
+  - [X] Move language switcher next to the feedback button (or same area at least)
+- [ ] Optimize game UI for mobile devices
+  - Currently, the popups are too small if there's more text/images.
+    - Maybe a full screen dialog instead?
 - [ ] Add more varied content to nodes (e.g., images, descriptions)
   - [X] Add YouTube video embeds to nodes
   - [X] Add quizzes or challenges at nodes
@@ -43,6 +49,7 @@
 - [ ] Testing
   - [ ] Unit tests
   - [ ] User tests
+- [ ] Tilastoseuranta ei kirjautuneille käyttäjille (käyttäjätiedot tallennetaan evästeisiin)
 - [X] GDPR thing from the University
 - [X] Player stats tracking
   - How many routes completed, how many nodes collected, etc.

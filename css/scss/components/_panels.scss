@@ -17,6 +17,19 @@
     }
 }
 
+.info-panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.language-switcher-inline {
+    .dropdown-toggle {
+        white-space: nowrap;
+    }
+}
+
 // Button to open the info panel
 .info-panel-toggle {
     position: absolute;
