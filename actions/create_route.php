@@ -2,6 +2,7 @@
 require_once('../vendor/autoload.php');
 require_once('../classes/tools.class.php');
 require_once('../classes/security.class.php');
+require_once('../classes/youtube_embed.class.php');
 use Ramsey\Uuid\Uuid;
 
 Security::initSession();
@@ -91,7 +92,7 @@ try {
 
             $node_public_id = Uuid::uuid4()->toString();
             $node_title = $node->title;
-            $node_content = $node->content ?? '';
+            $node_content = YouTubeEmbed::normalizeHtml($node->content ?? '');
             $node_latitude = floatval($node->lat);
             $node_longitude = floatval($node->lng);
             $node_challenge_data = isset($node->challenge_data) ? json_encode($node->challenge_data) : null;

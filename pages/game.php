@@ -30,7 +30,7 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 
 // Content Security Policy - most powerful XSS protection
 // Defines where resources can be loaded from
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://recaptcha.google.com;");
 
 // Hide PHP version for security through obscurity
 header_remove('X-Powered-By');
@@ -97,6 +97,7 @@ if (!$route) {
 
     <!-- Bootstrap CSS -->
     <link href="../css/bs-custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/responsive-embeds.css">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
@@ -108,16 +109,18 @@ if (!$route) {
 
     <!-- Leaflet JS -->
     <script src="../node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="../js/youtube-embed.js"></script>
 
     <script>
         // Configuration
         const PROXIMITY_THRESHOLD = 20; // meters - distance to trigger node popup
-        const UPDATE_INTERVAL = 3000; // ms - how often to check GPS position
+        const MOBILE_BREAKPOINT = 767.98;
         const REQUIRE_GPS_PROXIMITY = <?= REQUIRE_GPS_PROXIMITY ? 'true' : 'false' ?>;
         const translations = <?= HavuLocale::jsonNamespace('common', 'game') ?>;
         const commonTranslations = translations.common;
         const gameTranslations = translations.game;
         const activeLocale = <?= json_encode($date_locale, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+        const phoneViewportQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
 
         function translate(template, params = {}) {
             return Object.entries(params).reduce(
@@ -176,6 +179,7 @@ if (!$route) {
         let userMarker = null;
         let userPosition = null;
         let routeLine = null;
+        let activeNodeId = null;
 
         // Custom icons
         const unvisitedIcon = L.icon({
@@ -239,8 +243,17 @@ if (!$route) {
 
             drawRouteLine();
             initializeMarkers();
+            syncMarkerPresentationBindings();
+            updateProgressBarHeightVariable();
             updateProgress();
             initGPS();
+
+            window.addEventListener('resize', handleViewportChange);
+            if (phoneViewportQuery.addEventListener) {
+                phoneViewportQuery.addEventListener('change', handleViewportChange);
+            } else {
+                phoneViewportQuery.addListener(handleViewportChange);
+            }
         });
 
         // Draw route line
@@ -252,7 +265,7 @@ if (!$route) {
             }
 
             routeLine = L.polyline(latlngs, {
-                color: '#bfd7ff',
+                color: '#0066cc',
                 weight: 3,
                 opacity: 0.6,
                 dashArray: '10, 10'
@@ -285,14 +298,35 @@ if (!$route) {
             return 1 - dp[m][n] / Math.max(m, n);
         }
 
-        // Build popup HTML for a node based on its current state
-        function buildNodePopup(node) {
+        function isPhoneViewport() {
+            return phoneViewportQuery.matches;
+        }
+
+        function getNodeLabel(node) {
             const nodeIndex = routeNodes.indexOf(node);
-            const nodeLabel = nodeIndex === 0 ? gameTranslations.start_label : (nodeIndex === routeNodes.length - 1 ? gameTranslations.finish_label : '');
+            return nodeIndex === 0 ? gameTranslations.start_label : (nodeIndex === routeNodes.length - 1 ? gameTranslations.finish_label : '');
+        }
+
+        function buildCelebrationContent(node) {
+            return `
+                <div class="node-popup text-center" id="node-body-${node.id}">
+                    <h5>${gameTranslations.celebration_title}</h5>
+                    <p>${translate(gameTranslations.celebration_message, { name: `<strong>${escapeHtml(node.name)}</strong>` })}</p>
+                </div>
+            `;
+        }
+
+        // Build node HTML for both desktop popups and the phone bottom sheet
+        function buildNodeContent(node) {
+            if (node.visited) {
+                return buildCelebrationContent(node);
+            }
+
+            const nodeLabel = getNodeLabel(node);
             const canCheckin = !REQUIRE_GPS_PROXIMITY || (node.inProximity && (!node.challenge_data || node.challengeDone));
 
             let challengeHtml = '';
-            if (node.challenge_data && !node.visited) {
+            if (node.challenge_data) {
                 if (node.challengeDone) {
                     challengeHtml = `<div class="alert alert-success py-2 mt-2 mb-1">${gameTranslations.challenge_completed}</div>`;
                 } else {
@@ -324,10 +358,10 @@ if (!$route) {
             }
 
             return `
-                <div class="node-popup" id="popup-body-${node.id}">
+                <div class="node-popup" id="node-body-${node.id}">
                     ${nodeLabel ? `<div class="text-center mb-2"><strong>${nodeLabel}</strong></div>` : ''}
                     <h5>${escapeHtml(node.name)}</h5>
-                    <div class="mb-2">${node.description || ''}</div>
+                    <div class="mb-2">${window.HavuYouTubeEmbed.wrapRichContent(node.description)}</div>
                     ${challengeHtml}
                     <button class="checkin-btn btn btn-sm ${canCheckin ? 'btn-success' : 'btn-secondary'} mt-2"
                             onclick="markAsVisited(${node.id})"
@@ -357,22 +391,12 @@ if (!$route) {
                 ) >= 0.70;
             }
 
-            const body = document.getElementById('popup-body-' + nodeId);
+            const body = document.getElementById('node-body-' + nodeId);
 
             if (isCorrect) {
                 node.challengeDone = true;
                 node.challengeError = false;
-                if (body) {
-                    const challengeArea = body.querySelector('.challenge-area');
-                    if (challengeArea) {
-                        challengeArea.innerHTML = `<div class="alert alert-success py-2 mt-2 mb-1">${gameTranslations.challenge_completed}</div>`;
-                    }
-                    const checkinBtn = body.querySelector('.checkin-btn');
-                    if (checkinBtn) {
-                        checkinBtn.disabled = false;
-                        checkinBtn.className = 'checkin-btn btn btn-sm btn-success mt-2';
-                    }
-                }
+                refreshNodePresentation(nodeId);
             } else {
                 node.challengeError = true;
                 if (body) {
@@ -381,6 +405,156 @@ if (!$route) {
                 }
             }
         };
+
+        function getMobileNodeSheet() {
+            return document.getElementById('mobile-node-sheet');
+        }
+
+        function isMobileNodeSheetVisible() {
+            const sheet = getMobileNodeSheet();
+            return !!sheet && sheet.classList.contains('visible');
+        }
+
+        function renderMobileNodeSheet(nodeId) {
+            const node = routeNodes.find(n => n.id === nodeId);
+            const sheetBody = document.getElementById('mobile-node-sheet-body');
+
+            if (!node || !sheetBody) {
+                return;
+            }
+
+            sheetBody.innerHTML = buildNodeContent(node);
+        }
+
+        function openMobileNodeSheet(nodeId) {
+            const sheet = getMobileNodeSheet();
+            if (!sheet) {
+                return;
+            }
+
+            activeNodeId = nodeId;
+            renderMobileNodeSheet(nodeId);
+            sheet.classList.add('visible');
+        }
+
+        function closeMobileNodeSheet(clearActiveNode = true) {
+            const sheet = getMobileNodeSheet();
+            if (!sheet) {
+                return;
+            }
+
+            sheet.classList.remove('visible');
+
+            if (clearActiveNode) {
+                activeNodeId = null;
+            }
+        }
+
+        function syncMarkerPresentationBindings() {
+            routeNodes.forEach(node => {
+                const marker = markers[node.id];
+                if (!marker) {
+                    return;
+                }
+
+                if (isPhoneViewport()) {
+                    if (marker.getPopup()) {
+                        marker.unbindPopup();
+                    }
+                } else {
+                    const content = buildNodeContent(node);
+                    if (marker.getPopup()) {
+                        marker.setPopupContent(content);
+                    } else {
+                        marker.bindPopup(content);
+                    }
+                }
+            });
+        }
+
+        function refreshNodePresentation(nodeId) {
+            const marker = markers[nodeId];
+            const node = routeNodes.find(n => n.id === nodeId);
+
+            if (!marker || !node) {
+                return;
+            }
+
+            if (isPhoneViewport()) {
+                if (activeNodeId === nodeId && isMobileNodeSheetVisible()) {
+                    renderMobileNodeSheet(nodeId);
+                }
+            } else {
+                const content = buildNodeContent(node);
+                if (marker.getPopup()) {
+                    marker.setPopupContent(content);
+                } else {
+                    marker.bindPopup(content);
+                }
+            }
+        }
+
+        function openNodePresentation(nodeId) {
+            const node = routeNodes.find(n => n.id === nodeId);
+            const marker = markers[nodeId];
+
+            if (!node || !marker) {
+                return;
+            }
+
+            activeNodeId = nodeId;
+
+            if (isPhoneViewport()) {
+                map.closePopup();
+                openMobileNodeSheet(nodeId);
+                return;
+            }
+
+            refreshNodePresentation(nodeId);
+            marker.openPopup();
+        }
+
+        function closeNodePresentation(clearActiveNode = true) {
+            map.closePopup();
+            closeMobileNodeSheet(clearActiveNode);
+
+            if (clearActiveNode && !isPhoneViewport()) {
+                activeNodeId = null;
+            }
+        }
+
+        function updateProgressBarHeightVariable() {
+            const progressContainer = document.querySelector('.progress-container');
+            if (!progressContainer) {
+                return;
+            }
+
+            document.documentElement.style.setProperty('--progress-bar-height', `${progressContainer.offsetHeight}px`);
+        }
+
+        function handleViewportChange() {
+            const selectedNodeId = activeNodeId;
+            const hadVisibleMobileSheet = isMobileNodeSheetVisible();
+
+            updateProgressBarHeightVariable();
+            syncMarkerPresentationBindings();
+
+            if (isPhoneViewport()) {
+                map.closePopup();
+                if (selectedNodeId !== null) {
+                    openMobileNodeSheet(selectedNodeId);
+                }
+                return;
+            }
+
+            closeMobileNodeSheet(false);
+            if (selectedNodeId !== null) {
+                refreshNodePresentation(selectedNodeId);
+                if (hadVisibleMobileSheet && markers[selectedNodeId]) {
+                    markers[selectedNodeId].openPopup();
+                }
+            }
+        }
 
         // Create markers for all nodes
         function initializeMarkers() {
@@ -399,7 +573,25 @@ if (!$route) {
                     title: node.name
                 }).addTo(map);
 
-                marker.bindPopup(buildNodePopup(node));
+                if (!isPhoneViewport()) {
+                    marker.bindPopup(buildNodeContent(node));
+                }
+
+                marker.on('click', function() {
+                    if (isPhoneViewport()) {
+                        openNodePresentation(node.id);
+                    } else {
+                        activeNodeId = node.id;
+                        refreshNodePresentation(node.id);
+                    }
+                });
+
+                marker.on('popupclose', function() {
+                    if (!isPhoneViewport() && activeNodeId === node.id) {
+                        activeNodeId = null;
+                    }
+                });
+
                 markers[node.id] = marker;
             });
         }
@@ -438,17 +630,21 @@ if (!$route) {
                         const wasInProximity = node.inProximity;
                         node.inProximity = distance < PROXIMITY_THRESHOLD;
 
-                        // Proximity state changed — update popup if it's open
-                        if (node.inProximity !== wasInProximity && markers[node.id] && markers[node.id].isPopupOpen()) {
-                            markers[node.id].setPopupContent(buildNodePopup(node));
+                        if (node.inProximity !== wasInProximity) {
+                            refreshNodePresentation(node.id);
                         }
                     }
                 }
             });
 
             if (nearestNode && nearestDistance < PROXIMITY_THRESHOLD) {
-                // Auto-open popup for the nearest in-range node
-                markers[nearestNode.id].openPopup();
+                const nearestMarker = markers[nearestNode.id];
+                const desktopPopupOpen = nearestMarker && nearestMarker.getPopup() && nearestMarker.isPopupOpen();
+                const phoneSheetOpen = activeNodeId === nearestNode.id && isMobileNodeSheetVisible();
+
+                if (!desktopPopupOpen && !phoneSheetOpen) {
+                    openNodePresentation(nearestNode.id);
+                }
             }
 
             // Update distance info panel
@@ -515,8 +711,8 @@ if (!$route) {
                 markers[nodeId].setIcon(visitedIcon);
                 updateProgress();
 
-                // Close popup and show acorn animation
-                markers[nodeId].closePopup();
+                // Close the current presentation and show acorn animation
+                closeNodePresentation();
 
                 // Create acorn celebration element
                 const acornDiv = document.createElement('div');
@@ -529,15 +725,9 @@ if (!$route) {
                     acornDiv.remove();
                 }, 2000);
 
-                // Show celebration popup after acorn animation
+                // Show celebration content after the acorn animation
                 setTimeout(() => {
-                    const celebrationPopup = `
-                        <div class="node-popup text-center">
-                            <h5>${gameTranslations.celebration_title}</h5>
-                            <p>${translate(gameTranslations.celebration_message, { name: `<strong>${escapeHtml(node.name)}</strong>` })}</p>
-                        </div>
-                    `;
-                    markers[nodeId].bindPopup(celebrationPopup).openPopup();
+                    openNodePresentation(nodeId);
                 }, 2100);
             }
         };
@@ -706,6 +896,19 @@ if (!$route) {
                     <i class="bi bi-x-lg me-1"></i><?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <div class="mobile-node-sheet" id="mobile-node-sheet">
+        <div class="mobile-node-sheet__card">
+            <div class="mobile-node-sheet__header">
+                <div class="mobile-node-sheet__handle" aria-hidden="true"></div>
+                <button type="button"
+                        class="btn-close mobile-node-sheet__close"
+                        onclick="closeMobileNodeSheet()"
+                        aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
+            </div>
+            <div class="mobile-node-sheet__body" id="mobile-node-sheet-body"></div>
         </div>
     </div>
 

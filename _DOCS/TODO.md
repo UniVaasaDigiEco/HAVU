@@ -34,22 +34,25 @@
 
 ## TODO List - Short Term
 
+- [ ] Copy/Clone existing routes
+  - Add a "Copy" button in the admin panel to duplicate existing routes for easier content creation
+  - Prompt user to enter a new name for the copied route, as default name can be "Copy of [Original Route Name]"
 - [ ] Convert the GDPR/Privacy thing into a PDF and add a link to it on the site
-- [X] Game.php
-  - [X] Add close button for the stat window
-  - [X] Move language switcher next to the feedback button (or same area at least)
-- [ ] Optimize game UI for mobile devices
-  - Currently, the popups are too small if there's more text/images.
-    - Maybe a full screen dialog instead?
-- [ ] Add more varied content to nodes (e.g., images, descriptions)
-  - [X] Add YouTube video embeds to nodes
-  - [X] Add quizzes or challenges at nodes
-  - [ ] Add rewards or badges for completing nodes/routes
-  - [X] Add Summernote or similar WYSIWYG editor for content creation in admin panel
+- [ ] Add rewards or badges for completing nodes/routes
 - [ ] Testing
   - [ ] Unit tests
   - [ ] User tests
 - [ ] Tilastoseuranta ei kirjautuneille käyttäjille (käyttäjätiedot tallennetaan evästeisiin)
+- [X] Add more varied content to nodes (e.g., images, descriptions)
+  - [X] Add YouTube video embeds to nodes
+  - [X] Add quizzes or challenges at nodes
+  - [X] Add Summernote or similar WYSIWYG editor for content creation in admin panel
+- [X] Game.php
+  - [X] Add close button for the stat window
+  - [X] Move language switcher next to the feedback button (or same area at least)
+- [X] Optimize game UI for mobile devices
+  - Currently, the popups are too small if there's more text/images.
+    - Maybe a full screen dialog instead?
 - [X] GDPR thing from the University
 - [X] Player stats tracking
   - How many routes completed, how many nodes collected, etc.

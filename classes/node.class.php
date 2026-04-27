@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ .'/../vendor/autoload.php');
 require_once(__DIR__ .'/tools.class.php');
+require_once(__DIR__ .'/youtube_embed.class.php');
 use Ramsey\Uuid\Uuid;
 
 class Node{
@@ -64,7 +65,7 @@ class Node{
             $this->created_at = Tools::parseDateTime($created_at);
             $this->updated_at = Tools::parseDateTime($updated_at);
             $this->title = $title;
-            $this->content = $content;
+            $this->content = YouTubeEmbed::normalizeHtml($content);
             $this->latitude = $latitude;
             $this->longitude = $longitude;
             $this->challenge_data = $challenge_data_raw !== null ? json_decode($challenge_data_raw, true) : null;

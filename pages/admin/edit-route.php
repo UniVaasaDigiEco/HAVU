@@ -50,6 +50,7 @@ $route_data_json = json_encode($route_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_
     <title><?= htmlspecialchars(t('admin_edit_route.title'), ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../css/bs-custom.css">
+    <link rel="stylesheet" href="../../css/responsive-embeds.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="../../node_modules/summernote/dist/summernote-bs5.min.css">
@@ -339,6 +340,7 @@ require_once '../../includes/_admin_nav.php';
 <script src="../../node_modules/summernote/dist/summernote-bs5.min.js"></script>
 <script src="../../node_modules/summernote/dist/lang/summernote-<?= htmlspecialchars($summernote_locale, ENT_QUOTES, 'UTF-8') ?>.min.js"></script>
 <script src="../../js/challenge-panel.js"></script>
+<script src="../../js/youtube-embed.js"></script>
 <script>
     let map;
     let markers = [];
@@ -414,10 +416,13 @@ require_once '../../includes/_admin_nav.php';
                 ['style',  ['style']],
                 ['font',   ['bold', 'italic', 'underline', 'clear']],
                 ['para',   ['ul', 'ol', 'paragraph']],
-                ['insert', ['link', 'picture', 'video', 'videoUpload']],
+                ['insert', ['link', 'picture', 'youtubeEmbed', 'videoUpload']],
                 ['view',   ['fullscreen', 'codeview']],
             ],
             buttons: {
+                youtubeEmbed: function() {
+                    return window.HavuYouTubeEmbed.createSummernoteButton($, bootstrap, routeEditorTranslations, '#node_content');
+                },
                 videoUpload: function(context) {
                     const ui = $.summernote.ui;
                     return ui.button({
@@ -521,7 +526,8 @@ require_once '../../includes/_admin_nav.php';
     }
 
     function buildPopupContent(node) {
-        return `<b>${escapeHtml(node.title)}</b><div class="mt-1">${node.content || `<em>${routeEditorTranslations.node_no_content}</em>`}</div>`;
+        const richContent = window.HavuYouTubeEmbed.wrapRichContent(node.content);
+        return `<div class="node-popup-preview"><b>${escapeHtml(node.title)}</b><div class="mt-1">${richContent || `<em>${routeEditorTranslations.node_no_content}</em>`}</div></div>`;
     }
 
     function createNumberedIcon(number) {
@@ -619,7 +625,7 @@ require_once '../../includes/_admin_nav.php';
     function saveNodeEdit() {
         const index = parseInt(document.getElementById('editNodeIndex').value, 10);
         const title = document.getElementById('node_title').value.trim();
-        const content = $('#node_content').summernote('code');
+        const content = window.HavuYouTubeEmbed.normalizeHtml($('#node_content').summernote('code'));
 
         if (!title) {
             alert(routeEditorTranslations.node_name_required);

@@ -20,18 +20,101 @@
 
 // Node popup styles
 .node-popup {
+    overflow-wrap: anywhere;
 
     h5 {
         margin-top: 0;
         color: #0066cc;
     }
 
+    img,
+    video,
+    iframe {
+        display: block;
+        max-width: 100%;
+    }
+
+    table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
     // Responsive iframes (e.g. YouTube embeds)
     iframe {
-        min-width: 300px;
+        min-width: 0;
         width: 100% !important;
         height: auto !important;
         aspect-ratio: 16 / 9;
         max-width: 100%;
+        border: 0;
+    }
+}
+
+.mobile-node-sheet {
+    display: none;
+}
+
+@media (max-width: 767.98px) {
+    .mobile-node-sheet {
+        display: block;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(var(--progress-bar-height, 60px) + env(safe-area-inset-bottom, 0px));
+        z-index: $z-info-panel;
+        padding: 0 0.75rem 0.75rem;
+        pointer-events: none;
+
+        &__card {
+            pointer-events: auto;
+            background: white;
+            border-radius: 1.25rem;
+            box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(calc(100% + 1rem));
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        &.visible {
+            .mobile-node-sheet__card {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        &__header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.75rem 1rem 0.25rem;
+        }
+
+        &__handle {
+            width: 3rem;
+            height: 0.35rem;
+            border-radius: 999px;
+            background: #ced4da;
+        }
+
+        &__close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+        }
+
+        &__body {
+            max-height: min(60vh, calc(100vh - var(--progress-bar-height, 60px) - 4rem));
+            overflow-y: auto;
+            padding: 0 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
+        }
+    }
+
+    .node-popup {
+        iframe {
+            min-width: 0;
+        }
     }
 }
