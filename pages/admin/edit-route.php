@@ -122,14 +122,14 @@ require_once '../../includes/_admin_nav.php';
 
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i><?= htmlspecialchars(t('admin_edit_route.select_route'), ENT_QUOTES, 'UTF-8') ?></h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="routeSelectForm" method="GET" class="row g-3 align-items-end">
-                            <div class="col-lg-8">
-                                <label for="route_public_id" class="form-label"><?= htmlspecialchars(t('admin_edit_route.my_routes'), ENT_QUOTES, 'UTF-8') ?></label>
-                                <select class="form-select" id="route_public_id" name="route_public_id">
-                                    <option value=""><?= htmlspecialchars(t('admin_edit_route.route_select_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
+            <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i><?= htmlspecialchars(t('admin_edit_route.select_route'), ENT_QUOTES, 'UTF-8') ?></h5>
+        </div>
+        <div class="card-body">
+            <form id="routeSelectForm" method="GET" class="row g-3 align-items-end">
+                <div class="col-lg-8">
+                    <label for="route_public_id" class="form-label"><?= htmlspecialchars(t('admin_edit_route.my_routes'), ENT_QUOTES, 'UTF-8') ?></label>
+                    <select class="form-select" id="route_public_id" name="route_public_id">
+                        <option value=""><?= htmlspecialchars(t('admin_edit_route.route_select_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
                         <?php foreach ($user_routes as $route): ?>
                             <?php
                             $route_public_id = $route->getPublicId();
@@ -139,14 +139,14 @@ require_once '../../includes/_admin_nav.php';
                                 <?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>
                             </option>
                         <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-arrow-repeat me-2"></i><?= htmlspecialchars(t('admin_edit_route.load_route'), ENT_QUOTES, 'UTF-8') ?>
-                                </button>
-                            </div>
-                        </form>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-arrow-repeat me-2"></i><?= htmlspecialchars(t('admin_edit_route.load_route'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -182,6 +182,23 @@ require_once '../../includes/_admin_nav.php';
                         <div class="mb-3">
                             <label for="route_description" class="form-label"><?= htmlspecialchars(t('common.route_description'), ENT_QUOTES, 'UTF-8') ?></label>
                             <textarea class="form-control" id="route_description" name="route_description" rows="4"><?= htmlspecialchars($route_data['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <?php $gps_threshold_value = htmlspecialchars($route_data['gps_threshold'] ?? 25, ENT_QUOTES, 'UTF-8'); ?>
+                            <label class="form-label"><?= htmlspecialchars(t('route_editor.gps_threshold'), ENT_QUOTES, 'UTF-8') ?> <span class="badge bg-secondary ms-1" id="gpsThresholdBadge"><?= $gps_threshold_value ?> m</span></label>
+                            <div class="row g-2 align-items-center">
+                                <div class="col">
+                                    <input type="range" class="form-range" id="gps_threshold_slider" min="15" max="50" value="<?= $gps_threshold_value ?>">
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group" style="width:100px">
+                                        <input type="number" class="form-control" id="gps_threshold" name="gps_threshold" min="15" max="50" value="<?= $gps_threshold_value ?>" required>
+                                        <span class="input-group-text">m</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <small><?= htmlspecialchars(t('route_editor.gps_threshold_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
 
                         <div class="mb-3">
@@ -750,6 +767,37 @@ require_once '../../includes/_admin_nav.php';
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
         initEditor();
+
+        const gpsSlider = document.getElementById('gps_threshold_slider');
+        const gpsNumber = document.getElementById('gps_threshold');
+        const gpsBadge = document.getElementById('gpsThresholdBadge');
+
+        function setGpsThreshold(value) {
+            const normalized = Math.min(50, Math.max(15, Math.round(Number(value) || 25)));
+            gpsSlider.value = normalized;
+            gpsNumber.value = normalized;
+            gpsBadge.textContent = normalized + ' m';
+        }
+
+        function previewGpsThresholdFromNumber() {
+            const rawValue = gpsNumber.value.trim();
+            if (rawValue === '') {
+                gpsBadge.textContent = '- m';
+                return;
+            }
+
+            const numericValue = Number(rawValue);
+            if (Number.isFinite(numericValue)) {
+                const preview = Math.min(50, Math.max(15, Math.round(numericValue)));
+                gpsSlider.value = preview;
+                gpsBadge.textContent = preview + ' m';
+            }
+        }
+
+        gpsSlider.addEventListener('input', function() { setGpsThreshold(this.value); });
+        gpsNumber.addEventListener('input', previewGpsThresholdFromNumber);
+        gpsNumber.addEventListener('change', function() { setGpsThreshold(this.value); });
+        gpsNumber.addEventListener('blur', function() { setGpsThreshold(this.value); });
 
         if (selectedRouteData) {
             loadSelectedRouteData();

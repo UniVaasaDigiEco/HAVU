@@ -71,14 +71,16 @@ return [
         'error_codes' => [
             1 => 'Fel användarnamn eller lösenord.',
             2 => 'Ett fel uppstod när rutten skapades.',
+            3 => 'Ett fel uppstod när rutten uppdaterades.',
         ],
         'success_codes' => [
             1 => 'Användaren skapades.',
             2 => 'Rutten skapades.',
+            3 => 'Rutten uppdaterades.',
         ],
     ],
     'index' => [
-        'title' => 'HAVU - Stigspel',
+        'title' => 'HAVU-stigpelet',
         'heading' => 'HAVU-stigspelet',
         'maintenance_heading' => 'Spelet är tillfälligt under underhåll',
         'maintenance_message' => 'HAVU-stigspelet är för närvarande inte tillgänglig medan underhålls- eller återställningsarbete pågår.',
@@ -243,7 +245,7 @@ return [
         'latitude_help' => 'Du kan ange kontrollpunktens latitud manuellt.',
         'longitude_help' => 'Du kan ange kontrollpunktens longitud manuellt.',
         'node_name_help' => 'Kontrollpunktens namn. Till exempel ett närliggande landmärke eller en sevärdhet.',
-        'node_content_help' => 'Kort innehåll för kontrollpunkten. Du kan lägga till bilder och videor.',
+        'node_content_help' => 'Kort innehåll för kontrollpunkten. Till exempel en beskrivning av den omgivande naturen, ett landmärke eller lite historia. Du kan lägga till bilder och videor.',
         'node_content_help_short' => 'Kort innehåll för kontrollpunkten. Du kan lägga till bilder och videor.',
         'challenge' => 'Utmaning (valfri)',
         'challenge_none' => 'Ingen utmaning',
@@ -286,6 +288,8 @@ return [
         'default_node_title' => 'Kontrollpunkt :number',
         'confirm_delete_node' => 'Är du säker på att du vill ta bort den här kontrollpunkten?',
         'confirm_delete_route' => 'Är du säker på att du vill ta bort den här rutten? Åtgärden kan inte ångras.',
+        'gps_threshold' => 'GPS-närhetsavstånd',
+        'gps_threshold_help' => 'Avstånd i meter från en kontrollpunkt där en spelare kan markera den som besökt eller svara på en utmaning. Tillåtet intervall: 15–50 m.',
     ],
     'admin_new_route' => [
         'title' => 'HAVU-stigspelet - Skapa rutt',
@@ -342,9 +346,10 @@ return [
             'invalid_coordinates' => 'Ogiltiga kontrollpunktskoordinater vid index :index.',
             'route_not_found_or_denied' => 'Rutten hittades inte eller åtkomst nekades.',
             'create_success' => 'Rutten skapades. Kontrollpunkter: :count.',
-            'update_success' => 'Rutten uppdaterades. Kontrollpunkter: :count.',
+            'update_success' => 'Ändringarna i rutten och dess kontrollpunkter sparades. Kontrollpunkter: :count.',
             'create_failed' => 'Det gick inte att skapa rutten.',
             'update_failed' => 'Det gick inte att uppdatera rutten.',
+            'invalid_gps_threshold' => 'GPS-närhetsavståndet måste vara ett heltal mellan 15 och 50.',
         ],
         'upload_media' => [
             'unauthorized' => 'Ingen behörighet.',

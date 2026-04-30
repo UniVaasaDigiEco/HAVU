@@ -5,8 +5,8 @@ if (!file_exists(__DIR__ . '/../.env')) {
 }
 $env = require __DIR__ . '/../.env';
 
-const ROOT_DIR = '/HavuGamification/';
-const ICON_PATH = ROOT_DIR . 'images/logos/InnoWind_icon.png';
+define('ROOT_DIR', $env['ROOT_DIR'] ?? '/HavuGamification/'); // Fallback to '/HavuGamification/' if ROOT_DIR is not set in .env
+define('ICON_PATH', ROOT_DIR . 'images/logos/InnoWind_icon.png');
 
 //Define session name
 const SESSION_NAME = "HavuGamificationSession";
@@ -14,13 +14,15 @@ const SESSION_NAME = "HavuGamificationSession";
 const ERROR_CODES = [
     0 => "",
     1 => "Wrong username or password.",
-    2 => "Error creating route."
+    2 => "Error creating route.",
+    3 => "Error updating route."
 ];
 
 const SUCCESS_CODES = [
     0 => "",
     1 => "User created successfully.",
-    2 => "Route created successfully."
+    2 => "Route created successfully.",
+    3 => "Route updated successfully."
 ];
 
 const USER_TYPE_REGULAR = 1;
@@ -30,6 +32,9 @@ const HOME_URL = ROOT_DIR . "index.php";
 
 // Set to false to skip GPS proximity checks (useful for development/testing)
 const REQUIRE_GPS_PROXIMITY = true;
+
+// Distance in meters to trigger node proximity behaviors in game views
+const PROXIMITY_THRESHOLD = 25;
 
 // Database configuration from environment file
 define('DB_HOST', $env['DB_HOST']);

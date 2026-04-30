@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 22, 2026 at 12:55 PM
+-- Generation Time: Apr 29, 2026 at 02:13 PM
 -- Server version: 8.4.9
 -- PHP Version: 8.4.19
 
@@ -29,12 +29,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `feedback_submissions` (
   `id` int NOT NULL,
-  `type` enum('contact','bug','feature') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('contact','bug','feature') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int DEFAULT NULL,
-  `page_url` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -46,14 +46,14 @@ CREATE TABLE `feedback_submissions` (
 
 CREATE TABLE `nodes` (
   `id` int UNSIGNED NOT NULL,
-  `public_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `public_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_published` tinyint(1) NOT NULL DEFAULT '0',
   `publication_date` date DEFAULT NULL,
-  `created_by` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_by` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `latitude` decimal(9,6) NOT NULL,
   `longitude` decimal(9,6) NOT NULL,
   `challenge_data` json DEFAULT NULL
@@ -94,15 +94,16 @@ CREATE TABLE `node_visits` (
 
 CREATE TABLE `routes` (
   `id` int UNSIGNED NOT NULL,
-  `public_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `public_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_published` tinyint(1) NOT NULL DEFAULT '0',
   `publication_date` date DEFAULT NULL,
-  `created_by` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_by` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `user_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gps_threshold` int NOT NULL DEFAULT '25' COMMENT 'Minimum distance to a node, where user can check it visited or answer the challenges'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -142,10 +143,10 @@ CREATE TABLE `temp` (
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `public_id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `password_hash` text COLLATE utf8mb4_general_ci NOT NULL,
-  `full_name` text COLLATE utf8mb4_general_ci NOT NULL,
+  `public_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password_hash` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `full_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `last_login` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

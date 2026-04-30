@@ -15,6 +15,7 @@ class Route{
     private string $user_id;
     private string $title;
     private string $description;
+    private int $gps_threshold;
 
     /** @var array<int, array{cross_id: int, node: Node, order_number: int}> */
     private array $nodes = [];
@@ -25,7 +26,7 @@ class Route{
         }
 
         $db = Tools::getDb();
-        $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, user_id, title, description FROM routes WHERE id = ?";
+        $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, user_id, title, description, gps_threshold FROM routes WHERE id = ?";
         $stmt = $db->prepare($sql);
 
         $sql_nodes = "SELECT id, node_id, order_number FROM node_route_cross WHERE route_id = ? ORDER BY order_number";
@@ -45,8 +46,9 @@ class Route{
              * @var int $user_id
              * @var string $title
              * @var string $description
+             * @var int $gps_threshold
              */
-            $stmt->bind_result($public_id, $is_published, $publication_date, $created_by, $created_at, $updated_at, $user_id, $title, $description);
+            $stmt->bind_result($public_id, $is_published, $publication_date, $created_by, $created_at, $updated_at, $user_id, $title, $description, $gps_threshold);
             $stmt->store_result();
             if($stmt->num_rows === 0){
                 throw new Exception("Route not found");
@@ -62,6 +64,7 @@ class Route{
             $this->user_id = $user_id;
             $this->title = $title;
             $this->description = $description;
+            $this->gps_threshold = max(15, min(50, (int)($gps_threshold ?? 25)));
 
             //Fetch associated nodes
             $stmt_nodes->bind_param('i', $id);
@@ -177,6 +180,14 @@ class Route{
     /**
      * @return int
      */
+    public function getGpsThreshold(): int
+    {
+        return $this->gps_threshold;
+    }
+
+    /**
+     * @return int
+     */
     public function getUserId(): int
     {
         return $this->user_id;
@@ -206,6 +217,7 @@ class Route{
             'user_id' => $this->user_id,
             'title' => $this->title,
             'description' => $this->description,
+            'gps_threshold' => $this->gps_threshold,
             'nodes' => $nodes_array
         ];
     }

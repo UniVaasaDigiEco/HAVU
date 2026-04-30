@@ -95,7 +95,7 @@ if (!$route) {
     <script src="../../js/youtube-embed.js"></script>
 
     <script>
-        const PROXIMITY_THRESHOLD = 20;
+        const PROXIMITY_THRESHOLD = <?= json_encode(PROXIMITY_THRESHOLD, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>; // global fallback (meters)
         const MOBILE_BREAKPOINT = 767.98;
         let requireGpsProximity = <?= REQUIRE_GPS_PROXIMITY ? 'true' : 'false' ?>;
         const translations = <?= HavuLocale::jsonNamespace('common', 'game') ?>;
@@ -117,6 +117,11 @@ if (!$route) {
             throw new Error('Route data is null or undefined');
         }
         console.log('Loaded route data:', routeData);
+
+        // Use per-route GPS threshold, with fallback to global constant
+        const ROUTE_GPS_THRESHOLD = (routeData.gps_threshold && routeData.gps_threshold >= 15 && routeData.gps_threshold <= 50)
+            ? routeData.gps_threshold
+            : PROXIMITY_THRESHOLD;
 
         let CAMPUS_CENTER = [63.1055, 21.5929];
         if (routeData.nodes && routeData.nodes.length > 0) {
@@ -597,7 +602,7 @@ if (!$route) {
                         nearestDistance = distance;
                     }
 
-                    const nextInProximity = requireGpsProximity ? distance < PROXIMITY_THRESHOLD : true;
+                    const nextInProximity = requireGpsProximity ? distance < ROUTE_GPS_THRESHOLD : true;
                     if (node.inProximity !== nextInProximity) {
                         node.inProximity = nextInProximity;
                         refreshNodePresentation(node.id);
@@ -605,7 +610,7 @@ if (!$route) {
                 }
             });
 
-            if (nearestNode && nearestDistance < PROXIMITY_THRESHOLD) {
+            if (nearestNode && nearestDistance < ROUTE_GPS_THRESHOLD) {
                 const nearestMarker = markers[nearestNode.id];
                 const desktopPopupOpen = nearestMarker && nearestMarker.getPopup() && nearestMarker.isPopupOpen();
                 const phoneSheetOpen = activeNodeId === nearestNode.id && isMobileNodeSheetVisible();
@@ -616,7 +621,7 @@ if (!$route) {
             }
 
             if (nearestNode) {
-                const inRange = nearestDistance < PROXIMITY_THRESHOLD;
+                const inRange = nearestDistance < ROUTE_GPS_THRESHOLD;
                 $('#distance-info').html(`
                     <div class="alert ${inRange ? 'alert-success' : 'alert-info'} mb-0 py-2">
                         <strong>${inRange ? gameTranslations.in_range : gameTranslations.next}</strong><br>

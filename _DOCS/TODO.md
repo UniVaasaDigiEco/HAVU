@@ -77,7 +77,8 @@
 
 ## TODO List - Long Term
 
-- [X] Fix the url (away from /HavuGamication)]
+- [X] Fix the url (away from /HavuGamication)
+- [X] Migrate dev environment to VS Code
 - [ ] Fix the YouTube video embeds (the width should be relative to the screen size/width)
 - [ ] Documentation, comments, cleanup & guides
 - [ ] Contact Kallion Kamut for route and content ideas

@@ -14,6 +14,10 @@ try {
     die("Error fetching user: " . $e->getMessage());
 }
 $routes = $user->getCreatedRoutes();
+$delete_route_confirmation = json_encode(
+    t('route_editor.confirm_delete_route'),
+    JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+);
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -24,6 +28,7 @@ $routes = $user->getCreatedRoutes();
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../css/bs-custom.css">
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body class="admin-dashboard has-site-footer">
@@ -48,21 +53,21 @@ require_once '../../includes/_admin_nav.php';
             <div class="p-5 bg-white rounded-3 shadow text-center">
                 <i class="bi bi-trash-fill text-danger" style="font-size: 4rem;"></i>
                 <?= Message::displayFlashMessages() ?>
-                <form action="../../actions/delete-route.php" method="post" class="mt-4">
+                <form action="../../actions/delete-route.php" method="post" class="mt-4" onsubmit='return confirm(<?= $delete_route_confirmation ?>)'>
                     <div class="mb-3">
                         <label for="route_select" class="form-label"><?= htmlspecialchars(t('admin_delete_route.select_label'), ENT_QUOTES, 'UTF-8') ?></label>
-                        <select name="route_public_id" id="route_select" class="form-select">
-                            <option value=""><?= htmlspecialchars(t('admin_delete_route.select_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
+                        <select name="route_public_id" id="route_select" class="form-select" required>
+                            <option value="" selected disabled><?= htmlspecialchars(t('admin_delete_route.select_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
                             <?php
                             foreach($routes as $route) {
-                                $route_pubhlic_id = $route->getPublicId();
-                                $route_title = $route->getTitle();
-                                echo "<option value='$route_pubhlic_id'>$route_title</option>";
+                                $route_public_id = htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8');
+                                $route_title = htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8');
+                                echo "<option value='$route_public_id'>$route_title</option>";
                             }
                             ?>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-danger" onclick="return confirm(<?= json_encode(t('route_editor.confirm_delete_route'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>)">
+                    <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash-fill"></i> <?= htmlspecialchars(t('admin_delete_route.submit'), ENT_QUOTES, 'UTF-8') ?>
                     </button>
                 </form>

@@ -50,17 +50,24 @@ try {
     $title = $_POST['route_title'];
     $description = $_POST['route_description'];
 
+    // Validate and clamp GPS threshold
+    $gps_threshold_raw = isset($_POST['gps_threshold']) ? (int)$_POST['gps_threshold'] : 25;
+    if ($gps_threshold_raw < 15 || $gps_threshold_raw > 50) {
+        throw routeFormException('actions.route_form.invalid_gps_threshold');
+    }
+    $gps_threshold = $gps_threshold_raw;
+
     // Start transaction
     $db->begin_transaction();
 
     try {
         // Insert route
-        $sql = "INSERT INTO routes (public_id, is_published, publication_date, created_by, user_id, title, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO routes (public_id, is_published, publication_date, created_by, user_id, title, description, gps_threshold) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $db->prepare($sql);
             if (!$stmt) {
                 throw routeFormException('actions.route_form.create_failed');
             }
-        $stmt->bind_param("sisssss", $public_id, $is_published, $formatted_publication_date, $created_by, $created_by, $title, $description);
+        $stmt->bind_param("sisssssi", $public_id, $is_published, $formatted_publication_date, $created_by, $created_by, $title, $description, $gps_threshold);
 
             if (!$stmt->execute()) {
                 throw routeFormException('actions.route_form.create_failed');

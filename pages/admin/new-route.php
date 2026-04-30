@@ -95,7 +95,7 @@ require_once '../../includes/_admin_nav.php';
 
         <div class="row">
             <!-- Left Column - Route Details -->
-            <div class="col-lg-4 mb-4">
+            <div class="col-12 col-lg-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i><?= htmlspecialchars(t('route_editor.route_details'), ENT_QUOTES, 'UTF-8') ?></h5>
@@ -112,7 +112,21 @@ require_once '../../includes/_admin_nav.php';
                             <textarea class="form-control" id="route_description" aria-describedby="description_help" name="route_description" rows="4"></textarea>
                             <small id="description_help"><?= htmlspecialchars(t('route_editor.route_description_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
-
+                        <div class="mb-3">
+                            <label class="form-label"><?= htmlspecialchars(t('route_editor.gps_threshold'), ENT_QUOTES, 'UTF-8') ?> <span class="badge bg-secondary ms-1" id="gpsThresholdBadge">25 m</span></label>
+                            <div class="row g-2 align-items-center">
+                                <div class="col">
+                                    <input type="range" class="form-range" id="gps_threshold_slider" min="15" max="50" value="25">
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group" style="width:100px">
+                                        <input type="number" class="form-control" id="gps_threshold" name="gps_threshold" min="15" max="50" value="25" required>
+                                        <span class="input-group-text">m</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <small><?= htmlspecialchars(t('route_editor.gps_threshold_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                        </div>
                         <div class="mb-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" checked>
@@ -752,6 +766,38 @@ require_once '../../includes/_admin_nav.php';
 
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('publication_date').value = today;
+
+        // GPS threshold: sync slider and number input
+        const gpsSlider = document.getElementById('gps_threshold_slider');
+        const gpsNumber = document.getElementById('gps_threshold');
+        const gpsBadge  = document.getElementById('gpsThresholdBadge');
+
+        function setGpsThreshold(value) {
+            const normalized = Math.min(50, Math.max(15, Math.round(Number(value) || 25)));
+            gpsSlider.value = normalized;
+            gpsNumber.value = normalized;
+            gpsBadge.textContent = normalized + ' m';
+        }
+
+        function previewGpsThresholdFromNumber() {
+            const rawValue = gpsNumber.value.trim();
+            if (rawValue === '') {
+                gpsBadge.textContent = '- m';
+                return;
+            }
+
+            const numericValue = Number(rawValue);
+            if (Number.isFinite(numericValue)) {
+                const preview = Math.min(50, Math.max(15, Math.round(numericValue)));
+                gpsSlider.value = preview;
+                gpsBadge.textContent = preview + ' m';
+            }
+        }
+
+        gpsSlider.addEventListener('input', function() { setGpsThreshold(this.value); });
+        gpsNumber.addEventListener('input', previewGpsThresholdFromNumber);
+        gpsNumber.addEventListener('change', function() { setGpsThreshold(this.value); });
+        gpsNumber.addEventListener('blur', function() { setGpsThreshold(this.value); });
     });
 </script>
 <?php require_once '../../includes/_footer.php'; ?>

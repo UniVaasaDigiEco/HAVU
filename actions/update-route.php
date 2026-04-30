@@ -32,6 +32,13 @@ try {
     $route_description = trim($_POST['route_description'] ?? '');
     $created_by = $_SESSION['user_public_id'];
 
+    // Validate and clamp GPS threshold
+    $gps_threshold_raw = isset($_POST['gps_threshold']) ? (int)$_POST['gps_threshold'] : 25;
+    if ($gps_threshold_raw < 15 || $gps_threshold_raw > 50) {
+        throw routeFormException('actions.route_form.invalid_gps_threshold');
+    }
+    $gps_threshold = $gps_threshold_raw;
+
     $publication_date = DateTime::createFromFormat('Y-m-d', $_POST['publication_date']);
     if (!$publication_date) {
         throw routeFormException('actions.route_form.invalid_publication_date');
@@ -71,14 +78,14 @@ try {
         $route_lookup_stmt->close();
 
         // Update route details
-        $route_update_sql = 'UPDATE routes SET title = ?, description = ?, publication_date = ?, is_published = ? WHERE id = ?';
+        $route_update_sql = 'UPDATE routes SET title = ?, description = ?, publication_date = ?, is_published = ?, gps_threshold = ? WHERE id = ?';
         $route_update_stmt = $db->prepare($route_update_sql);
         if (!$route_update_stmt) {
             throw routeFormException('actions.route_form.update_failed');
         }
 
         $is_published = isset($_POST['is_published']) ? 1 : 0;
-        $route_update_stmt->bind_param('sssii', $route_title, $route_description, $formatted_publication_date, $is_published, $route_id);
+        $route_update_stmt->bind_param('sssiii', $route_title, $route_description, $formatted_publication_date, $is_published, $gps_threshold, $route_id);
         if (!$route_update_stmt->execute()) {
             throw routeFormException('actions.route_form.update_failed');
         }
@@ -185,7 +192,7 @@ try {
 
         $_SESSION['flash_messages'][] = [
             'type' => 'success',
-            'code' => 2,
+            'code' => 3,
             'message_key' => 'actions.route_form.update_success',
             'message_params' => ['count' => count($nodes_data)],
             'data' => [
@@ -204,7 +211,7 @@ try {
 
     $_SESSION['flash_messages'][] = [
         'type' => 'error',
-        'code' => 2,
+        'code' => 3,
         'message_key' => is_array($decoded_message) ? ($decoded_message['key'] ?? 'actions.route_form.update_failed') : 'actions.route_form.update_failed',
         'message_params' => is_array($decoded_message) ? ($decoded_message['params'] ?? []) : []
     ];
