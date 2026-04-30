@@ -6,12 +6,28 @@ require_once(__DIR__ .'/../../classes/security.class.php');
 use Ramsey\Uuid\Uuid;
 Security::initSession();
 
+if (empty($_SESSION['user_public_id'])) {
+    $_SESSION['flash_messages'][] = [
+        'type' => 'error',
+        'code' => 0,
+        'message_key' => 'login.session_expired',
+    ];
+    header('Location: ../../login.php');
+    exit;
+}
+
 $user_public_id_string = $_SESSION['user_public_id'];
 
 try {
     $user = Tools::getUserWithPublicId($user_public_id_string);
 } catch (Exception $e) {
-    die("Error fetching user: " . $e->getMessage());
+    $_SESSION['flash_messages'][] = [
+        'type' => 'error',
+        'code' => 0,
+        'message_key' => 'login.session_expired',
+    ];
+    header('Location: ../../login.php');
+    exit;
 }
 $routes = $user->getCreatedRoutes();
 $delete_route_confirmation = json_encode(

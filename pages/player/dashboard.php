@@ -14,7 +14,11 @@ try {
     $user_id = Tools::getUserIdByPublicId($_SESSION['user_public_id']);
     $user    = Tools::getUserWithPublicId($_SESSION['user_public_id']);
 } catch (Exception $e) {
-    session_destroy();
+    $_SESSION['flash_messages'][] = [
+        'type' => 'error',
+        'code' => 0,
+        'message_key' => 'login.session_expired',
+    ];
     header('Location: ../../login.php');
     exit;
 }

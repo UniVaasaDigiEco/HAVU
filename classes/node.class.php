@@ -8,7 +8,7 @@ class Node{
     private int $id;
     private string $public_id;
     private bool $is_published;
-    private DateTime $publication_date;
+    private ?DateTime $publication_date;
     private string $created_by;
     private DateTime $created_at;
     private DateTime $updated_at;
@@ -99,9 +99,9 @@ class Node{
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getPublicationDate(): DateTime
+    public function getPublicationDate(): ?DateTime
     {
         return $this->publication_date;
     }
@@ -178,7 +178,7 @@ class Node{
             'id' => $this->id,
             'public_id' => $this->public_id,
             'is_published' => $this->is_published,
-            'publication_date' => $this->publication_date->format('Y-m-d'),
+            'publication_date' => $this->publication_date?->format('Y-m-d'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'created_by' => $this->created_by,

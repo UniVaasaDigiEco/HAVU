@@ -9,7 +9,13 @@ Security::initSession();
 try {
     $user = Tools::getUserWithPublicId($_SESSION['user_public_id']);
 } catch (Exception $e) {
-    die("Error fetching user: " . $e->getMessage());
+    $_SESSION['flash_messages'][] = [
+        'type' => 'error',
+        'code' => 0,
+        'message_key' => 'login.session_expired',
+    ];
+    header('Location: ../../login.php');
+    exit;
 }
 
 $routes = $user->getCreatedRoutes();
@@ -126,6 +132,11 @@ require_once '../../includes/_admin_nav.php';
                                                     data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <i class="bi bi-qr-code me-1"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
                                             </button>
+                                            <button class="btn btn-sm btn-outline-info btn-copy-route"
+                                                    data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                                    data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                                <i class="bi bi-files me-1"></i><?= htmlspecialchars(t('admin_dashboard.copy_route'), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
                                             <form action="../../actions/toggle_publish.php" method="POST" class="m-0">
                                                 <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <?php if ($route->getIsPublished()): ?>
@@ -149,6 +160,39 @@ require_once '../../includes/_admin_nav.php';
                         <p class="text-muted"><?= htmlspecialchars(t('admin_dashboard.no_routes'), ENT_QUOTES, 'UTF-8') ?></p>
                     <?php endif; ?>
                 </div>
+        </div>
+    </div>
+</div>
+
+<!-- Copy Route Modal -->
+<div class="modal fade" id="copyRouteModal" tabindex="-1" aria-labelledby="copyRouteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="../../actions/copy-route.php" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="copyRouteModalLabel">
+                        <i class="bi bi-files me-2"></i><?= htmlspecialchars(t('admin_dashboard.copy_modal_title'), ENT_QUOTES, 'UTF-8') ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3"><?= htmlspecialchars(t('admin_dashboard.copy_modal_intro'), ENT_QUOTES, 'UTF-8') ?></p>
+                    <input type="hidden" id="copyRoutePublicId" name="route_public_id" required>
+                    <div class="mb-3">
+                        <label for="copyRouteTitle" class="form-label"><?= htmlspecialchars(t('admin_dashboard.copy_name_label'), ENT_QUOTES, 'UTF-8') ?></label>
+                        <input type="text" class="form-control" id="copyRouteTitle" name="route_title" required>
+                        <small class="text-muted"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('admin_dashboard.copy_name_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                    <button type="submit" class="btn btn-info text-white">
+                        <i class="bi bi-files me-1"></i><?= htmlspecialchars(t('admin_dashboard.copy_submit'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -182,7 +226,28 @@ require_once '../../includes/_admin_nav.php';
 
 <script>
     const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
+    const copyRouteModalElement = document.getElementById('copyRouteModal');
+    const copyRouteModal = new bootstrap.Modal(copyRouteModalElement);
     const gameBaseUrl = <?= json_encode($game_base_url) ?>;
+    const copyNamePrefix = 'Copy of ';
+
+    document.querySelectorAll('.btn-copy-route').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const routeId = this.dataset.routeId;
+            const routeTitle = this.dataset.routeTitle;
+
+            document.getElementById('copyRoutePublicId').value = routeId;
+            document.getElementById('copyRouteTitle').value = `${copyNamePrefix}${routeTitle}`;
+
+            copyRouteModal.show();
+        });
+    });
+
+    copyRouteModalElement.addEventListener('shown.bs.modal', function() {
+        const titleInput = document.getElementById('copyRouteTitle');
+        titleInput.focus();
+        titleInput.select();
+    });
 
     document.querySelectorAll('.btn-share').forEach(function(btn) {
         btn.addEventListener('click', function() {

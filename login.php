@@ -1,6 +1,16 @@
 <?php
 require_once('classes/security.class.php');
+require_once('classes/message.class.php');
+
+Security::initSession();
+$preserved_flash_messages = $_SESSION['flash_messages'] ?? [];
+
 Security::logout();
+Security::initSession();
+
+if (!empty($preserved_flash_messages)) {
+    $_SESSION['flash_messages'] = $preserved_flash_messages;
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -21,8 +31,9 @@ Security::logout();
             <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
             <h1 class="mb-4"><?= htmlspecialchars(t('login.heading'), ENT_QUOTES, 'UTF-8') ?></h1>
             <?php
+            echo Message::displayFlashMessages();
+
             if (isset($_GET['error'])) {
-                require_once('classes/message.class.php');
                 $error_code = intval($_GET['error']);
                 echo Message::error($error_code);
             }
