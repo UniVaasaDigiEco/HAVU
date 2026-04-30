@@ -34,6 +34,7 @@
 
 ## TODO List - Short Term
 
+- [ ] "Error user not found"-> no redirect to login
 - [ ] Copy/Clone existing routes
   - Add a "Copy" button in the admin panel to duplicate existing routes for easier content creation
   - Prompt user to enter a new name for the copied route, as default name can be "Copy of [Original Route Name]"

@@ -45,6 +45,11 @@ The main product flows span multiple files:
 - `includes/_feedback_widget.php` is a shared modal used across pages; `actions/submit-feedback.php` validates reCAPTCHA, stores the submission in the DB, and sends email.
 - `actions/upload-media.php` is the Summernote upload backend; uploaded files are stored under `uploads/{user_public_id}/`.
 
+### Locales
+
+- `includes/locales/` contains locale files that return translation arrays. `havu_locale.class.php` loads the appropriate file based on the user's session and provides the `__()` function for fetching translations.
+- The Finnish locale (`fi.php`) is considered to always be the master. Every other locale file should have the same keys as `fi.php`, and missing keys will fall back to Finnish. When adding new UI text, add it first to `fi.php` and then propagate to other locales.
+
 ## Key conventions
 
 - **Keep user-visible UI text in Finnish.** Existing admin/player flows, editor labels, and gameplay messages are Finnish even when comments or internal exception text are English.

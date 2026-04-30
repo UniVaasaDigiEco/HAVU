@@ -5,7 +5,7 @@ if (!file_exists(__DIR__ . '/../.env')) {
 }
 $env = require __DIR__ . '/../.env';
 
-define('ROOT_DIR', $env['ROOT_DIR'] ?? '/HavuGamification/'); // Fallback to '/HavuGamification/' if ROOT_DIR is not set in .env
+define('ROOT_DIR', $env['ROOT_DIR'] ?? '/'); // Fallback to '/HavuGamification/' if ROOT_DIR is not set in .env
 define('ICON_PATH', ROOT_DIR . 'images/logos/InnoWind_icon.png');
 
 //Define session name

@@ -231,13 +231,13 @@ return [
     ],
     'route_editor' => [
         'route_details' => 'Route details',
-        'route_title_help' => 'Give the route a name',
-        'route_description_help' => 'Add a short description of the route, for example what can be seen, how long it is, or how difficult it is.',
+        'route_title_help' => 'Give the route a descriptive name. E.g. "Nature trail", "City adventure", "Cultural tour", etc.',
+        'route_description_help' => 'Write a description for players about what the route has to offer. For example, what can be seen, experienced, or done; how long, challenging, or easy the route is; and whether it targets a specific group (e.g. children – youth – adults).',
         'public_help' => 'If you want the route to be visible and playable for all players, mark it as public.',
         'publication_date_help' => 'Not in use yet; currently this is effectively just the creation date.',
         'nodes_empty' => 'Click the map to add a checkpoint to the route',
-        'map_help' => 'Click anywhere on the map to add a checkpoint. You can move a checkpoint by dragging it or edit its details by clicking it.',
-        'map_help_new' => 'Click anywhere on the map to add a checkpoint. You can move a checkpoint by dragging it, edit its details by clicking it, and zoom using the mouse wheel, pinch gesture, or the plus/minus controls.',
+        'map_help' => 'Click on the map where you want to add a checkpoint. You can then fill in the checkpoint details. You can move a checkpoint by dragging it (hold the left mouse button on the checkpoint and move, or drag with your finger). You can switch the map view (map or satellite) from the top left corner. You can zoom using the mouse scroll wheel, by pinching on a touch screen, or with the plus/minus buttons in the top left of the map.',
+        'map_help_new' => 'Click anywhere on the map to add a checkpoint. You can move a checkpoint by dragging it (hold the left mouse button on the checkpoint and move), or edit its details by clicking it. You can zoom using the mouse scroll wheel, by pinching on a touch screen, or with the plus/minus buttons in the top left of the map.',
         'search_location_placeholder' => 'Search location... (e.g. Vaasa, University)',
         'node_edit' => 'Edit checkpoint',
         'latitude' => 'Latitude',
@@ -294,7 +294,7 @@ return [
     'admin_new_route' => [
         'title' => 'HAVU-trailgame - Create route',
         'heading' => 'Create a new route',
-        'subheading' => 'Give the route a name and description',
+        'subheading' => 'Give the route a name and description, define the settings, and add checkpoints with their content.',
     ],
     'admin_edit_route' => [
         'title' => 'HAVU - Edit route',

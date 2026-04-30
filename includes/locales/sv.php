@@ -231,13 +231,13 @@ return [
     ],
     'route_editor' => [
         'route_details' => 'Ruttinformation',
-        'route_title_help' => 'Ge rutten ett namn',
-        'route_description_help' => 'Lägg till en kort beskrivning av rutten, till exempel vad man kan se, hur lång den är eller hur svår den är.',
+        'route_title_help' => 'Ge rutten ett beskrivande namn. T.ex. "Naturstig", "Stadsäventyr", "Kulturtur" osv.',
+        'route_description_help' => 'Skriv en beskrivning för spelarna om vad rutten har att erbjuda. Till exempel vad man kan se, uppleva eller göra; hur lång, utmanande eller lätt rutten är; och om den riktar sig till en specifik målgrupp (t.ex. barn – ungdomar – vuxna).',
         'public_help' => 'Om du vill att rutten ska vara synlig och spelbar för alla spelare, markera den som offentlig.',
         'publication_date_help' => 'Används inte ännu; i praktiken bara skapelsedatum.',
         'nodes_empty' => 'Klicka på kartan för att lägga till en kontrollpunkt',
-        'map_help' => 'Klicka var som helst på kartan för att lägga till en kontrollpunkt. Du kan flytta en kontrollpunkt genom att dra den eller redigera dess information genom att klicka på den.',
-        'map_help_new' => 'Klicka var som helst på kartan för att lägga till en kontrollpunkt. Du kan flytta den genom att dra, redigera den genom att klicka och zooma med mushjulet, nypgest eller plus/minus-knapparna.',
+        'map_help' => 'Klicka på kartan där du vill lägga till en kontrollpunkt. Sedan kan du fylla i kontrollpunktens uppgifter. Du kan flytta kontrollpunkten genom att dra den (håll nere vänster musknapp och flytta, eller dra med fingret). Du kan byta kartvy (karta eller satellit) från det övre vänstra hörnet. Du kan zooma med mushjulet, genom att nypa på en pekskärm eller med plus/minus-knapparna i det övre vänstra hörnet av kartan.',
+        'map_help_new' => 'Klicka var som helst på kartan för att lägga till en kontrollpunkt. Du kan flytta den genom att dra (håll nere vänster musknapp och flytta), eller redigera dess uppgifter genom att klicka på den. Du kan zooma med mushjulet, genom att nypa på en pekskärm eller med plus/minus-knapparna i det övre vänstra hörnet av kartan.',
         'search_location_placeholder' => 'Sök plats... (t.ex. Vasa, Universitetet)',
         'node_edit' => 'Redigera kontrollpunkt',
         'latitude' => 'Latitud',
@@ -294,7 +294,7 @@ return [
     'admin_new_route' => [
         'title' => 'HAVU-stigspelet - Skapa rutt',
         'heading' => 'Skapa en ny rutt',
-        'subheading' => 'Ge rutten ett namn och en beskrivning',
+        'subheading' => 'Ge rutten ett namn och en beskrivning, definiera inställningarna och lägg till kontrollpunkter med deras innehåll.',
     ],
     'admin_edit_route' => [
         'title' => 'HAVU - Redigera rutt',

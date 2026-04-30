@@ -103,7 +103,7 @@ class HavuLocale
     private static function loadLocale(string $locale): array
     {
         if (!isset(self::$translations[$locale])) {
-            $file = __DIR__ . '/../config/locales/' . $locale . '.php';
+            $file = __DIR__ . '/../includes/locales/' . $locale . '.php';
             self::$translations[$locale] = file_exists($file) ? require $file : [];
         }
 

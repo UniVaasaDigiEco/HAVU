@@ -538,6 +538,20 @@ if (!$route) {
         }
 
         function handleViewportChange() {
+            const activeElement = document.activeElement;
+            const isTypingInChallengeInput = !!activeElement
+                && ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeElement.tagName)
+                && (
+                    !!activeElement.closest('#mobile-node-sheet')
+                    || !!activeElement.closest('.leaflet-popup-content')
+                );
+
+            // Mobile keyboards fire resize events; avoid rebuilding node UI while the user is typing.
+            if (isTypingInChallengeInput) {
+                updateProgressBarHeightVariable();
+                return;
+            }
+
             const selectedNodeId = activeNodeId;
             const hadVisibleMobileSheet = isMobileNodeSheetVisible();
 

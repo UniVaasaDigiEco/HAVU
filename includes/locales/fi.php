@@ -231,12 +231,12 @@ return [
     ],
     'route_editor' => [
         'route_details' => 'Reitin tiedot',
-        'route_title_help' => 'Anna reitille jokin nimi',
-        'route_description_help' => 'Anna reitille lyhyt kuvaus. Esim. mitä reitillä voi nähdä, kuinka pitkä reitti on, kuinka vaikea reitti on, jne.',
+        'route_title_help' => 'Anna reitille kuvaava nimi. Esim. "Luontopolku", "Kaupunkiseikkailu", "Kulttuurikierros", jne.',
+        'route_description_help' => 'Kirjaita kuvaus pelaajille siitä, mitä mukavaa reitillä on luvassa. Esimerkiksi mitä reitillä voi nähdä, kokea tai tehdä; kuinka pitkä, haastava tai helppo reitti on; onko sillä jokin kohderymä (esim. lapset - nuoret - aikuiset).',
         'public_help' => 'Jos haluat, että reitti näkyy ja on pelattavissa kaikille pelaajille, merkkaa reitti julkiseksi',
         'publication_date_help' => 'Ei käytössä vielä, käytännössä vain luontipäivämäärä',
         'nodes_empty' => 'Klikkaa paikkaa kartalla, lisätäksesi rastin reitille',
-        'map_help' => 'Klikkaa mitä tahansa kohtaa kartalla lisätäksesi rastin. Voit muuttaa rastin paikkaa vetämällä sitä, tai muokata rastin tietoja klikkaamalla rastia.',
+        'map_help' => 'Klikkaa kartalla sitä kohtaa, johon haluat lisätä rastin. Sen jälkeen voit täyttää rastin tiedot. Voit muuttaa rastin paikkaa vetämällä sitä (hiiren vasen nappi pohjaan rastin päällä ja liikuta hiirtä, tai vedä sormella). Voit vaihtaa karttapohjaa (kartta tai satelliitti) vasemmasta yläkulmasta. Voit zoomata karttaa hiiren rullalla, kosketusnäytöllä nipistämällä tai käyttämällä plus/miinus nappeja kartan vasemmassa yläreunassa.',
         'map_help_new' => 'Klikkaa mitä tahansa kohtaa kartalla lisätäksesi rastin. Voit muuttaa rastin paikkaa vetämällä (hiiren vasen nappi pohjaan rastin päällä ja liikuta hiirtä) sitä, tai muokata rastin tietoja klikkaamalla rastia. Voit zoomata karttaa hiiren rullalla, kosketusnäytöllä nipistämällä tai käyttämällä plus/miinus nappeja kartan vasemmassa yläreunassa.',
         'search_location_placeholder' => 'Etsi sijaintia... (esim. Vaasa, Yliopisto)',
         'node_edit' => 'Muokkaa rastia',
@@ -294,7 +294,7 @@ return [
     'admin_new_route' => [
         'title' => 'HAVU-polkupeli - Luo uusi reitti',
         'heading' => 'Luo uusi reitti',
-        'subheading' => 'Anna reitille nimi ja kuvaus',
+        'subheading' => 'Anna reitille nimi, sisältökuvaus sekä määrittele käyttöehtoja. Lisää myös rastit sisältöineen.',
     ],
     'admin_edit_route' => [
         'title' => 'HAVU - Muokkaa reittiä',
