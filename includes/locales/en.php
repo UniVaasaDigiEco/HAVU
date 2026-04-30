@@ -265,6 +265,7 @@ return [
         'create_route' => 'Create route',
         'save_changes' => 'Save changes',
         'upload_failed' => 'Upload failed: :message',
+        'unsupported_image_format' => 'Supported image formats are: :types.',
         'searching' => 'Searching...',
         'select_route_first' => 'Please select a route first.',
         'node_name_required' => 'Checkpoint name is required.',

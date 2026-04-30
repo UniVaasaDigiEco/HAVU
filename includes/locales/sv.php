@@ -265,6 +265,7 @@ return [
         'create_route' => 'Skapa rutt',
         'save_changes' => 'Spara ändringar',
         'upload_failed' => 'Uppladdningen misslyckades: :message',
+        'unsupported_image_format' => 'Bildformat som stöds är: :types.',
         'searching' => 'Söker...',
         'select_route_first' => 'Välj först en rutt.',
         'node_name_required' => 'Kontrollpunktens namn är obligatoriskt.',

@@ -265,6 +265,7 @@ return [
         'create_route' => 'Luo reitti',
         'save_changes' => 'Tallenna muutokset',
         'upload_failed' => 'Lataus epäonnistui: :message',
+        'unsupported_image_format' => 'Tuetut kuvaformaatit ovat: :types.',
         'searching' => 'Haetaan...',
         'select_route_first' => 'Ole hyvä ja valitse reitti ensin.',
         'node_name_required' => 'Rastin nimi on pakollinen',

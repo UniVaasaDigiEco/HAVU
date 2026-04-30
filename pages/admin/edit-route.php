@@ -369,6 +369,8 @@ require_once '../../includes/_admin_nav.php';
     const translations = <?= HavuLocale::jsonNamespace('common', 'route_editor') ?>;
     const commonTranslations = translations.common;
     const routeEditorTranslations = translations.route_editor;
+    const ALLOWED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const ALLOWED_IMAGE_FORMAT_LABELS = 'JPG, PNG, GIF, WEBP';
     window.challengePanelTranslations = routeEditorTranslations;
 
     function translate(template, params = {}) {
@@ -378,8 +380,25 @@ require_once '../../includes/_admin_nav.php';
         );
     }
 
+    function validateImageFile(file) {
+        if (!file || ALLOWED_IMAGE_MIME_TYPES.includes(file.type)) {
+            return true;
+        }
+
+        alert(translate(routeEditorTranslations.upload_failed, {
+            message: translate(routeEditorTranslations.unsupported_image_format, {
+                types: ALLOWED_IMAGE_FORMAT_LABELS
+            })
+        }));
+        return false;
+    }
+
     // Upload image or video file and insert into editor
     function uploadFile(file, type) {
+        if (type === 'image' && !validateImageFile(file)) {
+            return;
+        }
+
         showUploadOverlay();
         const formData = new FormData();
         formData.append('file', file);
@@ -459,7 +478,9 @@ require_once '../../includes/_admin_nav.php';
             },
             callbacks: {
                 onImageUpload: function(files) {
-                    uploadFile(files[0], 'image');
+                    if (validateImageFile(files[0])) {
+                        uploadFile(files[0], 'image');
+                    }
                 }
             }
         });
