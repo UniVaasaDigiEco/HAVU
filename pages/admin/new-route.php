@@ -104,13 +104,13 @@ require_once '../../includes/_admin_nav.php';
                         <div class="mb-3">
                             <label for="route_title" class="form-label"><?= htmlspecialchars(t('common.route_name'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="route_title" name="route_title" aria-describedby="route_help" required>
-                            <small id="route_help"><?= htmlspecialchars(t('route_editor.route_title_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small id="route_help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.route_title_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
 
                         <div class="mb-3">
                             <label for="route_description" class="form-label"><?= htmlspecialchars(t('common.route_description'), ENT_QUOTES, 'UTF-8') ?></label>
                             <textarea class="form-control" id="route_description" aria-describedby="description_help" name="route_description" rows="4"></textarea>
-                            <small id="description_help"><?= htmlspecialchars(t('route_editor.route_description_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small id="description_help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.route_description_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label"><?= htmlspecialchars(t('route_editor.gps_threshold'), ENT_QUOTES, 'UTF-8') ?> <span class="badge bg-secondary ms-1" id="gpsThresholdBadge">25 m</span></label>
@@ -125,7 +125,7 @@ require_once '../../includes/_admin_nav.php';
                                     </div>
                                 </div>
                             </div>
-                            <small><?= htmlspecialchars(t('route_editor.gps_threshold_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.gps_threshold_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
                         <div class="mb-3">
                             <div class="form-check form-switch">
@@ -133,14 +133,14 @@ require_once '../../includes/_admin_nav.php';
                                 <label class="form-check-label" for="is_published">
                                     <?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
                                 </label><br>
-                                <small id="public-help"><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                                <small id="public-help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="publication_date" class="form-label"><?= htmlspecialchars(t('common.publication_date_short'), ENT_QUOTES, 'UTF-8') ?></label>
                             <input type="date" class="form-control" id="publication_date" name="publication_date" readonly>
-                            <small><?= htmlspecialchars(t('route_editor.publication_date_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.publication_date_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
                     </div>
                 </div>
@@ -205,26 +205,26 @@ require_once '../../includes/_admin_nav.php';
                             <div class="col-md-6 mb-3">
                                 <label for="node_title" class="form-label"><?= htmlspecialchars(t('common.node_name'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="node_title">
-                                <small><?= htmlspecialchars(t('route_editor.node_name_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                                <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.node_name_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label for="node_lat" class="form-label"><?= htmlspecialchars(t('route_editor.latitude'), ENT_QUOTES, 'UTF-8') ?></label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lat" readonly>
-                                <small><?= htmlspecialchars(t('route_editor.latitude_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                                <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.latitude_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <label for="node_lng" class="form-label"><?= htmlspecialchars(t('route_editor.longitude'), ENT_QUOTES, 'UTF-8') ?></label>
                                 <input type="number" step="0.000001" class="form-control" id="node_lng" readonly>
-                                <small><?= htmlspecialchars(t('route_editor.longitude_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                                <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.longitude_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="node_content" class="form-label"><?= htmlspecialchars(t('common.node_content'), ENT_QUOTES, 'UTF-8') ?></label>
                             <textarea id="node_content"></textarea>
-                            <small><?= htmlspecialchars(t('route_editor.node_content_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.node_content_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
 
                         <!-- Challenge panel -->
@@ -277,7 +277,7 @@ require_once '../../includes/_admin_nav.php';
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h5 class="mb-1"><?= htmlspecialchars(t('route_editor.create_ready'), ENT_QUOTES, 'UTF-8') ?></h5>
-                                <p class="text-muted mb-0"><?= htmlspecialchars(t('route_editor.create_ready_help'), ENT_QUOTES, 'UTF-8') ?></p>
+                                <p class="text-muted mb-0"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.create_ready_help'), ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                             <button type="submit" class="btn btn-success btn-lg">
                                 <i class="bi bi-check-circle-fill me-2"></i> <?= htmlspecialchars(t('route_editor.create_route'), ENT_QUOTES, 'UTF-8') ?>
@@ -302,7 +302,7 @@ require_once '../../includes/_admin_nav.php';
     let map;
     let markers = [];
     let nodes = [];
-    const CAMPUS_CENTER = [63.1055, 21.5929];
+    const DEFAULT_MAP_CENTER = <?= json_encode(DEFAULT_MAP_CENTER) ?>;
     const translations = <?= HavuLocale::jsonNamespace('common', 'route_editor') ?>;
     const commonTranslations = translations.common;
     const routeEditorTranslations = translations.route_editor;
@@ -403,9 +403,9 @@ require_once '../../includes/_admin_nav.php';
         });
     }
 
-    // Initialize map — center on user's location, fall back to campus
+    // Initialize map — center on user's GPS location, fall back to default coordinates
     function initMap() {
-        map = L.map('map', { zoomControl: true }).setView(CAMPUS_CENTER, 15);
+        map = L.map('map', { zoomControl: true }).setView(DEFAULT_MAP_CENTER, <?= DEFAULT_ZOOM ?>);
 
         const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -431,9 +431,10 @@ require_once '../../includes/_admin_nav.php';
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(pos) {
-                    map.setView([pos.coords.latitude, pos.coords.longitude], 15);
+                    map.setView([pos.coords.latitude, pos.coords.longitude], <?= DEFAULT_ZOOM ?>);
                 },
-                function() { /* denied or unavailable — stay on campus center */ }
+                function() { /* denied or unavailable — stay on default coordinates */ },
+                { timeout: 8000, maximumAge: 60000 }
             );
         }
     }

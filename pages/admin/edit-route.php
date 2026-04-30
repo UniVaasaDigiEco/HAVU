@@ -198,7 +198,7 @@ require_once '../../includes/_admin_nav.php';
                                     </div>
                                 </div>
                             </div>
-                            <small><?= htmlspecialchars(t('route_editor.gps_threshold_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.gps_threshold_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
 
                         <div class="mb-3">
@@ -207,7 +207,7 @@ require_once '../../includes/_admin_nav.php';
                                 <label class="form-check-label" for="is_published">
                                     <?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
                                 </label><br>
-                                <small id="public-help"><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
+                                <small id="public-help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                         </div>
 
@@ -286,7 +286,7 @@ require_once '../../includes/_admin_nav.php';
                         <div class="mb-3">
                             <label for="node_content" class="form-label"><?= htmlspecialchars(t('common.node_content'), ENT_QUOTES, 'UTF-8') ?></label>
                             <textarea id="node_content"></textarea>
-                            <small><?= htmlspecialchars(t('route_editor.node_content_help_short'), ENT_QUOTES, 'UTF-8') ?></small>
+                            <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.node_content_help_short'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
 
                         <!-- Challenge panel -->
@@ -338,7 +338,7 @@ require_once '../../includes/_admin_nav.php';
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h5 class="mb-1"><?= htmlspecialchars(t('route_editor.update_ready'), ENT_QUOTES, 'UTF-8') ?></h5>
-                                <p class="text-muted mb-0"><?= htmlspecialchars(t('route_editor.update_ready_help'), ENT_QUOTES, 'UTF-8') ?></p>
+                                <p class="text-muted mb-0"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.update_ready_help'), ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                             <button type="submit" class="btn btn-success btn-lg" id="updateRouteBtn" <?= empty($selected_route_public_id) ? 'disabled' : '' ?>>
                                 <i class="bi bi-save-fill me-2"></i> <?= htmlspecialchars(t('route_editor.save_changes'), ENT_QUOTES, 'UTF-8') ?>
@@ -363,7 +363,7 @@ require_once '../../includes/_admin_nav.php';
     let markers = [];
     let nodes = [];
     let polyline = null;
-    const CAMPUS_CENTER = [63.1055, 21.5929];
+    const DEFAULT_MAP_CENTER = <?= json_encode(DEFAULT_MAP_CENTER) ?>;
     const selectedRoutePublicId = <?= json_encode($selected_route_public_id, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     const selectedRouteData = <?= $route_data_json ?: 'null' ?>;
     const translations = <?= HavuLocale::jsonNamespace('common', 'route_editor') ?>;
@@ -466,7 +466,7 @@ require_once '../../includes/_admin_nav.php';
     }
 
     function initMap() {
-        map = L.map('map', { zoomControl: true }).setView(CAMPUS_CENTER, 15);
+        map = L.map('map', { zoomControl: true }).setView(DEFAULT_MAP_CENTER, 15);
 
         const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

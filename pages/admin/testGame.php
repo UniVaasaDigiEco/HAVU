@@ -123,13 +123,13 @@ if (!$route) {
             ? routeData.gps_threshold
             : PROXIMITY_THRESHOLD;
 
-        let CAMPUS_CENTER = [63.1055, 21.5929];
+        let DEFAULT_MAP_CENTER = <?= json_encode(DEFAULT_MAP_CENTER) ?>;
         if (routeData.nodes && routeData.nodes.length > 0) {
             const lats = routeData.nodes.map(n => parseFloat(n.node.latitude));
             const lngs = routeData.nodes.map(n => parseFloat(n.node.longitude));
             const avgLat = lats.reduce((a, b) => a + b, 0) / lats.length;
             const avgLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
-            CAMPUS_CENTER = [avgLat, avgLng];
+            DEFAULT_MAP_CENTER = [avgLat, avgLng];
         }
 
         const routeNodes = routeData.nodes.map((nodeData) => ({
@@ -188,7 +188,7 @@ if (!$route) {
         });
 
         $(document).ready(function() {
-            map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(CAMPUS_CENTER, 16);
+            map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(DEFAULT_MAP_CENTER, 16);
 
             const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

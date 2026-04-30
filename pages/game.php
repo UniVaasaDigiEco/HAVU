@@ -145,8 +145,8 @@ if (!$route) {
             ? routeData.gps_threshold
             : PROXIMITY_THRESHOLD;
 
-        // Center of University of Vaasa campus (default)
-        let CAMPUS_CENTER = [63.1055, 21.5929];
+        // Default map center — falls back to configured default, overridden by route node average
+        let DEFAULT_MAP_CENTER = <?= json_encode(DEFAULT_MAP_CENTER) ?>;
 
         // Calculate center from route nodes if available
         if (routeData.nodes && routeData.nodes.length > 0) {
@@ -154,7 +154,7 @@ if (!$route) {
             const lngs = routeData.nodes.map(n => parseFloat(n.node.longitude));
             const avgLat = lats.reduce((a, b) => a + b, 0) / lats.length;
             const avgLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
-            CAMPUS_CENTER = [avgLat, avgLng];
+            DEFAULT_MAP_CENTER = [avgLat, avgLng];
         }
 
         let map = null;
@@ -224,7 +224,7 @@ if (!$route) {
         // Initialize everything
         $(document).ready(function() {
             // Initialize map
-            map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(CAMPUS_CENTER, 16);
+            map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(DEFAULT_MAP_CENTER, 16);
 
             const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

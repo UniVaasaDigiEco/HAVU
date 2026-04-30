@@ -8,6 +8,12 @@ $env = require __DIR__ . '/../.env';
 define('ROOT_DIR', $env['ROOT_DIR'] ?? '/'); // Fallback to '/HavuGamification/' if ROOT_DIR is not set in .env
 define('ICON_PATH', ROOT_DIR . 'images/logos/InnoWind_icon.png');
 
+// Default map center coordinates [lat, lng] — used as fallback when GPS is unavailable
+define('DEFAULT_MAP_CENTER', [63.078812544821666, 23.73671471861084]);
+
+// Default map zoom level
+define('DEFAULT_ZOOM', 14);
+
 //Define session name
 const SESSION_NAME = "HavuGamificationSession";
 
