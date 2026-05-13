@@ -54,7 +54,7 @@ if ($exists) {
 }
 
 try {
-    Security::addUser($email, $password, $full_name, USER_TYPE_ADMIN);
+    Security::addUser($email, $password, $full_name, USER_TYPE_REGULAR);
 } catch (Exception $e) {
     header('Location: ../register.php?error_key=' . urlencode('actions.register.create_failed'));
     exit;

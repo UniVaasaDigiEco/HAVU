@@ -151,35 +151,19 @@ if (!$route) {
         let userMarker = null;
         let userPosition = null;
         let routeLine = null;
+        let routeLineVisible = true;
         let activeNodeId = null;
 
-        const unvisitedIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MiIgdmlld0JveD0iMCAwIDMyIDQyIj48cGF0aCBmaWxsPSIjZGMzNTQ1IiBkPSJNMTYgMEMxMC40OSAwIDYgNC40OSA2IDEwYzAgNy4zNSAxMCAyMiAxMCAyMnMxMC0xNC42NSAxMC0yMmMwLTUuNTEtNC40OS0xMC0xMC0xMHptMCAxNGMtMi4yMSAwLTQtMS43OS00LTRzMS43OS00IDQtNCA0IDEuNzkgNCA0LTEuNzkgNC00IDR6Ii8+PC9zdmc+',
-            iconSize: [32, 42],
-            iconAnchor: [16, 42],
-            popupAnchor: [0, -42]
-        });
-
-        const visitedIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MiIgdmlld0JveD0iMCAwIDMyIDQyIj48cGF0aCBmaWxsPSIjMjhhNzQ1IiBkPSJNMTYgMEMxMC40OSAwIDYgNC40OSA2IDEwYzAgNy4zNSAxMCAyMiAxMCAyMnMxMC0xNC42NSAxMC0yMmMwLTUuNTEtNC40OS0xMC0xMC0xMHptMCAxNGMtMi4yMSAwLTQtMS43OS00LTRzMS43OS00IDQtNCA0IDEuNzkgNCA0LTEuNzkgNC00IDR6Ii8+PC9zdmc+',
-            iconSize: [32, 42],
-            iconAnchor: [16, 42],
-            popupAnchor: [0, -42]
-        });
-
-        const startIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MiIgdmlld0JveD0iMCAwIDMyIDQyIj48cGF0aCBmaWxsPSIjMjhhNzQ1IiBkPSJNMTYgMEMxMC40OSAwIDYgNC40OSA2IDEwYzAgNy4zNSAxMCAyMiAxMCAyMnMxMC0xNC42NSAxMC0yMmMwLTUuNTEtNC40OS0xMC0xMC0xMHptMCAxNGMtMi4yMSAwLTQtMS43OS00LTRzMS43OS00IDQtNCA0IDEuNzkgNCA0LTEuNzkgNC00IDR6Ii8+PC9zdmc+',
-            iconSize: [32, 42],
-            iconAnchor: [16, 42],
-            popupAnchor: [0, -42]
-        });
-
-        const finishIcon = L.icon({
-            iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSI0MiIgdmlld0JveD0iMCAwIDMyIDQyIj48cGF0aCBmaWxsPSIjZmZjMTA3IiBkPSJNMTYgMEMxMC40OSAwIDYgNC40OSA2IDEwYzAgNy4zNSAxMCAyMiAxMCAyMnMxMC0xNC42NSAxMC0yMmMwLTUuNTEtNC40OS0xMC0xMC0xMHptMCAxNGMtMi4yMSAwLTQtMS43OS00LTRzMS43OS00IDQtNCA0IDEuNzkgNCA0LTEuNzkgNC00IDR6Ii8+PC9zdmc+',
-            iconSize: [32, 42],
-            iconAnchor: [16, 42],
-            popupAnchor: [0, -42]
-        });
+        function createNodeIcon(number, visited = false) {
+            const colorClass = visited ? 'route-node-marker--visited' : 'route-node-marker--unvisited';
+            return L.divIcon({
+                className: 'route-node-marker-wrapper',
+                html: `<div class="route-node-marker-badge ${colorClass}">${number}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+            });
+        }
 
         const userIcon = L.icon({
             iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iIzAwNjZjYyIgb3BhY2l0eT0iMC4zIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNiIgZmlsbD0iIzAwNjZjYyIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9IndoaXRlIi8+PC9zdmc+',
@@ -212,6 +196,7 @@ if (!$route) {
             ).addTo(map);
 
             drawRouteLine();
+            initializeRouteLineToggle();
             initializeMarkers();
             syncMarkerPresentationBindings();
             initializeGpsRestrictionToggle();
@@ -240,6 +225,38 @@ if (!$route) {
                 opacity: 0.6,
                 dashArray: '10, 10'
             }).addTo(map);
+
+            if (!routeLineVisible) {
+                map.removeLayer(routeLine);
+            }
+        }
+
+        function setRouteLineVisibility(visible) {
+            routeLineVisible = visible;
+
+            if (!routeLine) {
+                return;
+            }
+
+            if (visible) {
+                if (!map.hasLayer(routeLine)) {
+                    map.addLayer(routeLine);
+                }
+            } else if (map.hasLayer(routeLine)) {
+                map.removeLayer(routeLine);
+            }
+        }
+
+        function initializeRouteLineToggle() {
+            const toggle = document.getElementById('route-line-toggle');
+            if (!toggle) {
+                return;
+            }
+
+            toggle.checked = routeLineVisible;
+            toggle.addEventListener('change', function() {
+                setRouteLineVisibility(this.checked);
+            });
         }
 
         function isPhoneViewport() {
@@ -551,17 +568,8 @@ if (!$route) {
 
         function initializeMarkers() {
             routeNodes.forEach((node, index) => {
-                let icon;
-                if (index === 0) {
-                    icon = startIcon;
-                } else if (index === routeNodes.length - 1) {
-                    icon = finishIcon;
-                } else {
-                    icon = unvisitedIcon;
-                }
-
                 const marker = L.marker([node.lat, node.lng], {
-                    icon: icon,
+                    icon: createNodeIcon(index + 1, node.visited),
                     title: node.name
                 }).addTo(map);
 
@@ -727,7 +735,9 @@ if (!$route) {
 
                 node.visited = true;
                 trackVisit(nodeId);
-                markers[nodeId].setIcon(visitedIcon);
+                const markerIndex = routeNodes.findIndex(n => n.id === nodeId);
+                const markerNumber = markerIndex >= 0 ? markerIndex + 1 : '?';
+                markers[nodeId].setIcon(createNodeIcon(markerNumber, true));
                 updateProgress();
 
                 closeNodePresentation();
@@ -814,6 +824,33 @@ if (!$route) {
     </script>
     <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
     <style>
+        .route-node-marker-wrapper {
+            background: transparent;
+            border: 0;
+        }
+
+        .route-node-marker-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        }
+
+        .route-node-marker--unvisited {
+            background: #0d6efd;
+        }
+
+        .route-node-marker--visited {
+            background: #198754;
+        }
+
         #completion-screen {
             display: none;
             position: fixed;
@@ -878,6 +915,12 @@ if (!$route) {
         </div>
         <div id="distance-info"></div>
         <div class="info-panel-footer mt-3 pt-2 border-top">
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" role="switch" id="route-line-toggle" checked>
+                <label class="form-check-label" for="route-line-toggle">
+                    <?= htmlspecialchars(t('game.route_line_toggle_label'), ENT_QUOTES, 'UTF-8') ?>
+                </label>
+            </div>
             <div class="form-check form-switch mb-3">
                 <input class="form-check-input" type="checkbox" role="switch" id="gps-restriction-toggle">
                 <label class="form-check-label" for="gps-restriction-toggle">

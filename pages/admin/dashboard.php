@@ -258,6 +258,11 @@ require_once '../../includes/_admin_nav.php';
                 </div>
                 <img id="shareQr" src="" alt="QR-koodi" class="border rounded p-2 admin-share-qr">
                 <p class="text-muted small mt-2"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('admin_dashboard.qr_info'), ENT_QUOTES, 'UTF-8') ?></p>
+                <div class="mt-3">
+                    <button class="btn btn-sm btn-primary" id="btnDownloadQr" type="button" title="<?= htmlspecialchars(t('admin_dashboard.download_qr'), ENT_QUOTES, 'UTF-8') ?>">
+                        <i class="bi bi-download me-1"></i><?= htmlspecialchars(t('admin_dashboard.download_qr'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -340,6 +345,29 @@ require_once '../../includes/_admin_nav.php';
             this.innerHTML = '<i class="bi bi-check text-success"></i>';
             setTimeout(() => { this.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
         });
+    });
+
+    document.getElementById('btnDownloadQr').addEventListener('click', function() {
+        const qrImg = document.getElementById('shareQr');
+        const shareUrl = document.getElementById('shareUrl').value;
+        const fileName = 'route-qr-code.png';
+
+        fetch(qrImg.src)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(err => {
+                console.error('QR code download failed:', err);
+                alert('Failed to download QR code');
+            });
     });
 </script>
 <?php require_once '../../includes/_footer.php'; ?>

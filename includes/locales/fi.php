@@ -217,6 +217,7 @@ return [
         'share_modal_title' => 'Jaa: ',
         'share_modal_intro' => 'Jaa tämä linkki tai QR-koodi pelaajille — he pääsevät reitille suoraan, myös ilman kirjautumista.',
         'copy_link' => 'Kopioi linkki',
+        'download_qr' => 'Lataa QR-koodi',
         'qr_info' => 'QR-koodi vie suoraan reitille',
     ],
     'admin_route_statistics' => [
@@ -301,6 +302,8 @@ return [
         'confirm_delete_route' => 'Oletko varma, että haluat poistaa tämän reitin? Tätä toimintoa ei voi peruuttaa.',
         'gps_threshold' => 'GPS-läheisyyskynnys',
         'gps_threshold_help' => 'Etäisyys metreinä rastista, jolta pelaaja voi merkitä rastin käydyksi tai vastata haasteeseen. Sallittu väli: 15–50 m.',
+        'allow_route_line_toggle' => 'Salli pelaajien näyttää reittiviiva',
+        'allow_route_line_help' => 'Jos valittu, pelaajat voivat näyttää tai piilottaa reitille piirretyn viivan peliä pelatessamme.',
         'route_length_estimate' => 'Reitin pituus (suora)',
     ],
     'admin_new_route' => [

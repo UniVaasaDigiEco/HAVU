@@ -42,7 +42,7 @@ if (!empty($_SESSION['user_public_id'])) {
                             <option value="" disabled selected><?= htmlspecialchars(t('feedback.type_placeholder'), ENT_QUOTES, 'UTF-8') ?></option>
                             <option value="contact"><?= htmlspecialchars(t('feedback.type_contact'), ENT_QUOTES, 'UTF-8') ?></option>
                             <option value="bug"><?= htmlspecialchars(t('feedback.type_bug'), ENT_QUOTES, 'UTF-8') ?></option>
-                            <option value="feature"><?= htmlspecialchars(t('feedback.type_feature'), ENT_QUOTES, 'UTF-8') ?></option>
+                            <!--<option value="feature"><?= htmlspecialchars(t('feedback.type_feature'), ENT_QUOTES, 'UTF-8') ?></option>-->
                         </select>
                     </div>
 

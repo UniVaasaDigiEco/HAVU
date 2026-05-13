@@ -217,6 +217,7 @@ return [
         'share_modal_title' => 'Share: ',
         'share_modal_intro' => 'Share this link or QR code with players — they can open the route directly, even without logging in.',
         'copy_link' => 'Copy link',
+        'download_qr' => 'Download QR code',
         'qr_info' => 'The QR code opens the route directly',
     ],
     'admin_route_statistics' => [
@@ -300,8 +301,8 @@ return [
         'confirm_delete_node' => 'Are you sure you want to delete this checkpoint?',
         'confirm_delete_route' => 'Are you sure you want to delete this route? This action cannot be undone.',
         'gps_threshold' => 'GPS proximity threshold',
-        'gps_threshold_help' => 'Distance in meters from a checkpoint where a player can mark it visited or answer a challenge. Allowed range: 15–50 m.',
-        'route_length_estimate' => 'Route length (straight line)',
+        'gps_threshold_help' => 'Distance in meters from a checkpoint where a player can mark it visited or answer a challenge. Allowed range: 15–50 m.',        'allow_route_line_toggle' => 'Allow players to show route line',
+        'allow_route_line_help' => 'If enabled, players can show or hide the line drawn for the route while playing the game.',        'route_length_estimate' => 'Route length (straight line)',
     ],
     'admin_new_route' => [
         'title' => 'HAVU-trailgame - Create route',

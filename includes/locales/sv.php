@@ -217,6 +217,7 @@ return [
         'share_modal_title' => 'Dela: ',
         'share_modal_intro' => 'Dela den här länken eller QR-koden med spelare — de kan öppna rutten direkt, även utan inloggning.',
         'copy_link' => 'Kopiera länk',
+        'download_qr' => 'Ladda ner QR-kod',
         'qr_info' => 'QR-koden öppnar rutten direkt',
     ],
     'admin_route_statistics' => [
@@ -301,6 +302,8 @@ return [
         'confirm_delete_route' => 'Är du säker på att du vill ta bort den här rutten? Åtgärden kan inte ångras.',
         'gps_threshold' => 'GPS-närhetsavstånd',
         'gps_threshold_help' => 'Avstånd i meter från en kontrollpunkt där en spelare kan markera den som besökt eller svara på en utmaning. Tillåtet intervall: 15–50 m.',
+        'allow_route_line_toggle' => 'Tillåt spelare att visa rutlinje',
+        'allow_route_line_help' => 'Om aktiverad kan spelare visa eller dölja linjen som ritats för rutten när de spelar spelet.',
         'route_length_estimate' => 'Ruttens längd (rak linje)',
     ],
     'admin_new_route' => [

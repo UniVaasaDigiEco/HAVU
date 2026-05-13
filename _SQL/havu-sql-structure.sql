@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 29, 2026 at 02:13 PM
+-- Generation Time: May 13, 2026 at 11:17 AM
 -- Server version: 8.4.9
--- PHP Version: 8.4.19
+-- PHP Version: 8.4.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -103,7 +103,8 @@ CREATE TABLE `routes` (
   `user_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gps_threshold` int NOT NULL DEFAULT '25' COMMENT 'Minimum distance to a node, where user can check it visited or answer the challenges'
+  `gps_threshold` int NOT NULL DEFAULT '25' COMMENT 'Minimum distance to a node, where user can check it visited or answer the challenges',
+  `allow_route_line` int NOT NULL DEFAULT '1' COMMENT '1 = true, 0 = false. If players are allowed to toggle route line'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

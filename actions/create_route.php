@@ -54,6 +54,7 @@ try {
     // Prepare route data
     $public_id = Uuid::uuid4()->toString();
     $is_published = isset($_POST['is_published']) ? 1 : 0;
+        $allow_route_line = isset($_POST['allow_route_line']) ? 1 : 0;
     $created_by = $_SESSION['user_public_id'];
     $title = $_POST['route_title'];
     $description = $_POST['route_description'];
@@ -70,12 +71,12 @@ try {
 
     try {
         // Insert route
-        $sql = "INSERT INTO routes (public_id, is_published, publication_date, created_by, user_id, title, description, gps_threshold) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO routes (public_id, is_published, publication_date, created_by, user_id, title, description, gps_threshold, allow_route_line) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $db->prepare($sql);
             if (!$stmt) {
                 throw routeFormException('actions.route_form.create_failed');
             }
-        $stmt->bind_param("sisssssi", $public_id, $is_published, $formatted_publication_date, $created_by, $created_by, $title, $description, $gps_threshold);
+        $stmt->bind_param("sisssssii", $public_id, $is_published, $formatted_publication_date, $created_by, $created_by, $title, $description, $gps_threshold, $allow_route_line);
 
             if (!$stmt->execute()) {
                 throw routeFormException('actions.route_form.create_failed');

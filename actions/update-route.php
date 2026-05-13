@@ -46,6 +46,7 @@ try {
         throw routeFormException('actions.route_form.invalid_gps_threshold');
     }
     $gps_threshold = $gps_threshold_raw;
+    $allow_route_line = isset($_POST['allow_route_line']) ? 1 : 0;
 
     $publication_date = DateTime::createFromFormat('Y-m-d', $_POST['publication_date']);
     if (!$publication_date) {
@@ -86,14 +87,14 @@ try {
         $route_lookup_stmt->close();
 
         // Update route details
-        $route_update_sql = 'UPDATE routes SET title = ?, description = ?, publication_date = ?, is_published = ?, gps_threshold = ? WHERE id = ?';
+        $route_update_sql = 'UPDATE routes SET title = ?, description = ?, publication_date = ?, is_published = ?, gps_threshold = ?, allow_route_line = ? WHERE id = ?';
         $route_update_stmt = $db->prepare($route_update_sql);
         if (!$route_update_stmt) {
             throw routeFormException('actions.route_form.update_failed');
         }
 
         $is_published = isset($_POST['is_published']) ? 1 : 0;
-        $route_update_stmt->bind_param('sssiii', $route_title, $route_description, $formatted_publication_date, $is_published, $gps_threshold, $route_id);
+        $route_update_stmt->bind_param('sssiiii', $route_title, $route_description, $formatted_publication_date, $is_published, $gps_threshold, $allow_route_line, $route_id);
         if (!$route_update_stmt->execute()) {
             throw routeFormException('actions.route_form.update_failed');
         }
