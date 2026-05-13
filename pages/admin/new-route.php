@@ -139,6 +139,7 @@ require_once '../../includes/_admin_nav.php';
                         <div class="mb-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" checked>
+                                   <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help">
                                 <label class="form-check-label" for="is_published">
                                     <?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
                                 </label><br>

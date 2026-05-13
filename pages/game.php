@@ -184,7 +184,7 @@ if (!$route) {
         let userMarker = null;
         let userPosition = null;
         let routeLine = null;
-        let routeLineVisible = true;
+        let routeLineVisible = false; // Default OFF
         let activeNodeId = null;
 
         // Numbered marker badges: blue for unvisited, green for visited.
@@ -287,11 +287,15 @@ if (!$route) {
             if (!toggle) {
                 return;
             }
-
-            toggle.checked = routeLineVisible;
-            toggle.addEventListener('change', function () {
-                setRouteLineVisibility(this.checked);
-            });
+            // Only allow toggle if allowed by route
+            if (routeData.allow_route_line) {
+                toggle.checked = routeLineVisible;
+                toggle.disabled = false;
+                toggle.style.display = '';
+                toggle.addEventListener('change', function () {
+                    setRouteLineVisibility(this.checked);
+                });
+            }
         }
 
         // Escape HTML for safe insertion
@@ -940,10 +944,12 @@ if (!$route) {
         <div id="distance-info"></div>
         <div class="info-panel-footer mt-3 pt-2 border-top">
             <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" role="switch" id="route-line-toggle" checked>
+                <?php if (!empty($route->toArray()['allow_route_line'])): ?>
+                <input class="form-check-input" type="checkbox" role="switch" id="route-line-toggle">
                 <label class="form-check-label" for="route-line-toggle">
                     <?= htmlspecialchars(t('game.route_line_toggle_label'), ENT_QUOTES, 'UTF-8') ?>
                 </label>
+                <?php endif; ?>
             </div>
             <div class="info-panel-actions">
                 <?php if ($is_logged_in): ?>

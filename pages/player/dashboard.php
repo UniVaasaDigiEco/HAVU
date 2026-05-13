@@ -2,6 +2,7 @@
 require_once('../../config/constants.php');
 require_once('../../classes/tools.class.php');
 require_once('../../classes/security.class.php');
+require_once('../../classes/message.class.php');
 
 Security::initSession();
 
@@ -157,6 +158,7 @@ try {
 </nav>
 
 <div class="container py-5">
+    <?php echo Message::displayFlashMessages(); ?>
 
     <!-- Profile header -->
     <div class="d-flex align-items-center gap-3 mb-5">
@@ -166,6 +168,11 @@ try {
         </div>
         <div>
             <h2 class="mb-0"><?= htmlspecialchars($user->getFullName(), ENT_QUOTES, 'UTF-8') ?></h2>
+            <div class="mt-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#accountSettingsModal">
+                    <i class="bi bi-person-gear me-1"></i><?= htmlspecialchars(t('player_dashboard.account_settings_button'), ENT_QUOTES, 'UTF-8') ?>
+                </button>
+            </div>
             <span class="text-muted small"><?= htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8') ?></span>
         </div>
         <div class="ms-auto text-end">
@@ -275,6 +282,73 @@ try {
         </div>
     <?php endif; ?>
 </div>
+
+<div class="modal fade" id="accountSettingsModal" tabindex="-1" aria-labelledby="accountSettingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accountSettingsModalLabel">
+                    <i class="bi bi-person-gear me-2"></i><?= htmlspecialchars(t('player_dashboard.account_settings_title'), ENT_QUOTES, 'UTF-8') ?>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
+            </div>
+            <div class="modal-body">
+                <h6 class="mb-3"><?= htmlspecialchars(t('player_dashboard.change_password_heading'), ENT_QUOTES, 'UTF-8') ?></h6>
+                <form action="../../actions/update-account-password.php" method="POST" class="mb-4 pb-3 border-bottom">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label"><?= htmlspecialchars(t('player_dashboard.current_password_label'), ENT_QUOTES, 'UTF-8') ?></label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label"><?= htmlspecialchars(t('player_dashboard.new_password_label'), ENT_QUOTES, 'UTF-8') ?></label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" minlength="8" required>
+                        <div class="form-text"><?= htmlspecialchars(t('player_dashboard.password_hint'), ENT_QUOTES, 'UTF-8') ?></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password_confirm" class="form-label"><?= htmlspecialchars(t('player_dashboard.new_password_confirm_label'), ENT_QUOTES, 'UTF-8') ?></label>
+                        <input type="password" class="form-control" id="new_password_confirm" name="new_password_confirm" minlength="8" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-shield-lock me-1"></i><?= htmlspecialchars(t('player_dashboard.change_password_submit'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </form>
+
+                <h6 class="mb-2 text-danger"><?= htmlspecialchars(t('player_dashboard.delete_account_heading'), ENT_QUOTES, 'UTF-8') ?></h6>
+                <div class="alert alert-danger">
+                    <strong><?= htmlspecialchars(t('player_dashboard.delete_account_warning_title'), ENT_QUOTES, 'UTF-8') ?></strong><br>
+                    <?= htmlspecialchars(t('player_dashboard.delete_account_warning_body'), ENT_QUOTES, 'UTF-8') ?>
+                </div>
+                <form action="../../actions/delete-account.php" method="POST" id="delete-account-form">
+                    <div class="mb-3">
+                        <label for="delete_confirm_input" class="form-label"><?= htmlspecialchars(t('player_dashboard.delete_account_confirm_label'), ENT_QUOTES, 'UTF-8') ?></label>
+                        <input type="text" class="form-control" id="delete_confirm_input" name="delete_confirm_input" autocomplete="off" required>
+                        <div class="form-text"><?= htmlspecialchars(t('player_dashboard.delete_account_confirm_help'), ENT_QUOTES, 'UTF-8') ?></div>
+                    </div>
+                    <button type="submit" class="btn btn-danger" id="delete-account-submit" disabled>
+                        <i class="bi bi-trash me-1"></i><?= htmlspecialchars(t('player_dashboard.delete_account_submit'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php require_once '../../includes/_footer.php'; ?>
+<script>
+    (function () {
+        const input = document.getElementById('delete_confirm_input');
+        const button = document.getElementById('delete-account-submit');
+        if (!input || !button) {
+            return;
+        }
+
+        const updateDeleteButtonState = function () {
+            button.disabled = input.value.trim() !== 'DELETE';
+        };
+
+        input.addEventListener('input', updateDeleteButtonState);
+        updateDeleteButtonState();
+    })();
+</script>
 </body>
 </html>

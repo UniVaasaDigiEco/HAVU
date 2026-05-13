@@ -16,6 +16,7 @@ class Route{
     private string $title;
     private string $description;
     private int $gps_threshold;
+    private int $allow_route_line;
 
     /** @var array<int, array{cross_id: int, node: Node, order_number: int}> */
     private array $nodes = [];
@@ -26,7 +27,7 @@ class Route{
         }
 
         $db = Tools::getDb();
-        $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, user_id, title, description, gps_threshold FROM routes WHERE id = ?";
+        $sql = "SELECT public_id, is_published, publication_date, created_by, created_at, updated_at, user_id, title, description, gps_threshold, allow_route_line FROM routes WHERE id = ?";
         $stmt = $db->prepare($sql);
 
         $sql_nodes = "SELECT id, node_id, order_number FROM node_route_cross WHERE route_id = ? ORDER BY order_number";
@@ -47,8 +48,9 @@ class Route{
              * @var string $title
              * @var string $description
              * @var int $gps_threshold
+             * @var int $allow_route_line
              */
-            $stmt->bind_result($public_id, $is_published, $publication_date, $created_by, $created_at, $updated_at, $user_id, $title, $description, $gps_threshold);
+            $stmt->bind_result($public_id, $is_published, $publication_date, $created_by, $created_at, $updated_at, $user_id, $title, $description, $gps_threshold, $allow_route_line);
             $stmt->store_result();
             if($stmt->num_rows === 0){
                 throw new Exception("Route not found");
@@ -65,7 +67,7 @@ class Route{
             $this->title = $title;
             $this->description = $description;
             $this->gps_threshold = max(15, min(50, (int)($gps_threshold ?? 25)));
-
+            $this->allow_route_line = (int)($allow_route_line ?? 0);
             //Fetch associated nodes
             $stmt_nodes->bind_param('i', $id);
             $stmt_nodes->execute();
@@ -218,6 +220,7 @@ class Route{
             'title' => $this->title,
             'description' => $this->description,
             'gps_threshold' => $this->gps_threshold,
+            'allow_route_line' => $this->allow_route_line,
             'nodes' => $nodes_array
         ];
     }

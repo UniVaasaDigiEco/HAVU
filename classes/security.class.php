@@ -4,6 +4,35 @@ require_once(__DIR__ .'/../vendor/autoload.php');
 use Ramsey\Uuid\Uuid;
 
 class Security{
+    public static function getCsrfToken(string $context = 'default'): string{
+        self::initSession();
+
+        if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
+            $_SESSION['csrf_tokens'] = [];
+        }
+
+        if (empty($_SESSION['csrf_tokens'][$context])) {
+            $_SESSION['csrf_tokens'][$context] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['csrf_tokens'][$context];
+    }
+
+    public static function validateCsrfToken(string $token, string $context = 'default'): bool{
+        self::initSession();
+
+        if (!isset($_SESSION['csrf_tokens']) || !is_array($_SESSION['csrf_tokens'])) {
+            return false;
+        }
+
+        $expected = $_SESSION['csrf_tokens'][$context] ?? '';
+        if (!is_string($expected) || $expected === '' || $token === '') {
+            return false;
+        }
+
+        return hash_equals($expected, $token);
+    }
+
     /** Add a new user to the database
      * @param $email
      * @param $password
