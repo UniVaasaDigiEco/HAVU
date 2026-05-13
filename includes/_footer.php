@@ -10,16 +10,18 @@
                     <a href="https://policies.google.com/terms" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.terms'), ENT_QUOTES, 'UTF-8') ?></a>.
                 </p>
             </div>
-            <div class="site-footer__actions">
-                <button type="button"
-                        class="btn btn-primary site-footer__feedback-btn"
-                        data-bs-toggle="modal"
-                        data-bs-target="#feedbackModal"
-                        title="<?= htmlspecialchars(t('feedback.button_title'), ENT_QUOTES, 'UTF-8') ?>">
-                    <i class="bi bi-chat-dots-fill me-1"></i><?= htmlspecialchars(t('feedback.button_label'), ENT_QUOTES, 'UTF-8') ?>
-                </button>
-            </div>
+            <?php if (!empty($_SESSION['user_public_id'])): ?>
+                <div class="site-footer__actions">
+                    <button type="button"
+                            class="btn btn-primary site-footer__feedback-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#feedbackModal"
+                            title="<?= htmlspecialchars(t('feedback.button_title'), ENT_QUOTES, 'UTF-8') ?>">
+                        <i class="bi bi-chat-dots-fill me-1"></i><?= htmlspecialchars(t('feedback.button_label'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </footer>
-<?php require __DIR__ . '/_feedback_widget.php'; ?>
+<?php if (!empty($_SESSION['user_public_id'])) require __DIR__ . '/_feedback_widget.php'; ?>

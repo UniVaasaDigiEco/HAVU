@@ -14,6 +14,12 @@ define('DEFAULT_MAP_CENTER', [63.078812544821666, 23.73671471861084]);
 // Default map zoom level
 define('DEFAULT_ZOOM', 14);
 
+// Allowed route editor bounds for checkpoints in Finland
+define('FINLAND_MIN_LAT', 59.5);
+define('FINLAND_MAX_LAT', 70.2);
+define('FINLAND_MIN_LNG', 19.0);
+define('FINLAND_MAX_LNG', 31.7);
+
 //Define session name
 const SESSION_NAME = "HavuGamificationSession";
 

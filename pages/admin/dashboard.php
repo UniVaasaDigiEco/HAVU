@@ -22,6 +22,10 @@ $routes = $user->getCreatedRoutes();
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/game.php?route=';
+$delete_route_confirmation = json_encode(
+    t('route_editor.confirm_delete_route'),
+    JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+);
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -66,44 +70,8 @@ require_once '../../includes/_admin_nav.php';
                     <a href="new-route.php" class="btn btn-primary text-white" id="btn-newRoute">
                         <i class="bi bi-plus-circle-fill"></i> <?= htmlspecialchars(t('admin_dashboard.new_route'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
-                    <a href="edit-route.php" class="btn btn-primary text-white" id="btn-editRoute">
-                        <i class="bi bi-pencil-fill"></i> <?= htmlspecialchars(t('admin_dashboard.edit_route'), ENT_QUOTES, 'UTF-8') ?>
-                    </a>
-                    <a href="delete-route.php" class="btn btn-danger text-white" id="btn-deleteRoute">
-                        <i class="bi bi-trash-fill"></i> <?= htmlspecialchars(t('admin_dashboard.delete_route'), ENT_QUOTES, 'UTF-8') ?>
-                    </a>
                 </div>
-                <div id="route-testing" class="mt-4 route-management-section">
-                    <h3><i class="bi bi-map-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_testing'), ENT_QUOTES, 'UTF-8') ?></h3>
-                    <div class="mb-3">
-                        <label for="route-select" class="form-label"><?= htmlspecialchars(t('admin_dashboard.route_testing_label'), ENT_QUOTES, 'UTF-8') ?></label>
-                        <select class="form-select" id="route-select">
-                            <option selected disabled><?= htmlspecialchars(t('admin_dashboard.choose_route'), ENT_QUOTES, 'UTF-8') ?></option>
-                            <?php
-                            if($routes){
-                                foreach ($routes as $route){
-                                    echo "<option value='{$route->getPublicId()}'>{$route->getTitle()}</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <button type="button" id="btn-play" class="btn btn-primary text-white"><i class="bi bi-joystick"></i> <?= htmlspecialchars(t('admin_dashboard.play'), ENT_QUOTES, 'UTF-8') ?></button>
-                    <script>
-                        $('#btn-play').on('click', function(){
-                            const selectedRoutePublicId = $('#route-select').val();
-                            if(!selectedRoutePublicId){
-                                alert(<?= json_encode(t('admin_dashboard.choose_route_alert'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>);
-                                return;
-                            }
-                            window.location.href = `testGame.php?route=${selectedRoutePublicId}`;
-                        });
-                    </script>
-                </div>
-
-                <div id="route-sharing" class="mt-4" style="border-top: 2px solid rgba(123,162,90,.2); margin-top: 3rem; padding-top: 2rem;">
-                    <h3><i class="bi bi-share-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_sharing'), ENT_QUOTES, 'UTF-8') ?></h3>
-                    <p class="lead"><?= htmlspecialchars(t('admin_dashboard.route_sharing_intro'), ENT_QUOTES, 'UTF-8') ?></p>
+                <div class="route-management-table">
                     <?php if ($routes): ?>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
@@ -120,35 +88,106 @@ require_once '../../includes/_admin_nav.php';
                                     <td><?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?></td>
                                     <td>
                                         <?php if ($route->getIsPublished()): ?>
-                                            <span class="badge bg-success"><i class="bi bi-eye me-1"></i><?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?></span>
+                                                <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-title="<?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>"><i class="bi bi-eye"></i><span class="d-none d-md-inline ms-1"><?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?></span></span>
                                         <?php else: ?>
-                                            <span class="badge bg-secondary"><i class="bi bi-eye-slash me-1"></i><?= htmlspecialchars(t('common.private'), ENT_QUOTES, 'UTF-8') ?></span>
+                                                <span class="badge bg-secondary" data-bs-toggle="tooltip" data-bs-title="<?= htmlspecialchars(t('common.private'), ENT_QUOTES, 'UTF-8') ?>"><i class="bi bi-eye-slash"></i><span class="d-none d-md-inline ms-1"><?= htmlspecialchars(t('common.private'), ENT_QUOTES, 'UTF-8') ?></span></span>
                                         <?php endif; ?>
                                     </td>
-                                    <td>
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <button class="btn btn-sm btn-outline-primary btn-share"
-                                                    data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
-                                                    data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
-                                                <i class="bi bi-qr-code me-1"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-info btn-copy-route"
-                                                    data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
-                                                    data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
-                                                <i class="bi bi-files me-1"></i><?= htmlspecialchars(t('admin_dashboard.copy_route'), ENT_QUOTES, 'UTF-8') ?>
-                                            </button>
+                                    <td class="route-actions-cell">
+                                        <!-- Desktop: full labelled buttons -->
+                                        <div class="d-none d-md-flex gap-2 flex-wrap">
                                             <form action="../../actions/toggle_publish.php" method="POST" class="m-0">
                                                 <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <?php if ($route->getIsPublished()): ?>
-                                                    <button type="submit" class="btn btn-sm btn-outline-warning">
+                                                        <button type="submit" class="btn btn-sm btn-warning">
                                                         <i class="bi bi-eye-slash me-1"></i><?= htmlspecialchars(t('admin_dashboard.make_private'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 <?php else: ?>
-                                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                                        <button type="submit" class="btn btn-sm btn-success">
                                                         <i class="bi bi-eye me-1"></i><?= htmlspecialchars(t('admin_dashboard.publish'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 <?php endif; ?>
                                             </form>
+                                            <a href="edit-route.php?route_public_id=<?= urlencode($route->getPublicId()) ?>" class="btn btn-sm btn-secondary">
+                                                <i class="bi bi-pencil-square me-1"></i><?= htmlspecialchars(t('admin_dashboard.edit_route'), ENT_QUOTES, 'UTF-8') ?>
+                                            </a>
+                                            <button class="btn btn-sm btn-secondary btn-share text-white"
+                                                data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                                data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                                <i class="bi bi-qr-code me-1"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
+                                                <button class="btn btn-sm btn-info btn-copy-route"
+                                                    data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                                    data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                                <i class="bi bi-files me-1"></i><?= htmlspecialchars(t('admin_dashboard.copy_route'), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
+                                                <a href="testGame.php?route=<?= urlencode($route->getPublicId()) ?>" class="btn btn-sm btn-dark">
+                                                <i class="bi bi-joystick me-1"></i><?= htmlspecialchars(t('admin_dashboard.test_route'), ENT_QUOTES, 'UTF-8') ?>
+                                            </a>
+                                            <form action="../../actions/delete-route.php" method="POST" class="m-0 js-delete-route-form">
+                                                <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash me-1"></i><?= htmlspecialchars(t('admin_dashboard.delete_route'), ENT_QUOTES, 'UTF-8') ?>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <!-- Mobile: collapsed dropdown -->
+                                        <div class="d-md-none">
+                                            <div class="dropdown">
+                                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                    <span class="visually-hidden"><?= htmlspecialchars(t('admin_dashboard.table_actions'), ENT_QUOTES, 'UTF-8') ?></span>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li>
+                                                        <form action="../../actions/toggle_publish.php" method="POST" class="m-0">
+                                                            <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
+                                                            <?php if ($route->getIsPublished()): ?>
+                                                                <button type="submit" class="dropdown-item text-warning">
+                                                                    <i class="bi bi-eye-slash me-2"></i><?= htmlspecialchars(t('admin_dashboard.make_private'), ENT_QUOTES, 'UTF-8') ?>
+                                                                </button>
+                                                            <?php else: ?>
+                                                                <button type="submit" class="dropdown-item text-success">
+                                                                    <i class="bi bi-eye me-2"></i><?= htmlspecialchars(t('admin_dashboard.publish'), ENT_QUOTES, 'UTF-8') ?>
+                                                                </button>
+                                                            <?php endif; ?>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="edit-route.php?route_public_id=<?= urlencode($route->getPublicId()) ?>">
+                                                            <i class="bi bi-pencil-square me-2"></i><?= htmlspecialchars(t('admin_dashboard.edit_route'), ENT_QUOTES, 'UTF-8') ?>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <button class="dropdown-item btn-share"
+                                                                data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                                                data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                                            <i class="bi bi-qr-code me-2"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button class="dropdown-item btn-copy-route"
+                                                                data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                                                data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                                            <i class="bi bi-files me-2"></i><?= htmlspecialchars(t('admin_dashboard.copy_route'), ENT_QUOTES, 'UTF-8') ?>
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="testGame.php?route=<?= urlencode($route->getPublicId()) ?>">
+                                                            <i class="bi bi-joystick me-2"></i><?= htmlspecialchars(t('admin_dashboard.test_route'), ENT_QUOTES, 'UTF-8') ?>
+                                                        </a>
+                                                    </li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li>
+                                                        <form action="../../actions/delete-route.php" method="POST" class="m-0 js-delete-route-form">
+                                                            <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i class="bi bi-trash me-2"></i><?= htmlspecialchars(t('admin_dashboard.delete_route'), ENT_QUOTES, 'UTF-8') ?>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -217,7 +256,7 @@ require_once '../../includes/_admin_nav.php';
                         <i class="bi bi-clipboard"></i>
                     </button>
                 </div>
-                <img id="shareQr" src="" alt="QR-koodi" class="border rounded p-2" style="width:200px;height:200px;">
+                <img id="shareQr" src="" alt="QR-koodi" class="border rounded p-2 admin-share-qr">
                 <p class="text-muted small mt-2"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('admin_dashboard.qr_info'), ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
@@ -225,11 +264,43 @@ require_once '../../includes/_admin_nav.php';
 </div>
 
 <script>
-    const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
+    const shareModalElement = document.getElementById('shareModal');
+    const shareModal = new bootstrap.Modal(shareModalElement);
     const copyRouteModalElement = document.getElementById('copyRouteModal');
     const copyRouteModal = new bootstrap.Modal(copyRouteModalElement);
+
+    // Blur any focused element inside a modal before it hides to prevent the
+    // aria-hidden-on-focused-descendant warning (Bootstrap 5 known issue).
+    [shareModalElement, copyRouteModalElement].forEach(function(el) {
+        el.addEventListener('hide.bs.modal', function() {
+            if (el.contains(document.activeElement)) {
+                document.activeElement.blur();
+            }
+        });
+    });
     const gameBaseUrl = <?= json_encode($game_base_url) ?>;
     const copyNamePrefix = 'Copy of ';
+    const deleteRouteConfirmation = <?= $delete_route_confirmation ?>;
+
+    // Initialise tooltips on status badges
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+        new bootstrap.Tooltip(el, { trigger: 'hover focus click' });
+    });
+
+    // Mobile dropdowns: use fixed positioning so they overflow the table-responsive container
+    document.querySelectorAll('.d-md-none [data-bs-toggle="dropdown"]').forEach(function(el) {
+        new bootstrap.Dropdown(el, {
+            popperConfig: { strategy: 'fixed' }
+        });
+    });
+
+    document.querySelectorAll('.js-delete-route-form').forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!confirm(deleteRouteConfirmation)) {
+                event.preventDefault();
+            }
+        });
+    });
 
     document.querySelectorAll('.btn-copy-route').forEach(function(btn) {
         btn.addEventListener('click', function() {

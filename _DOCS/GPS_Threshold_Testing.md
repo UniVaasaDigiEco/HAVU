@@ -38,19 +38,19 @@
 - [X] Open the game for the edited route in a browser with DevTools console open
 - [X] Run: `console.log(routeData.gps_threshold)` → expect `35`
 - [X] Run: `console.log(ROUTE_GPS_THRESHOLD)` → expect `35`
-- [ ] Create a second route with threshold **15**, open its game page, verify `ROUTE_GPS_THRESHOLD` = `15`
+- [X] Create a second route with threshold **15**, open its game page, verify `ROUTE_GPS_THRESHOLD` = `15`
 
 ### 6. Game page – Proximity logic uses per-route threshold
 
-- [ ] With `REQUIRE_GPS_PROXIMITY = true` (default), simulate a GPS position far from a node via DevTools: `checkProximity(0, 0)` → nodes should **not** be in proximity
-- [ ] Simulate a position right on the node coordinates: `checkProximity(<node_lat>, <node_lng>)` → mark-visited button should appear
+- [X] With `REQUIRE_GPS_PROXIMITY = true` (default), simulate a GPS position far from a node via DevTools: `checkProximity(0, 0)` → nodes should **not** be in proximity
+- [X] Simulate a position right on the node coordinates: `checkProximity(<node_lat>, <node_lng>)` → mark-visited button should appear
 
 ### 7. Admin test game page
 
-- [ ] Open testGame.php for a route with threshold **15**
-- [ ] Console: `ROUTE_GPS_THRESHOLD` → expect `15`
-- [ ] Toggle the GPS restriction off → checkpoint should be markable from anywhere
-- [ ] Toggle back on → proximity gate re-engaged
+- [X] Open testGame.php for a route with threshold **15**
+- [X] Console: `ROUTE_GPS_THRESHOLD` → expect `15`
+- [X] Toggle the GPS restriction off → checkpoint should be markable from anywhere
+- [X] Toggle back on → proximity gate re-engaged
 
 ### 8. Legacy route (pre-existing data)
 
@@ -61,4 +61,8 @@
 
 - [ ] Switch locale to **EN** → GPS threshold label and help text visible in the form
 - [ ] Switch to **SV** → same
-- [ ] Switch to **FI** → sameContinued with Autopilot: Task not yet completeProvided a 9-section manual testing checklist covering create/edit form UI behavior, server-side validation edge cases, DB persistence verification, per-route threshold consumption in game.php and testGame.php, legacy route fallback, and locale switching.
+- [ ] Switch to **FI** → same
+
+Continued with Autopilot: Task not yet complete
+
+Provided a 9-section manual testing checklist covering create/edit form UI behavior, server-side validation edge cases, DB persistence verification, per-route threshold consumption in game.php and testGame.php, legacy route fallback, and locale switching.

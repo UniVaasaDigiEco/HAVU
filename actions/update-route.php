@@ -15,6 +15,14 @@ function routeFormException(string $key, array $params = []): Exception
     return new Exception(json_encode(['key' => $key, 'params' => $params], JSON_THROW_ON_ERROR));
 }
 
+function isWithinFinlandBounds(float $latitude, float $longitude): bool
+{
+    return $latitude >= FINLAND_MIN_LAT
+        && $latitude <= FINLAND_MAX_LAT
+        && $longitude >= FINLAND_MIN_LNG
+        && $longitude <= FINLAND_MAX_LNG;
+}
+
 if (!empty($route_public_id)) {
     $return_url .= '?route_public_id=' . urlencode($route_public_id);
 }
@@ -149,6 +157,10 @@ try {
 
             if ($node_latitude < -90 || $node_latitude > 90 || $node_longitude < -180 || $node_longitude > 180) {
                 throw routeFormException('actions.route_form.invalid_coordinates', ['index' => $index]);
+            }
+
+            if (!isWithinFinlandBounds($node_latitude, $node_longitude)) {
+                throw routeFormException('actions.route_form.coordinates_outside_finland', ['index' => $index]);
             }
 
             $node_public_id = Uuid::uuid4()->toString();

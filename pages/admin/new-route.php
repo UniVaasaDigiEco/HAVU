@@ -119,7 +119,7 @@ require_once '../../includes/_admin_nav.php';
                                     <input type="range" class="form-range" id="gps_threshold_slider" min="15" max="50" value="25">
                                 </div>
                                 <div class="col-auto">
-                                    <div class="input-group" style="width:100px">
+                                    <div class="input-group route-editor-threshold-input">
                                         <input type="number" class="form-control" id="gps_threshold" name="gps_threshold" min="15" max="50" value="25" required>
                                         <span class="input-group-text">m</span>
                                     </div>
@@ -153,7 +153,7 @@ require_once '../../includes/_admin_nav.php';
                     <div class="card-body p-0">
                         <div id="nodesList" class="list-group list-group-flush">
                             <div class="node-list-empty">
-                                <i class="bi bi-cursor-fill" style="font-size: 3rem;"></i>
+                                <i class="bi bi-cursor-fill route-editor-empty-icon"></i>
                                 <p class="mt-3"><?= htmlspecialchars(t('route_editor.nodes_empty'), ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                         </div>
@@ -178,7 +178,7 @@ require_once '../../includes/_admin_nav.php';
                                     <?= htmlspecialchars(t('common.search'), ENT_QUOTES, 'UTF-8') ?>
                                 </button>
                             </div>
-                            <div id="searchResults" class="list-group mt-1" style="display:none; position:absolute; z-index:1000; max-width:600px;"></div>
+                            <div id="searchResults" class="list-group mt-1 route-editor-search-results"></div>
                         </div>
                         <div id="map"></div>
                         <div class="mt-2 text-muted small">
@@ -188,9 +188,9 @@ require_once '../../includes/_admin_nav.php';
                 </div>
 
                 <!-- Node Editor -->
-                <div id="nodeEditor" class="card shadow-sm" style="display: none; position: relative;">
-                    <div id="uploadOverlay" style="display:none; position:absolute; inset:0; z-index:10; background:rgba(255,255,255,0.88); border-radius:0.375rem; align-items:center; justify-content:center; flex-direction:column;">
-                            <div class="spinner-border text-primary" style="width:2.5rem;height:2.5rem;" role="status">
+                <div id="nodeEditor" class="card shadow-sm route-editor-node-editor">
+                    <div id="uploadOverlay" class="route-editor-upload-overlay">
+                            <div class="spinner-border text-primary route-editor-upload-spinner" role="status">
                             <span class="visually-hidden"><?= htmlspecialchars(t('common.loading'), ENT_QUOTES, 'UTF-8') ?></span>
                         </div>
                         <p class="mt-3 mb-0 fw-semibold text-primary"><?= htmlspecialchars(t('common.loading_file'), ENT_QUOTES, 'UTF-8') ?></p>
@@ -228,14 +228,14 @@ require_once '../../includes/_admin_nav.php';
                         </div>
 
                         <!-- Challenge panel -->
-                        <div class="mb-3 p-3 rounded" style="border: 2px solid #ffc107;">
+                        <div class="mb-3 p-3 rounded route-editor-challenge-panel">
                             <label class="form-label fw-semibold mb-2"><?= htmlspecialchars(t('route_editor.challenge'), ENT_QUOTES, 'UTF-8') ?></label>
                             <div class="d-flex gap-2 mb-3 flex-wrap">
                                 <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')"><?= htmlspecialchars(t('route_editor.challenge_none'), ENT_QUOTES, 'UTF-8') ?></button>
                                 <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')"><?= htmlspecialchars(t('route_editor.challenge_multiple_choice'), ENT_QUOTES, 'UTF-8') ?></button>
                                 <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')"><?= htmlspecialchars(t('route_editor.challenge_text'), ENT_QUOTES, 'UTF-8') ?></button>
                             </div>
-                            <div id="challengeMCFields" style="display:none;">
+                            <div id="challengeMCFields" class="route-editor-challenge-fields">
                                 <div class="mb-2">
                                     <label class="form-label form-label-sm"><?= htmlspecialchars(t('route_editor.challenge_question'), ENT_QUOTES, 'UTF-8') ?></label>
                                     <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="<?= htmlspecialchars(t('route_editor.challenge_question_placeholder'), ENT_QUOTES, 'UTF-8') ?>">
@@ -243,7 +243,7 @@ require_once '../../includes/_admin_nav.php';
                                 <div id="challengeOptions"></div>
                                 <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()"><?= htmlspecialchars(t('route_editor.challenge_add_option'), ENT_QUOTES, 'UTF-8') ?></button>
                             </div>
-                            <div id="challengeTextFields" style="display:none;">
+                            <div id="challengeTextFields" class="route-editor-challenge-fields">
                                 <div class="mb-2">
                                     <label class="form-label form-label-sm"><?= htmlspecialchars(t('route_editor.challenge_question'), ENT_QUOTES, 'UTF-8') ?></label>
                                     <input type="text" class="form-control form-control-sm" id="challengeTextQuestion" placeholder="<?= htmlspecialchars(t('route_editor.challenge_question_placeholder'), ENT_QUOTES, 'UTF-8') ?>">
@@ -307,6 +307,12 @@ require_once '../../includes/_admin_nav.php';
     const commonTranslations = translations.common;
     const routeEditorTranslations = translations.route_editor;
     const activeLocale = <?= json_encode(current_locale(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+    const FINLAND_BOUNDS = {
+        minLat: <?= json_encode(FINLAND_MIN_LAT, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
+        maxLat: <?= json_encode(FINLAND_MAX_LAT, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
+        minLng: <?= json_encode(FINLAND_MIN_LNG, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
+        maxLng: <?= json_encode(FINLAND_MAX_LNG, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>
+    };
     const ALLOWED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     const ALLOWED_IMAGE_FORMAT_LABELS = 'JPG, PNG, GIF, WEBP';
     window.challengePanelTranslations = routeEditorTranslations;
@@ -354,7 +360,7 @@ require_once '../../includes/_admin_nav.php';
                         $('#node_content').summernote('focus');
                         $('#node_content').summernote('insertImage', response.url);
                     } else {
-                        const videoHtml = `<video controls style="max-width:100%"><source src="${response.url}" type="${file.type}"></video><p></p>`;
+                        const videoHtml = `<video controls class="route-editor-embedded-video"><source src="${response.url}" type="${file.type}"></video><p></p>`;
                         $('#node_content').summernote('pasteHTML', videoHtml);
                     }
                 } else {
@@ -452,12 +458,30 @@ require_once '../../includes/_admin_nav.php';
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(pos) {
-                    map.setView([pos.coords.latitude, pos.coords.longitude], <?= DEFAULT_ZOOM ?>);
+                    if (isWithinFinland(pos.coords.latitude, pos.coords.longitude)) {
+                        map.setView([pos.coords.latitude, pos.coords.longitude], <?= DEFAULT_ZOOM ?>);
+                    }
                 },
                 function() { /* denied or unavailable — stay on default coordinates */ },
                 { timeout: 8000, maximumAge: 60000 }
             );
         }
+    }
+
+    function isWithinFinland(lat, lng) {
+        const latitude = Number(lat);
+        const longitude = Number(lng);
+
+        return Number.isFinite(latitude)
+            && Number.isFinite(longitude)
+            && latitude >= FINLAND_BOUNDS.minLat
+            && latitude <= FINLAND_BOUNDS.maxLat
+            && longitude >= FINLAND_BOUNDS.minLng
+            && longitude <= FINLAND_BOUNDS.maxLng;
+    }
+
+    function showFinlandOnlyAlert() {
+        alert(routeEditorTranslations.finland_only_coordinates);
     }
 
     // Location search via Nominatim
@@ -509,6 +533,11 @@ require_once '../../includes/_admin_nav.php';
             const lat = parseFloat(btn.dataset.lat);
             const lon = parseFloat(btn.dataset.lon);
 
+            if (!isWithinFinland(lat, lon)) {
+                showFinlandOnlyAlert();
+                return;
+            }
+
             map.setView([lat, lon], 16);
 
             if (searchMarker) map.removeLayer(searchMarker);
@@ -534,6 +563,11 @@ require_once '../../includes/_admin_nav.php';
 
     // Add a new node
     function addNode(lat, lng, title = '', content = '', challenge_data = null) {
+        if (!isWithinFinland(lat, lng)) {
+            showFinlandOnlyAlert();
+            return false;
+        }
+
         const nodeIndex = nodes.length;
         const nodeNumber = nodeIndex + 1;
 
@@ -557,9 +591,17 @@ require_once '../../includes/_admin_nav.php';
 
         marker.on('dragend', function(e) {
             const newPos = e.target.getLatLng();
+
+            if (!isWithinFinland(newPos.lat, newPos.lng)) {
+                e.target.setLatLng([nodes[marker.nodeIndex].lat, nodes[marker.nodeIndex].lng]);
+                showFinlandOnlyAlert();
+                return;
+            }
+
             nodes[marker.nodeIndex].lat = newPos.lat;
             nodes[marker.nodeIndex].lng = newPos.lng;
             updateNodesList();
+            updatePolyline();
         });
 
         marker.on('click', function() {
@@ -574,6 +616,8 @@ require_once '../../includes/_admin_nav.php';
         if (!title) {
             editNode(nodeIndex);
         }
+
+        return true;
     }
 
     function buildPopupContent(node) {
@@ -585,7 +629,7 @@ require_once '../../includes/_admin_nav.php';
     function createNumberedIcon(number) {
         return L.divIcon({
             className: 'custom-div-icon',
-            html: `<div style="background-color: #0d6efd; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${number}</div>`,
+            html: `<div class="route-editor-marker-badge">${number}</div>`,
             iconSize: [30, 30],
             iconAnchor: [15, 15]
         });
@@ -626,7 +670,7 @@ require_once '../../includes/_admin_nav.php';
         if (nodes.length === 0) {
             nodesList.innerHTML = `
                 <div class="node-list-empty">
-                    <i class="bi bi-cursor-fill" style="font-size: 3rem;"></i>
+                    <i class="bi bi-cursor-fill route-editor-empty-icon"></i>
                     <p class="mt-3">${routeEditorTranslations.nodes_empty}</p>
                 </div>
             `;
@@ -773,6 +817,12 @@ require_once '../../includes/_admin_nav.php';
         if (nodes.length === 0) {
             e.preventDefault();
             alert(routeEditorTranslations.create_need_node);
+            return false;
+        }
+
+        if (nodes.some(node => !isWithinFinland(node.lat, node.lng))) {
+            e.preventDefault();
+            showFinlandOnlyAlert();
             return false;
         }
 

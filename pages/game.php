@@ -30,7 +30,7 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 
 // Content Security Policy - most powerful XSS protection
 // Defines where resources can be loaded from
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://recaptcha.google.com;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://www.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.thinglink.com https://thinglink.com https://www.google.com https://recaptcha.google.com;");
 
 // Hide PHP version for security through obscurity
 header_remove('X-Powered-By');
@@ -903,10 +903,12 @@ if (!$route) {
         <div id="distance-info"></div>
         <div class="info-panel-footer mt-3 pt-2 border-top">
             <div class="info-panel-actions">
-                <a href="#" class="btn btn-sm btn-outline-secondary"
-                   onclick="hideInfoPanel(); openFeedbackModal(); return false;">
-                    <i class="bi bi-chat-dots me-1"></i><?= htmlspecialchars(t('game.feedback'), ENT_QUOTES, 'UTF-8') ?>
-                </a>
+                <?php if ($is_logged_in): ?>
+                    <a href="#" class="btn btn-sm btn-outline-secondary"
+                       onclick="hideInfoPanel(); openFeedbackModal(); return false;">
+                        <i class="bi bi-chat-dots me-1"></i><?= htmlspecialchars(t('game.feedback'), ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                <?php endif; ?>
                 <?php
                 $language_switcher_mode = 'inline';
                 require_once '../includes/_language_switcher.php';
@@ -944,9 +946,11 @@ if (!$route) {
 
     <!-- Map Container -->
     <div id="map"></div>
-<?php
-$feedback_widget_no_float = true;
-require_once '../includes/_feedback_widget.php';
-?>
+    <?php
+    if ($is_logged_in) {
+        $feedback_widget_no_float = true;
+        require_once '../includes/_feedback_widget.php';
+    }
+    ?>
 </body>
 </html>

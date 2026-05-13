@@ -52,7 +52,7 @@ $delete_route_confirmation = json_encode(
 $admin_nav_current = 'delete-route';
 require_once '../../includes/_admin_nav.php';
 ?>
-<div class="container-fluid py-4" style="margin-bottom: 101px;">
+<div class="container-fluid py-4 admin-delete-route-layout">
     <div class="row h-100 align-items-center justify-content-center">
         <div class="col-lg-8 col-xl-7">
             <div class="admin-page-hero p-4 mb-4">
@@ -67,7 +67,7 @@ require_once '../../includes/_admin_nav.php';
                 </div>
             </div>
             <div class="p-5 bg-white rounded-3 shadow text-center">
-                <i class="bi bi-trash-fill text-danger" style="font-size: 4rem;"></i>
+                <i class="bi bi-trash-fill text-danger admin-delete-route-icon"></i>
                 <?= Message::displayFlashMessages() ?>
                 <form action="../../actions/delete-route.php" method="post" class="mt-4" onsubmit='return confirm(<?= $delete_route_confirmation ?>)'>
                     <div class="mb-3">

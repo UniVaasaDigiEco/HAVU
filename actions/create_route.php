@@ -14,6 +14,14 @@ function routeFormException(string $key, array $params = []): Exception
     return new Exception(json_encode(['key' => $key, 'params' => $params], JSON_THROW_ON_ERROR));
 }
 
+function isWithinFinlandBounds(float $latitude, float $longitude): bool
+{
+    return $latitude >= FINLAND_MIN_LAT
+        && $latitude <= FINLAND_MAX_LAT
+        && $longitude >= FINLAND_MIN_LNG
+        && $longitude <= FINLAND_MAX_LNG;
+}
+
 try {
     // Validate required POST data
     if (empty($_POST['route_title']) || empty($_POST['route_description']) || empty($_POST['publication_date']) || empty($_POST['nodes_data'])) {
@@ -107,6 +115,10 @@ try {
             // Validate coordinates
             if ($node_latitude < -90 || $node_latitude > 90 || $node_longitude < -180 || $node_longitude > 180) {
                 throw routeFormException('actions.route_form.invalid_coordinates', ['index' => $index]);
+            }
+
+            if (!isWithinFinlandBounds($node_latitude, $node_longitude)) {
+                throw routeFormException('actions.route_form.coordinates_outside_finland', ['index' => $index]);
             }
 
             $node_stmt->bind_param('sissssdds', $node_public_id, $is_published, $formatted_publication_date, $created_by, $node_title, $node_content, $node_latitude, $node_longitude, $node_challenge_data);
