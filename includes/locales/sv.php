@@ -173,6 +173,7 @@ return [
         'completion_date' => 'Datum',
         'select_route' => 'Välj rutt',
         'feedback' => 'Feedback',
+        'route_line_toggle_label' => 'Visa ruttlinje',
         'testing_gps_toggle_label' => 'GPS-begränsning i testläge',
         'testing_gps_toggle_enabled' => 'På: en kontrollpunkt kan markeras som besökt först när du är tillräckligt nära.',
         'testing_gps_toggle_disabled' => 'Av: en kontrollpunkt kan markeras som besökt varifrån som helst.',
@@ -300,6 +301,7 @@ return [
         'confirm_delete_route' => 'Är du säker på att du vill ta bort den här rutten? Åtgärden kan inte ångras.',
         'gps_threshold' => 'GPS-närhetsavstånd',
         'gps_threshold_help' => 'Avstånd i meter från en kontrollpunkt där en spelare kan markera den som besökt eller svara på en utmaning. Tillåtet intervall: 15–50 m.',
+        'route_length_estimate' => 'Ruttens längd (rak linje)',
     ],
     'admin_new_route' => [
         'title' => 'HAVU-stigspelet - Skapa rutt',

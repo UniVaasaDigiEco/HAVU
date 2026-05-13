@@ -862,8 +862,8 @@ if (!$route) {
         </div>
     </div>
 
-    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()">
-        📍 <?php echo htmlspecialchars($route->getTitle()); ?> <span class="ms-1">⬇️</span>
+    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()" aria-label="Asetukset ja tila" title="Asetukset ja tila">
+        <i class="bi bi-gear-fill" aria-hidden="true"></i>
     </button>
 
     <div class="info-panel" id="info-panel">

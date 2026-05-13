@@ -173,6 +173,7 @@ return [
         'completion_date' => 'Suorituspäivä',
         'select_route' => 'Valitse reitti',
         'feedback' => 'Palaute',
+        'route_line_toggle_label' => 'Näytä reittiviiva',
         'testing_gps_toggle_label' => 'GPS-rajoitus testauksessa',
         'testing_gps_toggle_enabled' => 'Päällä: rastin voi merkitä käydyksi vasta, kun olet riittävän lähellä.',
         'testing_gps_toggle_disabled' => 'Pois päältä: rastin voi merkitä käydyksi mistä tahansa.',
@@ -300,6 +301,7 @@ return [
         'confirm_delete_route' => 'Oletko varma, että haluat poistaa tämän reitin? Tätä toimintoa ei voi peruuttaa.',
         'gps_threshold' => 'GPS-läheisyyskynnys',
         'gps_threshold_help' => 'Etäisyys metreinä rastista, jolta pelaaja voi merkitä rastin käydyksi tai vastata haasteeseen. Sallittu väli: 15–50 m.',
+        'route_length_estimate' => 'Reitin pituus (suora)',
     ],
     'admin_new_route' => [
         'title' => 'HAVU-polkupeli - Luo uusi reitti',

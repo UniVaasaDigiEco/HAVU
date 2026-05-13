@@ -173,6 +173,7 @@ return [
         'completion_date' => 'Completion date',
         'select_route' => 'Choose route',
         'feedback' => 'Feedback',
+        'route_line_toggle_label' => 'Show route line',
         'testing_gps_toggle_label' => 'GPS restriction in testing',
         'testing_gps_toggle_enabled' => 'On: a checkpoint can only be marked visited when you are close enough.',
         'testing_gps_toggle_disabled' => 'Off: a checkpoint can be marked visited from anywhere.',
@@ -300,6 +301,7 @@ return [
         'confirm_delete_route' => 'Are you sure you want to delete this route? This action cannot be undone.',
         'gps_threshold' => 'GPS proximity threshold',
         'gps_threshold_help' => 'Distance in meters from a checkpoint where a player can mark it visited or answer a challenge. Allowed range: 15–50 m.',
+        'route_length_estimate' => 'Route length (straight line)',
     ],
     'admin_new_route' => [
         'title' => 'HAVU-trailgame - Create route',

@@ -184,6 +184,7 @@ if (!$route) {
         let userMarker = null;
         let userPosition = null;
         let routeLine = null;
+        let routeLineVisible = true;
         let activeNodeId = null;
 
         // Custom icons
@@ -247,6 +248,7 @@ if (!$route) {
             ).addTo(map);
 
             drawRouteLine();
+            initializeRouteLineToggle();
             initializeMarkers();
             syncMarkerPresentationBindings();
             updateProgressBarHeightVariable();
@@ -275,6 +277,38 @@ if (!$route) {
                 opacity: 0.6,
                 dashArray: '10, 10'
             }).addTo(map);
+
+            if (!routeLineVisible) {
+                map.removeLayer(routeLine);
+            }
+        }
+
+        function setRouteLineVisibility(visible) {
+            routeLineVisible = visible;
+
+            if (!routeLine) {
+                return;
+            }
+
+            if (visible) {
+                if (!map.hasLayer(routeLine)) {
+                    map.addLayer(routeLine);
+                }
+            } else if (map.hasLayer(routeLine)) {
+                map.removeLayer(routeLine);
+            }
+        }
+
+        function initializeRouteLineToggle() {
+            const toggle = document.getElementById('route-line-toggle');
+            if (!toggle) {
+                return;
+            }
+
+            toggle.checked = routeLineVisible;
+            toggle.addEventListener('change', function () {
+                setRouteLineVisibility(this.checked);
+            });
         }
 
         // Escape HTML for safe insertion
@@ -885,8 +919,8 @@ if (!$route) {
     </div>
 
     <!-- Info Panel Toggle Button -->
-    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()">
-        📍 <?php echo htmlspecialchars($route->getTitle()); ?> <span class="ms-1">⬇️</span>
+    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()" aria-label="Asetukset ja tila" title="Asetukset ja tila">
+        <i class="bi bi-gear-fill" aria-hidden="true"></i>
     </button>
 
     <!-- Info Panel -->
@@ -902,6 +936,12 @@ if (!$route) {
         </div>
         <div id="distance-info"></div>
         <div class="info-panel-footer mt-3 pt-2 border-top">
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" role="switch" id="route-line-toggle" checked>
+                <label class="form-check-label" for="route-line-toggle">
+                    <?= htmlspecialchars(t('game.route_line_toggle_label'), ENT_QUOTES, 'UTF-8') ?>
+                </label>
+            </div>
             <div class="info-panel-actions">
                 <?php if ($is_logged_in): ?>
                     <a href="#" class="btn btn-sm btn-outline-secondary"

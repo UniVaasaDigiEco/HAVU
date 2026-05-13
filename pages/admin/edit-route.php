@@ -230,6 +230,10 @@ require_once '../../includes/_admin_nav.php';
                         <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i><?= htmlspecialchars(t('common.nodes'), ENT_QUOTES, 'UTF-8') ?> (<span id="nodeCount">0</span>)</h5>
                     </div>
                     <div class="card-body p-0">
+                        <div class="px-3 py-2 border-bottom bg-light-subtle small text-muted">
+                            <i class="bi bi-signpost-2 me-1"></i><?= htmlspecialchars(t('route_editor.route_length_estimate'), ENT_QUOTES, 'UTF-8') ?>:
+                            <strong id="routeLengthValue">0 m</strong>
+                        </div>
                         <div id="nodesList" class="list-group list-group-flush">
                             <div class="node-list-empty">
                                 <i class="bi bi-cursor-fill route-editor-empty-icon"></i>
@@ -629,6 +633,54 @@ require_once '../../includes/_admin_nav.php';
         }
     }
 
+    function haversineDistanceMeters(lat1, lng1, lat2, lng2) {
+        const toRadians = (value) => value * (Math.PI / 180);
+        const earthRadiusMeters = 6371000;
+        const dLat = toRadians(lat2 - lat1);
+        const dLng = toRadians(lng2 - lng1);
+        const a = Math.sin(dLat / 2) ** 2
+            + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLng / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadiusMeters * c;
+    }
+
+    function calculateRouteLengthMeters() {
+        if (nodes.length < 2) {
+            return 0;
+        }
+
+        let totalMeters = 0;
+        for (let i = 1; i < nodes.length; i += 1) {
+            const previousNode = nodes[i - 1];
+            const currentNode = nodes[i];
+            totalMeters += haversineDistanceMeters(
+                Number(previousNode.lat),
+                Number(previousNode.lng),
+                Number(currentNode.lat),
+                Number(currentNode.lng)
+            );
+        }
+
+        return totalMeters;
+    }
+
+    function formatRouteLength(meters) {
+        if (meters >= 1000) {
+            return `${(meters / 1000).toFixed(2)} km`;
+        }
+
+        return `${Math.round(meters)} m`;
+    }
+
+    function updateRouteLengthDisplay() {
+        const routeLengthValue = document.getElementById('routeLengthValue');
+        if (!routeLengthValue) {
+            return;
+        }
+
+        routeLengthValue.textContent = formatRouteLength(calculateRouteLengthMeters());
+    }
+
     function stripHtml(html) {
         const div = document.createElement('div');
         div.innerHTML = html;
@@ -640,6 +692,7 @@ require_once '../../includes/_admin_nav.php';
         const nodeCount = document.getElementById('nodeCount');
 
         nodeCount.textContent = nodes.length;
+        updateRouteLengthDisplay();
 
         if (nodes.length === 0) {
             nodesList.innerHTML = `
