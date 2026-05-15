@@ -1,0 +1,6 @@
+# Protect the system-admin area with HTTP Basic Authentication.
+# Create the .htpasswd file outside the web root and update AuthUserFile to the absolute path on your server.
+AuthType Basic
+AuthName "HAVU System Administration"
+AuthUserFile "/home/jansoftw/.htpasswds/havu/.htpasswd"
+Require valid-user
