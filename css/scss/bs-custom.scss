@@ -14,7 +14,8 @@
 
 // Import admin overrides after Bootstrap so navbar states and other admin styles
 // win against Bootstrap's component defaults.
-@import "components/admin";
+@import "pages/admin-dashboard";
+@import "pages/player-dashboard";
 @import "components/footer";
 
 #logoContainer {

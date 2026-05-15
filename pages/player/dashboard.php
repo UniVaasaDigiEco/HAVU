@@ -130,12 +130,17 @@ try {
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
-<body class="has-site-footer">
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+<body class="player-dashboard has-site-footer">
+<nav class="navbar navbar-expand-lg admin-navbar" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="../../index.php">
-            <img src="../../images/havu_logo.png" alt="HAVU" height="30" class="me-2">
-            <?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?>
+        <a class="navbar-brand admin-navbar__brand" href="dashboard.php">
+            <span class="admin-navbar__badge">
+                <img src="../../images/havu_logo_map.svg" alt="HAVU" class="admin-navbar__badge-image">
+            </span>
+            <span>
+                <?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?>
+                <small class="d-block"><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?></small>
+            </span>
         </a>
         <div class="ms-auto d-flex align-items-center gap-2">
             <a href="../routes.php" class="btn btn-sm btn-outline-light">
@@ -157,151 +162,166 @@ try {
     </div>
 </nav>
 
-<div class="container py-5">
+<div class="container-fluid pt-4">
     <?php echo Message::displayFlashMessages(); ?>
-
-    <!-- Profile header -->
-    <div class="d-flex align-items-center gap-3 mb-5">
-        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
-             style="width:56px;height:56px;font-size:1.5rem;">
-            <i class="bi bi-person-fill"></i>
-        </div>
-        <div>
-            <h2 class="mb-0"><?= htmlspecialchars($user->getFullName(), ENT_QUOTES, 'UTF-8') ?></h2>
-            <div class="mt-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#accountSettingsModal">
-                    <i class="bi bi-person-gear me-1"></i><?= htmlspecialchars(t('player_dashboard.account_settings_button'), ENT_QUOTES, 'UTF-8') ?>
-                </button>
+    <div id="dashboard-content" class="player-page-content">
+        <div class="admin-feature-panel p-4 bg-secondary-subtle rounded-3 shadow">
+            <div>
+                <h3><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?></h3>
             </div>
-            <span class="text-muted small"><?= htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8') ?></span>
-        </div>
-        <div class="ms-auto text-end">
-            <span class="badge bg-success fs-6 px-3 py-2">
-                <i class="bi bi-check-circle-fill me-1"></i>
-                <?= htmlspecialchars(t('player_dashboard.completed_summary', ['count' => count($completed_routes)]), ENT_QUOTES, 'UTF-8') ?>
-            </span>
+            <!-- Profile header -->
+            <div class="d-flex bg-primary-subtle rounded-3 p-3 align-items-center gap-3 mb-3">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                    style="width:56px;height:56px;font-size:1.5rem;">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div>
+                    <h2 class="mb-0"><?= htmlspecialchars($user->getFullName(), ENT_QUOTES, 'UTF-8') ?></h2>
+                    <div class="mt-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#accountSettingsModal">
+                            <i class="bi bi-person-gear me-1"></i><?= htmlspecialchars(t('player_dashboard.account_settings_button'), ENT_QUOTES, 'UTF-8') ?>
+                        </button>
+                    </div>
+                    <span class="text-muted small"><?= htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8') ?></span>
+                </div>
+                <div class="ms-auto text-end">
+                    <span class="badge bg-success fs-6 px-3 py-2">
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        <?= htmlspecialchars(t('player_dashboard.completed_summary', ['count' => count($completed_routes)]), ENT_QUOTES, 'UTF-8') ?>
+                    </span>
+                </div>
+            </div>
+            <!-- Instructions -->
+            <div class="bg-primary-subtle rounded-3 p-3 mb-3">
+                <h4><i class="bi bi-book me-2"></i><?= htmlspecialchars(t('player_dashboard.instructions'), ENT_QUOTES, 'UTF-8') ?></h4>
+                <p>
+                    <a href="../files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('player_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                    <br>
+                    <a href="../files/HAVU_pelaajanopas.pdf"><?= htmlspecialchars(t('player_dashboard.full_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                </p>
+            </div>
+
+            <!-- In progress -->
+            <?php if (!empty($in_progress)): ?>
+                <div class="bg-primary-subtle rounded-3 p-3 mb-3">
+                    <h4 class="mb-3"><i class="bi bi-hourglass-split text-warning me-2"></i><?= htmlspecialchars(t('common.in_progress_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                        <?php foreach ($in_progress as $r):
+                            $pct = $r['node_count'] > 0 ? round($r['visited'] / $r['node_count'] * 100) : 0;
+                        ?>
+                            <div class="col">
+                                <div class="card h-100 border-warning shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
+                                        <div class="d-flex justify-content-between small text-muted mb-1">
+                                            <span><?= htmlspecialchars(t('player_dashboard.visited_nodes'), ENT_QUOTES, 'UTF-8') ?></span>
+                                            <span><?= $r['visited'] ?>/<?= $r['node_count'] ?></span>
+                                        </div>
+                                        <div class="progress mb-3" style="height: 8px;">
+                                            <div class="progress-bar bg-warning" style="width: <?= $pct ?>%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0 pb-3">
+                                        <div class="d-grid gap-2">
+                                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                            class="btn btn-warning w-100">
+                                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.continue_route'), ENT_QUOTES, 'UTF-8') ?>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                    onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                                <i class="bi bi-chat-left-text me-1"></i>
+                                                <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Completed routes -->
+            <?php if (!empty($completed_routes)): ?>
+                <div class="bg-primary-subtle rounded-3 p-3 mb-3">
+                    <h4 class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><?= htmlspecialchars(t('common.completed_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-5">
+                        <?php foreach ($completed_routes as $r): ?>
+                            <div class="col">
+                                <div class="card h-100 border-success shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar-check me-1"></i>
+                                            <?= htmlspecialchars((string)t('common.route_completed_on', ['date' => date('d.m.Y', (int)strtotime($r['completed_at'] ?? ''))]), ENT_QUOTES, 'UTF-8') ?>
+                                        </small>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0 pb-3">
+                                        <div class="d-grid gap-2">
+                                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                            class="btn btn-outline-success w-100 btn-sm">
+                                                <i class="bi bi-arrow-repeat me-1"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                    onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                                <i class="bi bi-chat-left-text me-1"></i>
+                                                <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Available routes -->
+            <div class="bg-primary-subtle rounded-3 p-3 mb-3">
+                <h4 class="mb-3"><i class="bi bi-map text-primary me-2"></i><?= htmlspecialchars(t('common.available_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
+                <?php if (empty($available_routes)): ?>
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-trophy-fill text-warning" style="font-size: 3rem;"></i>
+                        <p class="mt-3 fw-bold"><?= htmlspecialchars(t('player_dashboard.all_completed'), ENT_QUOTES, 'UTF-8') ?></p>
+                    </div>
+                <?php else: ?>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                        <?php foreach ($available_routes as $r): ?>
+                            <div class="col">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
+                                        <p class="card-text text-muted small">
+                                            <?= htmlspecialchars($r['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-geo-alt-fill text-primary me-1"></i><?= htmlspecialchars(t('common.node_count', ['count' => $r['node_count']]), ENT_QUOTES, 'UTF-8') ?>
+                                        </small>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0 pb-3">
+                                        <div class="d-grid gap-2">
+                                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                            class="btn btn-primary w-100">
+                                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                    onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                                <i class="bi bi-chat-left-text me-1"></i>
+                                                <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
-    <div class="ms-auto mb-5">
-        <h3><?= htmlspecialchars(t('player_dashboard.instructions'), ENT_QUOTES, 'UTF-8') ?></h3>
-        <a href="../files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('player_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
-        <br>
-        <a href="../files/HAVU_pelaajanopas.pdf"><?= htmlspecialchars(t('player_dashboard.full_guide'), ENT_QUOTES, 'UTF-8') ?></a>
-    </div>
-
-    <!-- In progress -->
-    <?php if (!empty($in_progress)): ?>
-        <h4 class="mb-3"><i class="bi bi-hourglass-split text-warning me-2"></i><?= htmlspecialchars(t('common.in_progress_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-5">
-            <?php foreach ($in_progress as $r):
-                $pct = $r['node_count'] > 0 ? round($r['visited'] / $r['node_count'] * 100) : 0;
-            ?>
-                <div class="col">
-                    <div class="card h-100 border-warning shadow-sm">
-                        <div class="card-body">
-                            <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
-                            <div class="d-flex justify-content-between small text-muted mb-1">
-                                <span><?= htmlspecialchars(t('player_dashboard.visited_nodes'), ENT_QUOTES, 'UTF-8') ?></span>
-                                <span><?= $r['visited'] ?>/<?= $r['node_count'] ?></span>
-                            </div>
-                            <div class="progress mb-3" style="height: 8px;">
-                                <div class="progress-bar bg-warning" style="width: <?= $pct ?>%"></div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-0 pb-3">
-                            <div class="d-grid gap-2">
-                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                   class="btn btn-warning w-100">
-                                    <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.continue_route'), ENT_QUOTES, 'UTF-8') ?>
-                                </a>
-                                <button type="button" class="btn btn-outline-secondary btn-sm"
-                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
-                                    <i class="bi bi-chat-left-text me-1"></i>
-                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Completed routes -->
-    <?php if (!empty($completed_routes)): ?>
-        <h4 class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i><?= htmlspecialchars(t('common.completed_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-5">
-            <?php foreach ($completed_routes as $r): ?>
-                <div class="col">
-                    <div class="card h-100 border-success shadow-sm">
-                        <div class="card-body">
-                            <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
-                            <div class="progress mb-2" style="height: 6px;">
-                                <div class="progress-bar bg-success" style="width: 100%"></div>
-                            </div>
-                            <small class="text-muted">
-                                <i class="bi bi-calendar-check me-1"></i>
-                                <?= htmlspecialchars((string)t('common.route_completed_on', ['date' => date('d.m.Y', (int)strtotime($r['completed_at'] ?? ''))]), ENT_QUOTES, 'UTF-8') ?>
-                            </small>
-                        </div>
-                        <div class="card-footer bg-transparent border-0 pb-3">
-                            <div class="d-grid gap-2">
-                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                   class="btn btn-outline-success w-100 btn-sm">
-                                    <i class="bi bi-arrow-repeat me-1"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
-                                </a>
-                                <button type="button" class="btn btn-outline-secondary btn-sm"
-                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
-                                    <i class="bi bi-chat-left-text me-1"></i>
-                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Available routes -->
-    <h4 class="mb-3"><i class="bi bi-map text-primary me-2"></i><?= htmlspecialchars(t('common.available_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
-    <?php if (empty($available_routes)): ?>
-        <div class="text-center py-4 text-muted">
-            <i class="bi bi-trophy-fill text-warning" style="font-size: 3rem;"></i>
-            <p class="mt-3 fw-bold"><?= htmlspecialchars(t('player_dashboard.all_completed'), ENT_QUOTES, 'UTF-8') ?></p>
-        </div>
-    <?php else: ?>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
-            <?php foreach ($available_routes as $r): ?>
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
-                            <p class="card-text text-muted small">
-                                <?= htmlspecialchars($r['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
-                            </p>
-                            <small class="text-muted">
-                                <i class="bi bi-geo-alt-fill text-primary me-1"></i><?= htmlspecialchars(t('common.node_count', ['count' => $r['node_count']]), ENT_QUOTES, 'UTF-8') ?>
-                            </small>
-                        </div>
-                        <div class="card-footer bg-transparent border-0 pb-3">
-                            <div class="d-grid gap-2">
-                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                   class="btn btn-primary w-100">
-                                    <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
-                                </a>
-                                <button type="button" class="btn btn-outline-secondary btn-sm"
-                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
-                                    <i class="bi bi-chat-left-text me-1"></i>
-                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
 </div>
 
 <?php
