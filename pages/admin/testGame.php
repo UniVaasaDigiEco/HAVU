@@ -93,6 +93,7 @@ if (!$route) {
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../node_modules/leaflet/dist/leaflet.js"></script>
     <script src="../../js/youtube-embed.js"></script>
+    <script src="../../js/message-widget.js"></script>
 
     <script>
         const PROXIMITY_THRESHOLD = <?= json_encode(PROXIMITY_THRESHOLD, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>; // global fallback (meters)
@@ -971,6 +972,12 @@ if (!$route) {
 <?php
 $feedback_widget_no_float = true;
 require_once '../../includes/_feedback_widget.php';
+?>
+<?php
+// Set up message widget with current route
+$message_route_id = $route->getId();
+$message_route_name = $route->getTitle();
+require_once '../../includes/_message-widget.php';
 ?>
 </body>
 </html>

@@ -67,6 +67,26 @@ $admin_route_menu_active = in_array($admin_nav_current, ['dashboard', 'new-route
                         <i class="bi bi-bar-chart-line-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_statistics'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link<?= $admin_nav_current === 'messages' ? ' active' : '' ?>" href="messages.php"<?= $admin_nav_current === 'messages' ? ' aria-current="page"' : '' ?>>
+                        <i class="bi bi-inbox-fill me-2"></i><?= htmlspecialchars(t('common.messages'), ENT_QUOTES, 'UTF-8') ?>
+                        <?php 
+                        try {
+                            require_once __DIR__ . '/../classes/messagecenter.class.php';
+                            require_once __DIR__ . '/../classes/tools.class.php';
+                            if (!empty($_SESSION['user_public_id'])) {
+                                $current_user_id = Tools::getUserIdByPublicId($_SESSION['user_public_id']);
+                                $unread_count = MessageCenter::getUnreadCount($current_user_id);
+                                if ($unread_count > 0) {
+                                    echo '<span class="badge bg-danger ms-2">' . (int)$unread_count . '</span>';
+                                }
+                            }
+                        } catch (Exception $e) {
+                            // Non-fatal
+                        }
+                        ?>
+                    </a>
+                </li>
             </ul>
             <div class="d-flex flex-column flex-lg-row gap-2 admin-navbar__actions">
                 <a href="../player/dashboard.php" class="btn btn-sm btn-outline-light">

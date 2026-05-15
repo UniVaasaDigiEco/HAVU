@@ -47,7 +47,7 @@ require_once '../../includes/_admin_nav.php';
 ?>
 <div class="container-fluid py-4">
     <div id="dashboard-content" class="admin-page-content">
-        <div id="route-management" class="p-4 bg-secondary-subtle rounded-3 shadow">
+        <div id="route-management" class="admin-feature-panel p-4 bg-secondary-subtle rounded-3 shadow">
                 <div id="header" class="mb-4">
                     <h3><i class="bi bi-map-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_management'), ENT_QUOTES, 'UTF-8') ?></h3>
                     <?php
@@ -99,11 +99,11 @@ require_once '../../includes/_admin_nav.php';
                                             <form action="../../actions/toggle_publish.php" method="POST" class="m-0">
                                                 <input type="hidden" name="route_public_id" value="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <?php if ($route->getIsPublished()): ?>
-                                                        <button type="submit" class="btn btn-sm btn-warning">
+                                                        <button type="submit" class="btn btn-sm btn-warning route-toggle-btn">
                                                         <i class="bi bi-eye-slash me-1"></i><?= htmlspecialchars(t('admin_dashboard.make_private'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 <?php else: ?>
-                                                        <button type="submit" class="btn btn-sm btn-success">
+                                                        <button type="submit" class="btn btn-sm btn-success route-toggle-btn">
                                                         <i class="bi bi-eye me-1"></i><?= htmlspecialchars(t('admin_dashboard.publish'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 <?php endif; ?>

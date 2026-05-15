@@ -47,7 +47,7 @@ require_once '../../includes/_admin_nav.php';
 ?>
 <div class="container-fluid py-4">
     <div class="admin-page-content">
-        <div id="route-statistics" class="p-4 bg-secondary-subtle rounded-3 shadow">
+        <div id="route-statistics" class="admin-feature-panel p-4 bg-secondary-subtle rounded-3 shadow">
             <div class="mb-4">
                 <h3><i class="bi bi-bar-chart-line-fill me-2"></i><?= htmlspecialchars(t('admin_route_statistics.heading'), ENT_QUOTES, 'UTF-8') ?></h3>
                 <p class="lead mb-0"><?= htmlspecialchars(t('admin_route_statistics.intro'), ENT_QUOTES, 'UTF-8') ?></p>

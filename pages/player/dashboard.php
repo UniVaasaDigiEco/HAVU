@@ -209,10 +209,17 @@ try {
                             </div>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
-                               class="btn btn-warning w-100">
-                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.continue_route'), ENT_QUOTES, 'UTF-8') ?>
-                            </a>
+                            <div class="d-grid gap-2">
+                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                   class="btn btn-warning w-100">
+                                    <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.continue_route'), ENT_QUOTES, 'UTF-8') ?>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                    <i class="bi bi-chat-left-text me-1"></i>
+                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -238,10 +245,17 @@ try {
                             </small>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
-                               class="btn btn-outline-success w-100 btn-sm">
-                                <i class="bi bi-arrow-repeat me-1"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
-                            </a>
+                            <div class="d-grid gap-2">
+                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                   class="btn btn-outline-success w-100 btn-sm">
+                                    <i class="bi bi-arrow-repeat me-1"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                    <i class="bi bi-chat-left-text me-1"></i>
+                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -271,10 +285,17 @@ try {
                             </small>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
-                               class="btn btn-primary w-100">
-                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
-                            </a>
+                            <div class="d-grid gap-2">
+                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                   class="btn btn-primary w-100">
+                                    <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                    <i class="bi bi-chat-left-text me-1"></i>
+                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -282,6 +303,11 @@ try {
         </div>
     <?php endif; ?>
 </div>
+
+<?php
+// Include message widget for route creator messaging.
+require_once '../../includes/_message-widget.php';
+?>
 
 <div class="modal fade" id="accountSettingsModal" tabindex="-1" aria-labelledby="accountSettingsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">

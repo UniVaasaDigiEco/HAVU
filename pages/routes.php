@@ -207,11 +207,18 @@ try {
                             <?php endif; ?>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
-                            <a href="game.php?route=<?= htmlspecialchars($route['public_id'], ENT_QUOTES, 'UTF-8') ?>"
-                               class="btn btn-primary w-100">
-                                <i class="bi bi-joystick me-1"></i>
-                                <?= htmlspecialchars($is_complete ? t('common.play_again') : ($is_started ? t('common.continue_route') : t('common.start_route')), ENT_QUOTES, 'UTF-8') ?>
-                            </a>
+                            <div class="d-grid gap-2">
+                                <a href="game.php?route=<?= htmlspecialchars($route['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                   class="btn btn-primary">
+                                    <i class="bi bi-joystick me-1"></i>
+                                    <?= htmlspecialchars($is_complete ? t('common.play_again') : ($is_started ? t('common.continue_route') : t('common.start_route')), ENT_QUOTES, 'UTF-8') ?>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                        onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($route['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($route['title']), ENT_QUOTES, 'UTF-8') ?>)">
+                                    <i class="bi bi-chat-left-text me-1"></i>
+                                    <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,6 +226,10 @@ try {
         </div>
     <?php endif; ?>
 </div>
+<?php
+// Include message widget template for routes page
+require_once '../includes/_message-widget.php';
+?>
 <?php require_once '../includes/_footer.php'; ?>
 </body>
 </html>
