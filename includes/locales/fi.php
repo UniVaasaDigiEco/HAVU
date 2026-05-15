@@ -348,7 +348,7 @@ return [
     'admin_edit_route' => [
         'title' => 'HAVU - Muokkaa reittiä',
         'heading' => 'Muokkaa reittiä',
-        'subheading' => 'Valitse reitti ja muokkaa sen tietoja ja rasteja',
+        'subheading' => 'Muokkaa reitin tietoja ja rasteja',
         'select_route' => 'Valitse muokattava reitti',
         'my_routes' => 'Omat reitit',
         'load_route' => 'Lataa reitti',

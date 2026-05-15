@@ -348,7 +348,7 @@ return [
     'admin_edit_route' => [
         'title' => 'HAVU - Redigera rutt',
         'heading' => 'Redigera rutt',
-        'subheading' => 'Välj en rutt och redigera dess information och kontrollpunkter',
+        'subheading' => 'Redigera ruttens information och kontrollpunkter',
         'select_route' => 'Välj rutt att redigera',
         'my_routes' => 'Mina rutter',
         'load_route' => 'Ladda rutt',

@@ -346,7 +346,7 @@ return [
     'admin_edit_route' => [
         'title' => 'HAVU - Edit route',
         'heading' => 'Edit route',
-        'subheading' => 'Select a route and edit its details and checkpoints',
+        'subheading' => 'Edit route\'s details and checkpoints',
         'select_route' => 'Select route to edit',
         'my_routes' => 'My routes',
         'load_route' => 'Load route',
