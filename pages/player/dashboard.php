@@ -199,7 +199,7 @@ try {
                 <div class="col">
                     <div class="card h-100 border-warning shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-title"><?= htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8') ?></h6>
+                            <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
                             <div class="d-flex justify-content-between small text-muted mb-1">
                                 <span><?= htmlspecialchars(t('player_dashboard.visited_nodes'), ENT_QUOTES, 'UTF-8') ?></span>
                                 <span><?= $r['visited'] ?>/<?= $r['node_count'] ?></span>
@@ -210,7 +210,7 @@ try {
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <div class="d-grid gap-2">
-                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                                    class="btn btn-warning w-100">
                                     <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.continue_route'), ENT_QUOTES, 'UTF-8') ?>
                                 </a>
@@ -235,18 +235,18 @@ try {
                 <div class="col">
                     <div class="card h-100 border-success shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-title"><?= htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8') ?></h6>
+                            <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
                             <div class="progress mb-2" style="height: 6px;">
                                 <div class="progress-bar bg-success" style="width: 100%"></div>
                             </div>
                             <small class="text-muted">
                                 <i class="bi bi-calendar-check me-1"></i>
-                                <?= htmlspecialchars(t('common.route_completed_on', ['date' => date('d.m.Y', strtotime($r['completed_at']))]), ENT_QUOTES, 'UTF-8') ?>
+                                <?= htmlspecialchars((string)t('common.route_completed_on', ['date' => date('d.m.Y', (int)strtotime($r['completed_at'] ?? ''))]), ENT_QUOTES, 'UTF-8') ?>
                             </small>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <div class="d-grid gap-2">
-                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                                    class="btn btn-outline-success w-100 btn-sm">
                                     <i class="bi bi-arrow-repeat me-1"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
                                 </a>
@@ -276,9 +276,9 @@ try {
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-title"><?= htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8') ?></h6>
+                            <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
                             <p class="card-text text-muted small">
-                                <?= htmlspecialchars($r['description'], ENT_QUOTES, 'UTF-8') ?>
+                                <?= htmlspecialchars($r['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                             </p>
                             <small class="text-muted">
                                 <i class="bi bi-geo-alt-fill text-primary me-1"></i><?= htmlspecialchars(t('common.node_count', ['count' => $r['node_count']]), ENT_QUOTES, 'UTF-8') ?>
@@ -286,7 +286,7 @@ try {
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <div class="d-grid gap-2">
-                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                                    class="btn btn-primary w-100">
                                     <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
                                 </a>

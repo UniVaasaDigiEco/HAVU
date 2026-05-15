@@ -92,6 +92,9 @@ try {
             <?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?>
         </a>
         <div class="ms-auto d-flex align-items-center gap-2">
+            <a href="player/dashboard.php" class="btn btn-sm btn-outline-light">
+                <i class="bi bi-person-fill me-1"></i><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?>
+            </a>
             <?php if ($is_admin): ?>
                 <a href="admin/dashboard.php" class="btn btn-sm btn-warning">
                     <i class="bi bi-gear-fill me-1"></i><?= htmlspecialchars(t('common.admin_panel'), ENT_QUOTES, 'UTF-8') ?>
@@ -164,7 +167,7 @@ try {
                     <div class="card h-100 shadow-sm <?= $is_complete ? 'border-success' : '' ?>">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0"><?= htmlspecialchars($route['title'], ENT_QUOTES, 'UTF-8') ?></h5>
+                                <h5 class="card-title mb-0"><?= htmlspecialchars($route['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h5>
                                 <?php if ($is_complete): ?>
                                     <span class="badge bg-success ms-2 text-nowrap">
                                         <i class="bi bi-check-circle-fill me-1"></i><?= htmlspecialchars(t('common.status_completed'), ENT_QUOTES, 'UTF-8') ?>
@@ -177,7 +180,7 @@ try {
                             </div>
 
                             <p class="card-text text-muted small">
-                                <?= htmlspecialchars($route['description'], ENT_QUOTES, 'UTF-8') ?>
+                                <?= htmlspecialchars($route['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                             </p>
 
                             <div class="d-flex align-items-center gap-2 mb-3 text-muted small">
@@ -201,17 +204,17 @@ try {
                                         <div class="progress-bar bg-success" style="width: 100%"></div>
                                     </div>
                                     <small class="text-muted">
-                                        <?= htmlspecialchars(t('common.route_completed_on', ['date' => date('d.m.Y', strtotime($completed_route_ids[$route_id]))]), ENT_QUOTES, 'UTF-8') ?>
+                                        <?= htmlspecialchars((string)t('common.route_completed_on', ['date' => date('d.m.Y', (int)strtotime($completed_route_ids[$route_id] ?? ''))]), ENT_QUOTES, 'UTF-8') ?>
                                     </small>
                                 </div>
                             <?php endif; ?>
                         </div>
                         <div class="card-footer bg-transparent border-0 pb-3">
                             <div class="d-grid gap-2">
-                                <a href="game.php?route=<?= htmlspecialchars($route['public_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                <a href="game.php?route=<?= htmlspecialchars($route['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                                    class="btn btn-primary">
                                     <i class="bi bi-joystick me-1"></i>
-                                    <?= htmlspecialchars($is_complete ? t('common.play_again') : ($is_started ? t('common.continue_route') : t('common.start_route')), ENT_QUOTES, 'UTF-8') ?>
+                                    <?= htmlspecialchars(($is_complete ? t('common.play_again') : ($is_started ? t('common.continue_route') : t('common.start_route'))) ?? '', ENT_QUOTES, 'UTF-8') ?>
                                 </a>
                                 <button type="button" class="btn btn-outline-secondary btn-sm"
                                         onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($route['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($route['title']), ENT_QUOTES, 'UTF-8') ?>)">
