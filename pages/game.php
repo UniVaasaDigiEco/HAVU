@@ -38,6 +38,7 @@ header_remove('X-Powered-By');
 $default_route_public_id = "417bef1b-1b00-46f5-ac85-4774ff20d0ed";
 
 $is_logged_in = !empty($_SESSION['user_public_id']);
+$route_public_id = isset($_GET['route']) ? trim((string)$_GET['route']) : '';
 $date_locale = [
     'fi' => 'fi-FI',
     'en' => 'en-US',
@@ -46,16 +47,14 @@ $date_locale = [
 
 $route = null;
 $route_error_message = null;
-if(isset($_GET['route']))
+if ($route_public_id !== '')
 {
-    $route_public_id = $_GET['route'];
     try {
         $route = Tools::getRouteByPublicId($route_public_id);
     } catch (Exception $e) {
         $route_error_message = t('game.route_not_found', ['message' => $e->getMessage()]);
     }
-}
-else {
+} else {
     // If no route specified, load the default route
     try {
         $route = Tools::getRouteByPublicId($default_route_public_id);
@@ -63,6 +62,11 @@ else {
         $route_error_message = t('game.default_route_not_found', ['message' => $e->getMessage()]);
     }
 }
+
+$show_entry_choice_modal = !$is_logged_in && $route_public_id !== '';
+$route_return_url = ROOT_DIR . 'pages/game.php?route=' . urlencode($route_public_id);
+$entry_choice_login_url = ROOT_DIR . 'login.php?return_to=' . urlencode($route_return_url);
+$entry_choice_register_url = ROOT_DIR . 'register.php?return_to=' . urlencode($route_return_url);
 
 if (!$route) {
     ?>
@@ -132,6 +136,7 @@ if (!$route) {
 
         // Session state
         const isLoggedIn = <?= $is_logged_in ? 'true' : 'false' ?>;
+        const requiresEntryChoice = <?= $show_entry_choice_modal ? 'true' : 'false' ?>;
 
         // Load route data from PHP
         const routeData = <?php echo $route->toJavaScript(); ?>;
@@ -206,8 +211,32 @@ if (!$route) {
             iconAnchor: [12, 12]
         });
 
-        // Initialize everything
-        $(document).ready(function() {
+        let gameInitialized = false;
+
+        function setEntryChoiceUiLocked(locked) {
+            const infoPanelToggle = document.getElementById('info-panel-toggle');
+            const infoPanel = document.getElementById('info-panel');
+
+            if (infoPanelToggle) {
+                infoPanelToggle.style.display = locked ? 'none' : '';
+                infoPanelToggle.setAttribute('aria-hidden', locked ? 'true' : 'false');
+            }
+
+            if (infoPanel) {
+                if (locked) {
+                    infoPanel.classList.remove('visible');
+                }
+                infoPanel.style.display = locked ? 'none' : '';
+                infoPanel.setAttribute('aria-hidden', locked ? 'true' : 'false');
+            }
+        }
+
+        function initializeGame() {
+            if (gameInitialized) {
+                return;
+            }
+            gameInitialized = true;
+
             // Initialize map
             map = L.map('map', { zoomControl: false, closePopupOnClick: false }).setView(DEFAULT_MAP_CENTER, 16);
 
@@ -245,6 +274,39 @@ if (!$route) {
             } else {
                 phoneViewportQuery.addListener(handleViewportChange);
             }
+        }
+
+        // Initialize everything
+        $(document).ready(function() {
+            if (!requiresEntryChoice) {
+                initializeGame();
+                return;
+            }
+
+            setEntryChoiceUiLocked(true);
+
+            const entryChoiceModalElement = document.getElementById('route-entry-choice-modal');
+            const playAnonymouslyButton = document.getElementById('play-anonymously-btn');
+
+            if (!entryChoiceModalElement || !playAnonymouslyButton) {
+                setEntryChoiceUiLocked(false);
+                initializeGame();
+                return;
+            }
+
+            const entryChoiceModal = new bootstrap.Modal(entryChoiceModalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            playAnonymouslyButton.addEventListener('click', function() {
+                this.disabled = true;
+                setEntryChoiceUiLocked(false);
+                initializeGame();
+                entryChoiceModal.hide();
+            });
+
+            entryChoiceModal.show();
         });
 
         // Draw route line
@@ -872,6 +934,40 @@ if (!$route) {
     <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(RECAPTCHA_SITE_KEY, ENT_QUOTES, 'UTF-8') ?>" async defer></script>
 </head>
 <body>
+    <?php if ($show_entry_choice_modal): ?>
+    <div class="modal fade" id="route-entry-choice-modal" tabindex="-1" aria-labelledby="routeEntryChoiceModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="routeEntryChoiceModalLabel">
+                        <i class="bi bi-signpost-split-fill me-2"></i><?= htmlspecialchars(t('game.entry_choice_title'), ENT_QUOTES, 'UTF-8') ?>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3"><?= htmlspecialchars(t('game.entry_choice_intro'), ENT_QUOTES, 'UTF-8') ?></p>
+                    <div class="alert alert-info small mb-3" role="note">
+                        <div class="fw-semibold mb-1">
+                            <i class="bi bi-lightbulb-fill me-1"></i><?= htmlspecialchars(t('game.entry_choice_helper_title'), ENT_QUOTES, 'UTF-8') ?>
+                        </div>
+                        <div><?= htmlspecialchars(t('game.entry_choice_helper_body'), ENT_QUOTES, 'UTF-8') ?></div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="<?= htmlspecialchars($entry_choice_login_url, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right me-1"></i><?= htmlspecialchars(t('game.entry_choice_login'), ENT_QUOTES, 'UTF-8') ?>
+                        </a>
+                        <a href="<?= htmlspecialchars($entry_choice_register_url, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus-fill me-1"></i><?= htmlspecialchars(t('game.entry_choice_register'), ENT_QUOTES, 'UTF-8') ?>
+                        </a>
+                        <button type="button" class="btn btn-secondary" id="play-anonymously-btn">
+                            <i class="bi bi-person me-1"></i><?= htmlspecialchars(t('game.entry_choice_anonymous'), ENT_QUOTES, 'UTF-8') ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <!-- Route Completion Screen -->
     <div id="completion-screen">
         <div class="d-flex flex-column align-items-center justify-content-center min-vh-100 p-4 text-white text-center">
@@ -918,12 +1014,12 @@ if (!$route) {
     </div>
 
     <!-- Info Panel Toggle Button -->
-    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()" aria-label="Asetukset ja tila" title="Asetukset ja tila">
+    <button class="btn btn-primary info-panel-toggle" id="info-panel-toggle" onclick="showInfoPanel()" aria-label="Asetukset ja tila" title="Asetukset ja tila"<?= $show_entry_choice_modal ? ' style="display:none" aria-hidden="true"' : '' ?>>
         <i class="bi bi-gear-fill" aria-hidden="true"></i>
     </button>
 
     <!-- Info Panel -->
-    <div class="info-panel" id="info-panel">
+    <div class="info-panel" id="info-panel"<?= $show_entry_choice_modal ? ' style="display:none" aria-hidden="true"' : '' ?>>
         <div class="d-flex justify-content-between align-items-start mb-2">
             <h5 class="mb-0">📍 <?php echo htmlspecialchars($route->getTitle()); ?></h5>
             <button type="button" class="btn-close ms-2" onclick="hideInfoPanel()" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>

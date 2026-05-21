@@ -8,6 +8,9 @@ if (!empty($_SESSION['user_public_id'])) {
     header('Location: ' . ROOT_DIR . 'pages/routes.php');
     exit;
 }
+
+$return_to = trim((string)($_GET['return_to'] ?? ''));
+$return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) : '';
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -38,6 +41,9 @@ if (!empty($_SESSION['user_public_id'])) {
 
             <div class="container-fluid col-12 col-lg-4 bg-secondary-subtle p-4 rounded-3">
                 <form action="actions/register.php" method="POST">
+                    <?php if ($return_to !== ''): ?>
+                        <input type="hidden" name="return_to" value="<?= htmlspecialchars($return_to, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label for="full_name" class="form-label"><?= htmlspecialchars(t('register.name_label'), ENT_QUOTES, 'UTF-8') ?></label>
                         <input id="full_name" name="full_name" type="text" class="form-control"
@@ -84,7 +90,7 @@ if (!empty($_SESSION['user_public_id'])) {
 
             <p class="mt-3 text-muted">
                 <?= htmlspecialchars(t('register.has_account'), ENT_QUOTES, 'UTF-8') ?>
-                <a href="login.php"><?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?></a>
+                <a href="login.php<?= htmlspecialchars($return_to_query, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?></a>
             </p>
             <p>
                 <a href="#" class="text-muted small" onclick="event.preventDefault(); window.history.back();">

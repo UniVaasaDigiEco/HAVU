@@ -10,6 +10,41 @@ require_once(__DIR__ . '/../classes/tools.class.php');
 require_once(__DIR__ . '/../classes/security.class.php');
 use Ramsey\Uuid\Uuid;
 
+function resolveSafeReturnTo(?string $candidate): ?string
+{
+    if (!is_string($candidate)) {
+        return null;
+    }
+
+    $candidate = trim($candidate);
+    if ($candidate === '' || preg_match('/[\r\n]/', $candidate)) {
+        return null;
+    }
+
+    $parsed = parse_url($candidate);
+    if ($parsed === false || isset($parsed['scheme']) || isset($parsed['host']) || isset($parsed['user']) || isset($parsed['pass'])) {
+        return null;
+    }
+
+    $path = $parsed['path'] ?? '';
+    if ($path === '' || !str_starts_with($path, ROOT_DIR)) {
+        return null;
+    }
+
+    return $candidate;
+}
+
+function loginErrorUrl(int $errorCode, ?string $returnTo): string
+{
+    $url = ROOT_DIR . 'login.php?error=' . urlencode((string)$errorCode);
+    if ($returnTo !== null) {
+        $url .= '&return_to=' . urlencode($returnTo);
+    }
+    return $url;
+}
+
+$return_to = resolveSafeReturnTo($_POST['return_to'] ?? null);
+
 $db = Tools::getDb();
 
 $sql = "SELECT public_id FROM users WHERE email = ?";
@@ -21,7 +56,7 @@ $stmt->bind_result($public_id_string);
 $stmt->store_result();
 if($stmt->num_rows === 0){
     $error_code = 1;
-    header("Location: " . ROOT_DIR . "login.php?error=" . urlencode($error_code));
+    header('Location: ' . loginErrorUrl($error_code, $return_to));
     die();
 }
 $stmt->fetch();
@@ -30,7 +65,7 @@ try{
 }
 catch (Exception $exception){
     $error_code = 1;
-    header("Location: " . ROOT_DIR . "login.php?error=" . urlencode($error_code));
+    header('Location: ' . loginErrorUrl($error_code, $return_to));
     die();
 }
 try{
@@ -44,13 +79,14 @@ try{
         $_SESSION['is_logged_in'] = true;
         $_SESSION['login_timestamp'] = time();
         $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['is_admin'] = ($user->getUserType() === USER_TYPE_ADMIN);
 
-        if($user->getUserType() === USER_TYPE_ADMIN){
-            $_SESSION['is_admin'] = true;
+        if ($return_to !== null) {
+            $url = $return_to;
+        } elseif($user->getUserType() === USER_TYPE_ADMIN){
             $url = ROOT_DIR . "pages/admin/dashboard.php";
         }
         else{
-            $_SESSION['is_admin'] = false;
             $url = ROOT_DIR . "pages/player/dashboard.php";
         }
 
@@ -60,7 +96,7 @@ try{
 }
 catch (Exception $exception){
     $error_code = 1; // Invalid credentials
-    $url = ROOT_DIR . "login.php?error=" . urlencode($error_code);
+    $url = loginErrorUrl($error_code, $return_to);
     header("Location: $url");
     die();
 }

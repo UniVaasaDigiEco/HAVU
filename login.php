@@ -11,6 +11,9 @@ Security::initSession();
 if (!empty($preserved_flash_messages)) {
     $_SESSION['flash_messages'] = $preserved_flash_messages;
 }
+
+$return_to = trim((string)($_GET['return_to'] ?? ''));
+$return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) : '';
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -58,6 +61,9 @@ if (!empty($preserved_flash_messages)) {
             ?>
             <div class="container-fluid col-12 col-lg-3 bg-secondary-subtle p-4 rounded-3">
                 <form action="actions/login.php" method="POST">
+                    <?php if ($return_to !== ''): ?>
+                        <input type="hidden" name="return_to" value="<?= htmlspecialchars($return_to, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label for="email" class="form-label"><?= htmlspecialchars(t('login.username_label'), ENT_QUOTES, 'UTF-8') ?></label>
                         <input id="email" name="email" type="email" class="form-control">
@@ -76,7 +82,7 @@ if (!empty($preserved_flash_messages)) {
             </div>
             <p class="mt-3 text-muted">
                 <?= htmlspecialchars(t('login.no_account'), ENT_QUOTES, 'UTF-8') ?>
-                <a href="register.php"><?= htmlspecialchars(t('login.create_free_account'), ENT_QUOTES, 'UTF-8') ?></a>
+                <a href="register.php<?= htmlspecialchars($return_to_query, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(t('login.create_free_account'), ENT_QUOTES, 'UTF-8') ?></a>
             </p>
             <p>
                 <a href="index.php" class="text-muted small">
