@@ -98,7 +98,7 @@ require_once '../../includes/_admin_nav.php';
                                         <a href="testGame.php?route=<?= urlencode($route->getPublicId()) ?>" class="btn btn-sm btn-dark">
                                                 <i class="bi bi-joystick me-1"></i><?= htmlspecialchars(t('admin_dashboard.test_route'), ENT_QUOTES, 'UTF-8') ?>
                                         </a>
-                                        <button class="btn btn-sm btn-secondary btn-share text-white"
+                                        <button class="btn btn-sm btn-warning btn-share"
                                             data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
                                             data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
                                             <i class="bi bi-qr-code me-1"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>

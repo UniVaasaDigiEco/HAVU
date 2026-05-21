@@ -28,7 +28,6 @@ try {
 
 $completed_routes  = []; // [{id, public_id, title, node_count, completed_at}]
 $in_progress       = []; // [{id, public_id, title, node_count, visited}]
-$available_routes  = []; // [{id, public_id, title, node_count}]
 
 try {
     $db = Tools::getDb();
@@ -87,31 +86,6 @@ try {
     }
     $stmt->close();
 
-    $started_ids = array_merge($completed_ids, array_column($in_progress, 'id'));
-
-    // Available routes not yet started
-    $sql = "SELECT r.id, r.public_id, r.title, r.description,
-                   COUNT(nrc.id) AS node_count
-            FROM routes r
-            LEFT JOIN node_route_cross nrc ON nrc.route_id = r.id
-            WHERE r.is_published = 1
-            GROUP BY r.id, r.public_id, r.title, r.description
-            ORDER BY r.created_at DESC";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-    $stmt->bind_result($r_id, $r_pub, $r_title, $r_desc, $r_nodes);
-    while ($stmt->fetch()) {
-        if (!in_array($r_id, $started_ids)) {
-            $available_routes[] = [
-                'id'          => $r_id,
-                'public_id'   => $r_pub,
-                'title'       => $r_title,
-                'description' => $r_desc,
-                'node_count'  => $r_nodes,
-            ];
-        }
-    }
-    $stmt->close();
     $db->close();
 
 } catch (Exception $e) {
@@ -143,9 +117,9 @@ try {
             </span>
         </a>
         <div class="ms-auto d-flex align-items-center gap-2">
-            <a href="../routes.php" class="btn btn-sm btn-outline-light">
-                <i class="bi bi-map me-1"></i><?= htmlspecialchars(t('common.all_routes'), ENT_QUOTES, 'UTF-8') ?>
-            </a>
+            <!--<a href="../../index.php" class="btn btn-sm btn-outline-light">
+                <i class="bi bi-house-door me-1"></i><?= htmlspecialchars(t('common.back_to_home'), ENT_QUOTES, 'UTF-8') ?>
+            </a>-->
             <?php if (!empty($_SESSION['is_admin'])): ?>
                 <a href="../admin/dashboard.php" class="btn btn-sm btn-outline-light">
                     <i class="bi bi-gear-fill me-1"></i><?= htmlspecialchars(t('common.admin_panel'), ENT_QUOTES, 'UTF-8') ?>
@@ -279,47 +253,6 @@ try {
                 </div>
             <?php endif; ?>
 
-            <!-- Available routes -->
-            <div class="bg-primary-subtle rounded-3 p-3 mb-3">
-                <h4 class="mb-3"><i class="bi bi-map text-primary me-2"></i><?= htmlspecialchars(t('common.available_routes'), ENT_QUOTES, 'UTF-8') ?></h4>
-                <?php if (empty($available_routes)): ?>
-                    <div class="text-center py-4 text-muted">
-                        <i class="bi bi-trophy-fill text-warning" style="font-size: 3rem;"></i>
-                        <p class="mt-3 fw-bold"><?= htmlspecialchars(t('player_dashboard.all_completed'), ENT_QUOTES, 'UTF-8') ?></p>
-                    </div>
-                <?php else: ?>
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
-                        <?php foreach ($available_routes as $r): ?>
-                            <div class="col">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h6 class="card-title"><?= htmlspecialchars($r['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></h6>
-                                        <p class="card-text text-muted small">
-                                            <?= htmlspecialchars($r['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>
-                                        </p>
-                                        <small class="text-muted">
-                                            <i class="bi bi-geo-alt-fill text-primary me-1"></i><?= htmlspecialchars(t('common.node_count', ['count' => $r['node_count']]), ENT_QUOTES, 'UTF-8') ?>
-                                        </small>
-                                    </div>
-                                    <div class="card-footer bg-transparent border-0 pb-3">
-                                        <div class="d-grid gap-2">
-                                            <a href="../game.php?route=<?= htmlspecialchars($r['public_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                            class="btn btn-primary w-100">
-                                                <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('common.start_route'), ENT_QUOTES, 'UTF-8') ?>
-                                            </a>
-                                            <button type="button" class="btn btn-outline-secondary btn-sm"
-                                                    onclick="window.openMessageModal(<?= htmlspecialchars(json_encode($r['id']), ENT_QUOTES, 'UTF-8') ?>, <?= htmlspecialchars(json_encode($r['title']), ENT_QUOTES, 'UTF-8') ?>)">
-                                                <i class="bi bi-chat-left-text me-1"></i>
-                                                <?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
         </div>
     </div>
 </div>

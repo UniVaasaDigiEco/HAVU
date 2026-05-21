@@ -83,7 +83,7 @@ if (!$route) {
     <?php require_once '../includes/_language_switcher.php'; ?>
     <div class="container py-5">
         <div class="alert alert-danger"><?= $route_error_message ?></div>
-        <a href="routes.php" class="btn btn-primary"><?= htmlspecialchars(t('common.all_routes'), ENT_QUOTES, 'UTF-8') ?></a>
+        <a href="../index.php" class="btn btn-primary"><?= htmlspecialchars(t('common.back_to_home'), ENT_QUOTES, 'UTF-8') ?></a>
     </div>
     </body>
     </html>
@@ -1000,8 +1000,8 @@ if (!$route) {
                     <button onclick="window.location.reload()" class="btn btn-light btn-lg fw-bold">
                         <i class="bi bi-arrow-repeat me-2"></i><?= htmlspecialchars(t('common.play_again'), ENT_QUOTES, 'UTF-8') ?>
                     </button>
-                    <a href="routes.php" class="btn btn-outline-light btn-lg">
-                        <i class="bi bi-map me-2"></i><?= htmlspecialchars(t('game.select_route'), ENT_QUOTES, 'UTF-8') ?>
+                    <a href="../index.php" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-house-door me-2"></i><?= htmlspecialchars(t('common.back_to_home'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                     <a href="player/dashboard.php" class="btn btn-outline-light btn-lg"
                        id="completion-btn-dashboard" style="display: none;">
@@ -1041,6 +1041,9 @@ if (!$route) {
             </div>
             <div class="info-panel-actions">
                 <?php if ($is_logged_in): ?>
+                    <a href="player/dashboard.php" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-person-fill me-1"></i><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?>
+                    </a>
                     <a href="#" class="btn btn-sm btn-outline-secondary"
                        onclick="hideInfoPanel(); openFeedbackModal(); return false;">
                         <i class="bi bi-chat-dots me-1"></i><?= htmlspecialchars(t('game.feedback'), ENT_QUOTES, 'UTF-8') ?>

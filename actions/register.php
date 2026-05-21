@@ -40,7 +40,7 @@ function registerErrorUrl(string $errorKey, ?string $returnTo): string
 
 // Redirect already-logged-in users
 if (!empty($_SESSION['user_public_id'])) {
-    header('Location: ' . ROOT_DIR . 'pages/routes.php');
+    header('Location: ' . ROOT_DIR . 'pages/player/dashboard.php');
     exit;
 }
 

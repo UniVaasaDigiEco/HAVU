@@ -34,14 +34,11 @@ Security::initSession();
             </div>
         <?php else: ?>
             <div class="d-flex flex-row gap-3 flex-wrap justify-content-center">
-                <a href="pages/routes.php" class="btn btn-success btn-lg text-white fw-bold">
-                    <i class="bi bi-joystick me-1"></i> <?= htmlspecialchars(t('common.play_now'), ENT_QUOTES, 'UTF-8') ?>
+                <a href="login.php" class="btn btn-success btn-lg text-white fw-bold">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> <?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
                 <a href="register.php" class="btn btn-outline-primary btn-lg fw-bold">
                     <i class="bi bi-person-plus-fill me-1"></i> <?= htmlspecialchars(t('common.create_account'), ENT_QUOTES, 'UTF-8') ?>
-                </a>
-                <a href="login.php" class="btn btn-success btn-lg text-white fw-bold">
-                    <i class="bi bi-box-arrow-in-right me-1"></i> <?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             </div>
         <?php endif; ?>

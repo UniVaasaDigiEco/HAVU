@@ -3,12 +3,6 @@
         <div class="site-footer__content">
             <div class="site-footer__summary">
                 <h2 class="site-footer__title"><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?></h2>
-                <p class="site-footer__text">
-                    <?= htmlspecialchars(t('feedback.recaptcha_notice'), ENT_QUOTES, 'UTF-8') ?>
-                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?></a>
-                    ja
-                    <a href="https://policies.google.com/terms" target="_blank" rel="noopener"><?= htmlspecialchars(t('feedback.terms'), ENT_QUOTES, 'UTF-8') ?></a>.
-                </p>
             </div>
             <?php if (!empty($_SESSION['user_public_id'])): ?>
                 <div class="site-footer__actions">
