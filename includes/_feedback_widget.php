@@ -23,7 +23,7 @@ if (!empty($_SESSION['user_public_id'])) {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="feedbackModalLabel">
-                    <i class="bi bi-chat-dots-fill me-2"></i><?= htmlspecialchars(t('feedback.modal_title'), ENT_QUOTES, 'UTF-8') ?>
+                    <i class="bi bi-chat-dots-fill me-2"></i><span id="feedback-modal-title-text"><?= htmlspecialchars(t('feedback.modal_title'), ENT_QUOTES, 'UTF-8') ?></span>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
             </div>
@@ -68,6 +68,9 @@ if (!empty($_SESSION['user_public_id'])) {
                         <label for="feedback-message" class="form-label fw-semibold">
                             <?= htmlspecialchars(t('feedback.message_label'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span>
                         </label>
+                        <small class="text-muted d-block mb-2">
+                            <?= htmlspecialchars(t('feedback.message_help'), ENT_QUOTES, 'UTF-8') ?>
+                        </small>
                         <textarea class="form-control" id="feedback-message" name="message"
                                   rows="4" required></textarea>
                     </div>
@@ -106,6 +109,8 @@ if (!empty($_SESSION['user_public_id'])) {
         'success' => t('feedback.success'),
         'genericError' => t('feedback.generic_error'),
         'networkError' => t('feedback.network_error'),
+        'modalTitle' => t('feedback.modal_title'),
+        'bugTitle' => t('feedback.type_bug'),
     ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
 </script>
 <script src="<?= htmlspecialchars(ROOT_DIR, ENT_QUOTES, 'UTF-8') ?>js/feedback-widget.js"></script>

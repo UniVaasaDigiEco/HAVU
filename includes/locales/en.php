@@ -64,6 +64,7 @@ return [
             'en' => 'English',
             'sv' => 'Svenska',
         ],
+        'new' => 'New',
     ],
     'messages' => [
         'error_heading' => 'An error occurred!',
@@ -140,6 +141,7 @@ return [
         'name_label' => 'Name',
         'email_label' => 'Email',
         'message_label' => 'Message',
+        'message_help' => 'Please describe the problem as clearly as you can. Also tell us what you were doing when it happened.',
         'recaptcha_notice' => 'This form is protected by reCAPTCHA.',
         'privacy' => 'Privacy',
         'terms' => 'terms',

@@ -115,11 +115,11 @@ $total_pages = ceil($total_messages / $per_page);
                         (<?= $total_messages ?>)
                     </a>
                     <a href="?filter=unread" class="btn btn-sm <?= $filter_read === 'unread' ? 'btn-primary' : 'btn-outline-primary' ?>">
-                        <i class="bi bi-dot me-1"></i><?= htmlspecialchars(t('messages_center.filter_unread'), ENT_QUOTES, 'UTF-8') ?>
+                        <i class="bi bi-envelope-fill me-1"></i><?= htmlspecialchars(t('messages_center.filter_unread'), ENT_QUOTES, 'UTF-8') ?>
                         (<?= $unread_count ?>)
                     </a>
                     <a href="?filter=read" class="btn btn-sm <?= $filter_read === 'read' ? 'btn-primary' : 'btn-outline-primary' ?>">
-                        <i class="bi bi-check-circle me-1"></i><?= htmlspecialchars(t('messages_center.filter_read'), ENT_QUOTES, 'UTF-8') ?>
+                        <i class="bi bi-envelope-open-fill me-1"></i><?= htmlspecialchars(t('messages_center.filter_read'), ENT_QUOTES, 'UTF-8') ?>
                         (<?= $total_messages - $unread_count ?>)
                     </a>
                 </div>
@@ -170,12 +170,24 @@ $total_pages = ceil($total_messages / $per_page);
 
                                 $is_unread = $msg['is_read'] == 0;
                                 $card_class = $is_unread ? 'border-left-primary bg-light-subtle' : '';
+
+                                $raw_title = trim((string)($msg['title'] ?? ''));
+                                if ($raw_title === '' || $raw_title === '0') {
+                                    $content_preview = trim((string)($msg['content'] ?? ''));
+                                    if ($content_preview !== '') {
+                                        $display_title = mb_strimwidth($content_preview, 0, 80, '...');
+                                    } else {
+                                        $display_title = t('messages_center.general_message');
+                                    }
+                                } else {
+                                    $display_title = $raw_title;
+                                }
                                 ?>
                                 <div class="card mb-3 <?= htmlspecialchars($card_class, ENT_QUOTES, 'UTF-8') ?>" style="<?= $is_unread ? 'border-left: 4px solid #0d6efd;' : '' ?>">
                                     <div class="card-header d-flex justify-content-between align-items-start pb-2">
                                         <div class="flex-grow-1">
                                             <div class="d-flex align-items-center gap-2 mb-1">
-                                                <h6 class="mb-0 fw-bold"><?= htmlspecialchars($msg['title'], ENT_QUOTES, 'UTF-8') ?></h6>
+                                                <h6 class="mb-0 fw-bold"><?= htmlspecialchars($display_title, ENT_QUOTES, 'UTF-8') ?></h6>
                                                 <?php if ($is_unread): ?>
                                                     <span class="badge bg-primary"><?= htmlspecialchars(t('common.new'), ENT_QUOTES, 'UTF-8') ?></span>
                                                 <?php endif; ?>
@@ -212,11 +224,11 @@ $total_pages = ceil($total_messages / $per_page);
                                     <div class="card-footer bg-transparent border-top d-flex gap-2 justify-content-end">
                                         <?php if ($is_unread): ?>
                                             <button class="btn btn-sm btn-outline-secondary mark-read-btn" data-message-id="<?= (int)$msg['id'] ?>" data-action="read">
-                                                <i class="bi bi-check-circle me-1"></i><?= htmlspecialchars(t('messages_center.mark_read'), ENT_QUOTES, 'UTF-8') ?>
+                                                <i class="bi bi-envelope-open-fill me-1"></i><?= htmlspecialchars(t('messages_center.mark_read'), ENT_QUOTES, 'UTF-8') ?>
                                             </button>
                                         <?php else: ?>
                                             <button class="btn btn-sm btn-outline-secondary mark-read-btn" data-message-id="<?= (int)$msg['id'] ?>" data-action="unread">
-                                                <i class="bi bi-dot me-1"></i><?= htmlspecialchars(t('messages_center.mark_unread'), ENT_QUOTES, 'UTF-8') ?>
+                                                <i class="bi bi-envelope-fill me-1"></i><?= htmlspecialchars(t('messages_center.mark_unread'), ENT_QUOTES, 'UTF-8') ?>
                                             </button>
                                         <?php endif; ?>
                                         <button class="btn btn-sm btn-outline-danger delete-msg-btn" data-message-id="<?= (int)$msg['id'] ?>">

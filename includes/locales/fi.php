@@ -64,6 +64,7 @@ return [
             'en' => 'English',
             'sv' => 'Svenska',
         ],
+        'new' => 'Uusi',
     ],
     'messages' => [
         'error_heading' => 'Tapahtui virhe!',
@@ -140,6 +141,7 @@ return [
         'name_label' => 'Nimi',
         'email_label' => 'Sähköposti',
         'message_label' => 'Viesti',
+        'message_help' => 'Kuvaile ongelma mahdollisimman selkeästi. Kerro myös, mitä olit tekemässä, kun ongelma tapahtui.',
         'recaptcha_notice' => 'Tämä lomake on suojattu reCAPTCHA:lla.',
         'privacy' => 'Tietosuoja',
         'terms' => 'käyttöehdot',

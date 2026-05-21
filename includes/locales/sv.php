@@ -62,6 +62,7 @@ return [
             'en' => 'English',
             'sv' => 'Svenska',
         ],
+        'new' => 'Ny',
     ],
     'messages' => [
         'error_heading' => 'Ett fel uppstod!',
@@ -138,6 +139,7 @@ return [
         'name_label' => 'Namn',
         'email_label' => 'E-post',
         'message_label' => 'Meddelande',
+        'message_help' => 'Beskriv problemet så tydligt du kan. Berätta också vad du gjorde när det hände.',
         'recaptcha_notice' => 'Detta formulär skyddas av reCAPTCHA.',
         'privacy' => 'Sekretess',
         'terms' => 'villkor',

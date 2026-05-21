@@ -276,8 +276,31 @@ if (!$route) {
             }
         }
 
+        function bindInfoPanelActions() {
+            const messageCreatorBtn = document.getElementById('message-creator-btn');
+            const reportBugBtn = document.getElementById('report-bug-btn');
+
+            if (messageCreatorBtn) {
+                messageCreatorBtn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    hideInfoPanel();
+                    openMessageModal(routeData.id, routeData.title);
+                });
+            }
+
+            if (reportBugBtn) {
+                reportBugBtn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    hideInfoPanel();
+                    openFeedbackModal('bug');
+                });
+            }
+        }
+
         // Initialize everything
         $(document).ready(function() {
+            bindInfoPanelActions();
+
             if (!requiresEntryChoice) {
                 initializeGame();
                 return;
@@ -1040,13 +1063,15 @@ if (!$route) {
                 <?php endif; ?>
             </div>
             <div class="info-panel-actions">
+                <a href="#" class="btn btn-sm btn-outline-secondary" id="message-creator-btn">
+                    <i class="bi bi-chat-left-text me-1"></i><?= htmlspecialchars(t('common.message_creator'), ENT_QUOTES, 'UTF-8') ?>
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-secondary" id="report-bug-btn">
+                    <i class="bi bi-bug-fill me-1"></i><?= htmlspecialchars(t('feedback.type_bug'), ENT_QUOTES, 'UTF-8') ?>
+                </a>
                 <?php if ($is_logged_in): ?>
                     <a href="player/dashboard.php" class="btn btn-sm btn-outline-secondary">
                         <i class="bi bi-person-fill me-1"></i><?= htmlspecialchars(t('common.my_profile'), ENT_QUOTES, 'UTF-8') ?>
-                    </a>
-                    <a href="#" class="btn btn-sm btn-outline-secondary"
-                       onclick="hideInfoPanel(); openFeedbackModal(); return false;">
-                        <i class="bi bi-chat-dots me-1"></i><?= htmlspecialchars(t('game.feedback'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 <?php endif; ?>
                 <?php
@@ -1087,10 +1112,8 @@ if (!$route) {
     <!-- Map Container -->
     <div id="map"></div>
     <?php
-    if ($is_logged_in) {
-        $feedback_widget_no_float = true;
-        require_once '../includes/_feedback_widget.php';
-    }
+    $feedback_widget_no_float = true;
+    require_once '../includes/_feedback_widget.php';
     ?>
     <?php
     // Set up message widget with current route

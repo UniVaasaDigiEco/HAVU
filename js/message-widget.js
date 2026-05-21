@@ -16,6 +16,9 @@
     const btnText   = document.getElementById('message-submit-text');
     const submitBtn = document.getElementById('message-submit');
     const cancelBtn = document.getElementById('message-cancel');
+    const recaptcha = window.grecaptcha;
+    const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY;
+    const bootstrapApi = window.bootstrap;
 
     if (!form || !modal) return;
 
@@ -58,8 +61,14 @@
 
         setLoading(true);
 
-        grecaptcha.ready(function () {
-            grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'message' })
+        if (!recaptcha || !recaptchaSiteKey) {
+            setLoading(false);
+            showAlert(i18n.genericError, true);
+            return;
+        }
+
+        recaptcha.ready(function () {
+            recaptcha.execute(recaptchaSiteKey, { action: 'message' })
                 .then(function (token) {
                     document.getElementById('recaptcha-message-token').value = token;
 
@@ -80,6 +89,10 @@
                             setLoading(false);
                             showAlert(i18n.networkError, true);
                         });
+                })
+                .catch(function () {
+                    setLoading(false);
+                    showAlert(i18n.genericError, true);
                 });
         });
     });
@@ -101,6 +114,9 @@
                 routeInfoEl.parentElement.classList.add('d-none');
             }
         }
-        bootstrap.Modal.getOrCreateInstance(modal).show();
+        if (!bootstrapApi || !bootstrapApi.Modal) {
+            return;
+        }
+        bootstrapApi.Modal.getOrCreateInstance(modal).show();
     };
 }());
