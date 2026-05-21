@@ -93,7 +93,7 @@ try {
             throw routeFormException('actions.route_form.update_failed');
         }
 
-        $is_published = isset($_POST['is_published']) ? 1 : 0;
+        $is_published = 0;
         $route_update_stmt->bind_param('sssiiii', $route_title, $route_description, $formatted_publication_date, $is_published, $gps_threshold, $allow_route_line, $route_id);
         if (!$route_update_stmt->execute()) {
             throw routeFormException('actions.route_form.update_failed');

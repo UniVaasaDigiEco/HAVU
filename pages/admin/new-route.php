@@ -136,16 +136,6 @@ require_once '../../includes/_admin_nav.php';
                                 <small id="allow-route-line-help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.allow_route_line_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" checked>
-                                   <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help">
-                                <label class="form-check-label" for="is_published">
-                                    <?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
-                                </label><br>
-                                <small id="public-help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
-                            </div>
-                        </div>
 
                         <div class="mb-3">
                             <label for="publication_date" class="form-label"><?= htmlspecialchars(t('common.publication_date_short'), ENT_QUOTES, 'UTF-8') ?></label>

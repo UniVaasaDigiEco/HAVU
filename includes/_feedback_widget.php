@@ -98,7 +98,7 @@ if (!empty($_SESSION['user_public_id'])) {
     </div>
 </div>
 
-<script>const RECAPTCHA_SITE_KEY = <?= json_encode(RECAPTCHA_SITE_KEY, JSON_HEX_TAG) ?>;</script>
+<script>var RECAPTCHA_SITE_KEY = <?= json_encode(RECAPTCHA_SITE_KEY, JSON_HEX_TAG) ?>;</script>
 <script>
     window.feedbackWidgetTranslations = <?= json_encode([
         'cancel' => t('common.cancel'),

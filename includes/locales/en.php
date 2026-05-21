@@ -235,6 +235,7 @@ return [
         'heading' => 'Admin dashboard',
         'route_management' => 'Route management',
         'route_management_intro' => 'Here you can manage your routes. Create new ones, edit existing ones, or delete routes that are no longer needed.',
+        'routes_private_update_notice' => 'UPDATE 21.05.2026: All routes are now set to be private. They are no longer visible to logged in players at all. The only way for players to play your routes is click your shareable link or QR-code.',
         'manuals_intro' => 'Here are different guides for using the HAVU-trailgame. There is also an older guide below that does not mention all features, but contains more screenshots that may be helpful.',
         'route_creator_guide' => 'Route creator guide (In Finnish)',
         'player_guide' => 'Player guide (In Finnish)',

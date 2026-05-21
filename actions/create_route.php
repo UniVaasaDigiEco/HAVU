@@ -53,8 +53,8 @@ try {
 
     // Prepare route data
     $public_id = Uuid::uuid4()->toString();
-    $is_published = isset($_POST['is_published']) ? 1 : 0;
-        $allow_route_line = isset($_POST['allow_route_line']) ? 1 : 0;
+    $is_published = 0;
+    $allow_route_line = isset($_POST['allow_route_line']) ? 1 : 0;
     $created_by = $_SESSION['user_public_id'];
     $title = $_POST['route_title'];
     $description = $_POST['route_description'];

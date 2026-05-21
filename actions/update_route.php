@@ -52,7 +52,7 @@ try {
 
     try {
         // Update route
-        $sql = "UPDATE routes SET title = ?, description = ?, updated_at = NOW() WHERE public_id = ?";
+        $sql = "UPDATE routes SET title = ?, description = ?, is_published = 0, updated_at = NOW() WHERE public_id = ?";
         $stmt = $db->prepare($sql);
         if (!$stmt) {
             throw new Exception('Failed to prepare update statement: ' . $db->error);
@@ -97,8 +97,8 @@ try {
             throw new Exception('Failed to prepare cross reference statement: ' . $db->error);
         }
 
-        // Get user data for is_published and publication_date
-        $is_published = 1;
+        // Keep updated routes and created nodes private by default.
+        $is_published = 0;
         $publication_date = date('Y-m-d');
         $created_by = $_SESSION['user_public_id'];
 

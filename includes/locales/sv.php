@@ -233,6 +233,7 @@ return [
         'heading' => 'Adminpanel',
         'route_management' => 'Ruttadministration',
         'route_management_intro' => 'Här kan du hantera dina rutter. Skapa nya, redigera befintliga eller ta bort rutter som inte längre behövs.',
+        'routes_private_update_notice' => 'UPPDATERING 21.05.2026: Alla rutter är nu privata. De syns inte längre alls för inloggade spelare. Det enda sättet för spelare att spela dina rutter är att använda din delbara länk eller QR-kod.',
         'manuals_intro' => 'Här finns olika guider för HAVU-stigspelet. Nedan finns också en äldre guide som inte nämner alla funktioner men innehåller fler skärmbilder.',
         'route_creator_guide' => 'Guide för att skapa rutter (På finska)',
         'player_guide' => 'Spelarguide (På finska)',

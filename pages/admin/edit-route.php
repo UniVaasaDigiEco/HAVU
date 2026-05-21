@@ -212,17 +212,6 @@ require_once '../../includes/_admin_nav.php';
                         </div>
 
                         <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help" <?= !isset($route_data) || !empty($route_data['is_published']) ? 'checked' : '' ?>>
-                                   <input class="form-check-input" type="checkbox" id="is_published" name="is_published" aria-describedby="public-help">
-                                <label class="form-check-label" for="is_published">
-                                    <?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
-                                </label><br>
-                                <small id="public-help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.public_help'), ENT_QUOTES, 'UTF-8') ?></small>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
                             <label for="publication_date" class="form-label"><?= htmlspecialchars(t('common.publication_date'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
                             <input
                                 type="date"

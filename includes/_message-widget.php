@@ -86,7 +86,7 @@ $_mw_route_name = isset($message_route_name) ? htmlspecialchars($message_route_n
     </div>
 </div>
 
-<script>const RECAPTCHA_SITE_KEY = <?= json_encode(RECAPTCHA_SITE_KEY, JSON_HEX_TAG) ?>;</script>
+<script>var RECAPTCHA_SITE_KEY = <?= json_encode(RECAPTCHA_SITE_KEY, JSON_HEX_TAG) ?>;</script>
 <script>
     window.messageWidgetTranslations = <?= json_encode([
         'cancel' => t('common.cancel'),

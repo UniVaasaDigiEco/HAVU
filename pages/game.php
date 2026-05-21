@@ -703,15 +703,6 @@ if (!$route) {
                     icon: userIcon,
                     title: commonTranslations.your_location
                 }).addTo(map);
-
-                // Optionally add accuracy circle
-                L.circle([lat, lng], {
-                    radius: 20,
-                    color: '#0066cc',
-                    fillColor: '#0066cc',
-                    fillOpacity: 0.1,
-                    weight: 1
-                }).addTo(map);
             }
 
             checkProximity(lat, lng);
