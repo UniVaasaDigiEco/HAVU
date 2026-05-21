@@ -101,7 +101,7 @@ require_once '../../includes/_admin_nav.php';
 
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <h4 class="mb-0"><?= htmlspecialchars(t('admin_route_statistics.routes_heading'), ENT_QUOTES, 'UTF-8') ?></h4>
-                    <span class="badge rounded-pill text-bg-light border"><?= htmlspecialchars(t('admin_route_statistics.includes_unpublished'), ENT_QUOTES, 'UTF-8') ?></span>
+                    <span class="badge rounded-pill text-bg-light border"><?= htmlspecialchars(t('admin_route_statistics.includes_private_routes'), ENT_QUOTES, 'UTF-8') ?></span>
                 </div>
 
                 <div class="table-responsive">
