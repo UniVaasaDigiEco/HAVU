@@ -235,7 +235,7 @@ return [
         'heading' => 'Ylläpitäjän hallintapaneeli',
         'route_management' => 'Reittien hallinta',
         'route_management_intro' => 'Tässä hallintapaneelissa voit ylläpitää reittejäsi: Luo uusia reittejä, muokkaa olemassa olevia, tai poista tarpeettomia reittejä.',
-        'routes_private_update_notice' => 'PÄIVITYS 21.05.2026: Kaikki reitit on nyt asetettu yksityisiksi ja kaikki uudet reitit ovat automaattisesti yksityisiä, eikä niitä voi enää asettaa julkiseksi. Reitit eivät siis enää näy pelaajille lainkaan. Ainoa tapa pelata reittejäsi on käyttää jakamaasi linkkiä tai QR-koodia.',
+        'routes_private_update_notice' => 'PÄIVITYS 21.05.2026: Kaikki reitit on nyt asetettu yksityisiksi, ja myös tulevat uudet reitit ovat ainoastaan yksityisiä. Reittejä ei voi enää asettaa julkiseksi. Ainoa tapa pelata reittejäsi on käyttää jakamaasi reitin linkkiä tai QR-koodia.',
         'manuals_intro' => 'Tässä on eri oppaita HAVU-polkupelin käyttämiseen niin pelaajalle kuin ylläpitäjälle. Alimpana on myös vanhempi opas reittien ylläpitäjille. Siinä ei mukana kaikkia nykyisiä toiminnallisuuksia, mutta sisältää enemmän kuvakaappauksia, mikä voi antaa paremmin apua.',
         'route_creator_guide' => 'Opas reittien luomiseen ja ylläpitämiseen (Suomeksi)',
         'player_guide' => 'Opas pelaamiseen (Suomeksi)',
