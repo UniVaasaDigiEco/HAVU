@@ -22,6 +22,7 @@ $routes = $user->getCreatedRoutes();
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $game_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/game.php?route=';
+$creator_routes_base_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . ROOT_DIR . 'pages/creator-routes.php?creator=';
 $delete_route_confirmation = json_encode(
     t('route_editor.confirm_delete_route'),
     JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
@@ -74,6 +75,13 @@ require_once '../../includes/_admin_nav.php';
                 <a href="new-route.php" class="btn btn-primary text-white" id="btn-newRoute">
                     <i class="bi bi-plus-circle-fill"></i> <?= htmlspecialchars(t('admin_dashboard.new_route'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
+                <button type="button"
+                        class="btn btn-outline-success btn-share-target"
+                        data-share-url="<?= htmlspecialchars($creator_routes_base_url . $user->getPublicId()->toString(), ENT_QUOTES, 'UTF-8') ?>"
+                        data-share-title="<?= htmlspecialchars(t('admin_dashboard.share_collection_title'), ENT_QUOTES, 'UTF-8') ?>"
+                        data-share-file-name="creator-route-collection-qr-code.png">
+                    <i class="bi bi-collection-play-fill"></i> <?= htmlspecialchars(t('admin_dashboard.share_collection'), ENT_QUOTES, 'UTF-8') ?>
+                </button>
             </div>
             <div class="route-management-table">
                 <?php if ($routes): ?>
@@ -98,9 +106,10 @@ require_once '../../includes/_admin_nav.php';
                                         <a href="testGame.php?route=<?= urlencode($route->getPublicId()) ?>" class="btn btn-sm btn-dark">
                                                 <i class="bi bi-joystick me-1"></i><?= htmlspecialchars(t('admin_dashboard.test_route'), ENT_QUOTES, 'UTF-8') ?>
                                         </a>
-                                        <button class="btn btn-sm btn-warning btn-share"
-                                            data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
-                                            data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                        <button class="btn btn-sm btn-warning btn-share-target"
+                                            data-share-url="<?= htmlspecialchars($game_base_url . $route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                            data-share-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
+                                            data-share-file-name="route-qr-code.png">
                                             <i class="bi bi-qr-code me-1"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
                                         </button>
                                         <button class="btn btn-sm btn-info btn-copy-route me-4"
@@ -129,9 +138,10 @@ require_once '../../includes/_admin_nav.php';
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <button class="dropdown-item btn-share"
-                                                            data-route-id="<?= htmlspecialchars($route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
-                                                            data-route-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                                                    <button class="dropdown-item btn-share-target"
+                                                            data-share-url="<?= htmlspecialchars($game_base_url . $route->getPublicId(), ENT_QUOTES, 'UTF-8') ?>"
+                                                            data-share-title="<?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
+                                                            data-share-file-name="route-qr-code.png">
                                                         <i class="bi bi-qr-code me-2"></i><?= htmlspecialchars(t('admin_dashboard.share'), ENT_QUOTES, 'UTF-8') ?>
                                                     </button>
                                                 </li>
@@ -218,7 +228,7 @@ require_once '../../includes/_admin_nav.php';
             </div>
             <div class="modal-body text-center">
                 <p class="text-muted mb-3">
-                    <label for="shareUrl"><?= htmlspecialchars(t('admin_dashboard.share_modal_intro'), ENT_QUOTES, 'UTF-8') ?></label>
+                    <label for="shareUrl"><?= htmlspecialchars(t('admin_dashboard.share_modal_intro_generic'), ENT_QUOTES, 'UTF-8') ?></label>
                 </p>
                 <div class="input-group mb-4">
                     <input type="text" class="form-control font-monospace small" id="shareUrl" readonly>
@@ -253,9 +263,9 @@ require_once '../../includes/_admin_nav.php';
             }
         });
     });
-    const gameBaseUrl = <?= json_encode($game_base_url) ?>;
     const copyNamePrefix = 'Copy of ';
     const deleteRouteConfirmation = <?= $delete_route_confirmation ?>;
+    const shareQrUrlBase = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=';
 
     // Mobile dropdowns: use fixed positioning so they overflow the table-responsive container
     document.querySelectorAll('.d-md-none [data-bs-toggle="dropdown"]').forEach(function(el) {
@@ -290,16 +300,17 @@ require_once '../../includes/_admin_nav.php';
         titleInput.select();
     });
 
-    document.querySelectorAll('.btn-share').forEach(function(btn) {
+    document.querySelectorAll('.btn-share-target').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            const routeId = this.dataset.routeId;
-            const routeTitle = this.dataset.routeTitle;
-            const gameUrl = gameBaseUrl + routeId;
+            const shareUrl = this.dataset.shareUrl;
+            const shareTitle = this.dataset.shareTitle || '';
+            const shareFileName = this.dataset.shareFileName || 'shared-qr-code.png';
 
-            document.getElementById('shareModalTitle').textContent = routeTitle;
-            document.getElementById('shareUrl').value = gameUrl;
+            document.getElementById('shareModalTitle').textContent = shareTitle;
+            document.getElementById('shareUrl').value = shareUrl;
             document.getElementById('shareQr').src =
-                'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(gameUrl);
+                shareQrUrlBase + encodeURIComponent(shareUrl);
+            document.getElementById('btnDownloadQr').dataset.fileName = shareFileName;
 
             shareModal.show();
         });
@@ -314,8 +325,7 @@ require_once '../../includes/_admin_nav.php';
 
     document.getElementById('btnDownloadQr').addEventListener('click', function() {
         const qrImg = document.getElementById('shareQr');
-        const shareUrl = document.getElementById('shareUrl').value;
-        const fileName = 'route-qr-code.png';
+        const fileName = this.dataset.fileName || 'shared-qr-code.png';
 
         fetch(qrImg.src)
             .then(response => response.blob())
