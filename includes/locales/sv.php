@@ -123,8 +123,6 @@ return [
         'password_label' => 'Lösenord',
         'password_confirm_label' => 'Bekräfta lösenord',
         'password_hint' => 'Minst 8 tecken',
-        'request_admin_label' => 'Vill du lägga till rutter själv?',
-        'request_admin_hint' => 'Ditt spelarkonto skapas och aktiveras genast. En administratör får ett meddelande om din begäran att skapa rutter. Du får rättigheter att skapa rutter när begäran har godkänts.',
         'has_account' => 'Har du redan ett konto?',
     ],
     'feedback' => [

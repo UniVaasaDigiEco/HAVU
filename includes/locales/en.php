@@ -125,8 +125,6 @@ return [
         'password_label' => 'Password',
         'password_confirm_label' => 'Confirm password',
         'password_hint' => 'At least 8 characters',
-        'request_admin_label' => 'Do you want to create routes yourself?',
-        'request_admin_hint' => 'Your player account will be created and activated immediately. An administrator will be notified about your request to create routes. You will receive route creation rights once your request has been approved.',
         'has_account' => 'Already have an account?',
     ],
     'feedback' => [

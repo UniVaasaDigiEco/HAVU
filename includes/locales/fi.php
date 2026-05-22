@@ -125,8 +125,6 @@ return [
         'password_label' => 'Salasana',
         'password_confirm_label' => 'Vahvista salasana',
         'password_hint' => 'Vähintään 8 merkkiä',
-        'request_admin_label' => 'Haluatko lisätä reittejä itse?',
-        'request_admin_hint' => 'Tunnuksesi pelaajana luodaan ja aktivoidaan heti. Ylläpitäjälle lähetetään ilmoitus pyynnöstäsi luoda reittejä. Saat reitinluontioikeudet, kun pyyntösi on hyväksytty.',
         'has_account' => 'Onko sinulla jo tunnus?',
     ],
     'feedback' => [

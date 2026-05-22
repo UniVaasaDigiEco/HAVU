@@ -89,28 +89,10 @@ if ($exists) {
 }
 
 try {
-    Security::addUser($email, $password, $full_name, USER_TYPE_REGULAR);
+    Security::addUser($email, $password, $full_name, USER_TYPE_ADMIN);
 } catch (Exception $e) {
     header('Location: ' . registerErrorUrl('actions.register.create_failed', $return_to));
     exit;
-}
-
-if (isset($_POST['request_admin'])) {
-    $to      = 'support@havupeli.jansoftworks.fi';
-    $subject = 'HAVU: Uusi käyttäjä pyytää reitinluontioikeuksia';
-    $time    = (new DateTime())->format('d.m.Y H:i');
-    $body    = "Hei,\n\n"
-             . "Uusi käyttäjä on rekisteröitynyt HAVU-peliin ja pyytää oikeuksia reittien luomiseen.\n\n"
-             . "Käyttäjätiedot:\n"
-             . "  Nimi:               {$full_name}\n"
-             . "  Sähköposti:         {$email}\n"
-             . "  Rekisteröitymisaika: {$time}\n\n"
-             . "Voit muuttaa käyttäjän tyypiksi admin ylläpitopaneelissa.\n\n"
-             . "---\nHAVU-pelialusta";
-    $headers = "From: noreply@havupeli.jansoftworks.fi\r\n"
-             . "Reply-To: {$email}\r\n"
-             . "Content-Type: text/plain; charset=UTF-8\r\n";
-    mail($to, $subject, $body, $headers);
 }
 
 if ($return_to !== null) {
@@ -129,7 +111,7 @@ if ($return_to !== null) {
 
             $_SESSION['user_public_id'] = $user->getPublicId()->toString();
             $_SESSION['is_logged_in'] = true;
-            $_SESSION['is_admin'] = false;
+            $_SESSION['is_admin'] = ($user->getUserType() === USER_TYPE_ADMIN);
             $_SESSION['login_timestamp'] = time();
             $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR'];
 

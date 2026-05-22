@@ -67,19 +67,6 @@ $return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) :
                         <input id="password_confirm" name="password_confirm" type="password" class="form-control"
                                required autocomplete="new-password">
                     </div>
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                   id="request_admin" name="request_admin">
-                            <label class="form-check-label fw-semibold" for="request_admin">
-                                <?= htmlspecialchars(t('register.request_admin_label'), ENT_QUOTES, 'UTF-8') ?>
-                            </label>
-                        </div>
-                        <small id="request_admin_hint" class="text-muted" style="display:none;">
-                            <i class="bi bi-info-circle me-1"></i>
-                            <?= htmlspecialchars(t('register.request_admin_hint'), ENT_QUOTES, 'UTF-8') ?>
-                        </small>
-                    </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-success text-white w-100">
                             <i class="bi bi-person-plus-fill me-1"></i> <?= htmlspecialchars(t('common.create_account'), ENT_QUOTES, 'UTF-8') ?>
@@ -100,10 +87,5 @@ $return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) :
         </div>
     </div>
 </div>
-<script>
-    document.getElementById('request_admin').addEventListener('change', function () {
-        document.getElementById('request_admin_hint').style.display = this.checked ? 'block' : 'none';
-    });
-</script>
 </body>
 </html>
