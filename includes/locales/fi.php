@@ -269,7 +269,7 @@ return [
     ],
     'creator_routes' => [
         'title' => 'HAVU-polkupeli - :creatorin reitit',
-        'heading' => ':creatorin reitit',
+        'heading' => ':creator - Kaikki reitit',
         'intro' => 'Tältä sivulta löydät kaikki reitit, jotka :creator on luonut. Valitse reitti ja aloita pelaaminen suoraan.',
         'route_count' => ':count reittiä',
         'empty_routes' => 'Tällä reitinluojalla ei ole vielä yhtään reittiä.',

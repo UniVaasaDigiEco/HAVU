@@ -181,7 +181,7 @@ function formatCreatorRouteDate(string $value): string
         <?php else: ?>
             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3">
                 <div>
-                    <p class="text-uppercase small fw-semibold text-success mb-2"><?= htmlspecialchars(t('admin_dashboard.route_sharing'), ENT_QUOTES, 'UTF-8') ?></p>
+                    <!--<p class="text-uppercase small fw-semibold text-success mb-2"><?= htmlspecialchars(t('admin_dashboard.route_sharing'), ENT_QUOTES, 'UTF-8') ?></p>-->
                     <h1 class="display-6 fw-bold mb-3"><?= htmlspecialchars(t('creator_routes.heading', ['creator' => $creator_name]), ENT_QUOTES, 'UTF-8') ?></h1>
                     <p class="lead mb-0"><?= htmlspecialchars(t('creator_routes.intro', ['creator' => $creator_name]), ENT_QUOTES, 'UTF-8') ?></p>
                 </div>

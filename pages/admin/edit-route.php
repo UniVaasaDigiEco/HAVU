@@ -120,11 +120,11 @@ require_once '../../includes/_admin_nav.php';
         </div>
     </div>
 
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-4 d-none" id="routeSelectCard">
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0"><i class="bi bi-folder2-open me-2"></i><?= htmlspecialchars(t('admin_edit_route.select_route'), ENT_QUOTES, 'UTF-8') ?></h5>
         </div>
-        <div class="card-body d-none">
+        <div class="card-body">
             <form id="routeSelectForm" method="GET" class="row g-3 align-items-end">
                 <div class="col-lg-8">
                     <label for="route_public_id" class="form-label"><?= htmlspecialchars(t('admin_edit_route.my_routes'), ENT_QUOTES, 'UTF-8') ?></label>
