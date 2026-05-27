@@ -23,6 +23,8 @@
     let forcedFeedbackType = null;
     const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY;
     const bootstrapApi = window.bootstrap;
+    const feedbackModalZIndex = 11050;
+    const feedbackBackdropZIndex = 11040;
 
     if (!form || !modal) return;
 
@@ -73,6 +75,33 @@
         btnText.classList.toggle('d-none', loading);
         submitBtn.disabled = loading;
     }
+
+    function getTopmostBackdrop() {
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        return backdrops.length ? backdrops[backdrops.length - 1] : null;
+    }
+
+    function promoteFeedbackModal() {
+        modal.style.zIndex = String(feedbackModalZIndex);
+
+        const backdrop = getTopmostBackdrop();
+        if (backdrop) {
+            backdrop.style.zIndex = String(feedbackBackdropZIndex);
+        }
+    }
+
+    function resetFeedbackModalStacking() {
+        modal.style.zIndex = '';
+
+        const backdrop = getTopmostBackdrop();
+        if (backdrop) {
+            backdrop.style.zIndex = '';
+        }
+    }
+
+    modal.addEventListener('show.bs.modal', promoteFeedbackModal);
+    modal.addEventListener('shown.bs.modal', promoteFeedbackModal);
+    modal.addEventListener('hidden.bs.modal', resetFeedbackModalStacking);
 
     modal.addEventListener('hidden.bs.modal', function () {
         alertEl.classList.add('d-none');

@@ -60,8 +60,13 @@ require_once '../../includes/_admin_nav.php';
                 echo Message::displayFlashMessages();
                 ?>
                 <p class="lead"><?= htmlspecialchars(t('admin_dashboard.route_management_intro'), ENT_QUOTES, 'UTF-8') ?></p>
+                <!-- TODO: Remove these alerts when they're no longer relevant -->
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <i class="bi bi-info-circle-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.routes_private_update_notice'), ENT_QUOTES, 'UTF-8') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
+                </div>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.routes_guides_update_notice'), ENT_QUOTES, 'UTF-8') ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
                 </div>
                 <p>
