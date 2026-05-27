@@ -1,32 +1,6 @@
 <?php
 $admin_nav_current = $admin_nav_current ?? '';
-$admin_route_items = [
-    [
-        'id' => 'dashboard',
-        'href' => 'dashboard.php',
-        'icon' => 'bi bi-grid-fill',
-        'label' => t('admin_dashboard.dashboard_home'),
-    ],
-    [
-        'id' => 'new-route',
-        'href' => 'new-route.php',
-        'icon' => 'bi bi-plus-circle-fill',
-        'label' => t('admin_dashboard.new_route'),
-    ],
-    [
-        'id' => 'edit-route',
-        'href' => 'edit-route.php',
-        'icon' => 'bi bi-pencil-fill',
-        'label' => t('admin_dashboard.edit_route'),
-    ],
-    [
-        'id' => 'delete-route',
-        'href' => 'delete-route.php',
-        'icon' => 'bi bi-trash-fill',
-        'label' => t('admin_dashboard.delete_route'),
-    ],
-];
-$admin_route_menu_active = in_array($admin_nav_current, ['dashboard', 'new-route', 'edit-route', 'delete-route'], true);
+$admin_route_nav_active = in_array($admin_nav_current, ['dashboard', 'new-route', 'edit-route', 'delete-route'], true);
 ?>
 <nav class="navbar navbar-expand-lg admin-navbar" data-bs-theme="dark">
     <div class="container-fluid">
@@ -44,23 +18,10 @@ $admin_route_menu_active = in_array($admin_nav_current, ['dashboard', 'new-route
         </button>
         <div class="collapse navbar-collapse" id="adminNavbarNav">
             <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                <li class="nav-item dropdown admin-navbar__dropdown">
-                    <a class="nav-link dropdown-toggle<?= $admin_route_menu_active ? ' active' : '' ?>"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">
+                <li class="nav-item">
+                    <a class="nav-link<?= $admin_route_nav_active ? ' active' : '' ?>" href="dashboard.php"<?= $admin_route_nav_active ? ' aria-current="page"' : '' ?>>
                         <i class="bi bi-map-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.route_management'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
-                    <ul class="dropdown-menu">
-                        <?php foreach ($admin_route_items as $item): ?>
-                            <li>
-                                <a class="dropdown-item<?= $admin_nav_current === $item['id'] ? ' active' : '' ?>" href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>"<?= $admin_nav_current === $item['id'] ? ' aria-current="page"' : '' ?>>
-                                    <i class="<?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?> me-2"></i><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link<?= $admin_nav_current === 'route-statistics' ? ' active' : '' ?>" href="route-statistics.php"<?= $admin_nav_current === 'route-statistics' ? ' aria-current="page"' : '' ?>>
