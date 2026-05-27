@@ -203,6 +203,7 @@ return [
         'next' => 'Next:',
         'celebration_title' => '🎉 Great!',
         'celebration_message' => 'You found the checkpoint: <strong>:name</strong>',
+        'checkpoint_found_message' => 'Congratulations!' . "\n" . 'You found a checkpoint!',
         'progress_label' => 'Progress',
         'progress_text' => ':visited/:total checkpoints',
         'gps_error' => 'GPS error: Your location could not be determined. Make sure location services are enabled and that the browser has permission to use them.' . "\n\n" . 'Error: :message',

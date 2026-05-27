@@ -814,13 +814,16 @@ if (!$route) {
                 // Create acorn celebration element
                 const acornDiv = document.createElement('div');
                 acornDiv.className = 'acorn-celebration';
-                acornDiv.innerHTML = '<img src="../images/acorn.png" alt="Acorn">';
+                acornDiv.innerHTML = `
+                    <img src="../images/acorn.png" alt="Acorn">
+                    <div class="acorn-celebration__text">${escapeHtml(gameTranslations.checkpoint_found_message || 'Congratulations!\nYou found a checkpoint!')}</div>
+                `;
                 document.body.appendChild(acornDiv);
 
                 // Remove acorn after animation completes
                 setTimeout(() => {
                     acornDiv.remove();
-                }, 2000);
+                }, 3000);
             }
         };
 
@@ -925,6 +928,80 @@ if (!$route) {
 
         .route-node-marker--visited {
             background: #198754;
+        }
+
+        .acorn-celebration {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+            text-align: center;
+            animation: acornCelebrationFade 2s ease-in-out forwards;
+        }
+
+        .acorn-celebration img {
+            animation: acornPulseOnly 2s ease-in-out forwards;
+        }
+
+        @keyframes acornCelebrationFade {
+            0% {
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes acornPulseOnly {
+            0% {
+                transform: scale(0.5);
+            }
+
+            15% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.2);
+            }
+
+            35% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            55% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0.8);
+            }
+        }
+
+        .acorn-celebration__text {
+            color: ghostwhite;
+            background: rgba(0, 0, 0, 0.6) !important;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 1.25;
+            white-space: pre-line;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+            max-width: min(90vw, 320px);
         }
 
         #completion-screen {

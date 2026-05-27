@@ -201,6 +201,7 @@ return [
         'next' => 'Nästa:',
         'celebration_title' => '🎉 Bra jobbat!',
         'celebration_message' => 'Du hittade kontrollpunkten: <strong>:name</strong>',
+        'checkpoint_found_message' => 'Grattis!' . "\n" . 'Du hittade en kontrollpunkt!',
         'progress_label' => 'Framsteg',
         'progress_text' => ':visited/:total kontrollpunkter',
         'gps_error' => 'GPS-fel: Din plats kunde inte bestämmas. Kontrollera att platstjänster är aktiverade och att webbläsaren har tillstånd att använda dem.' . "\n\n" . 'Fel: :message',

@@ -203,6 +203,7 @@ return [
         'next' => 'Seuraava:',
         'celebration_title' => '🎉 Hienoa!',
         'celebration_message' => 'Olet löytänyt rastin: <strong>:name</strong>',
+        'checkpoint_found_message' => 'Onneksi olkoon!' . "\n" . 'Löysit rastin!',
         'progress_label' => 'Eteneminen',
         'progress_text' => ':visited/:total rastia',
         'gps_error' => 'GPS-virhe: Sijaintiasi ei voida määrittää. Varmista, että sijaintipalvelut ovat päällä ja että selaimella on lupa käyttää niitä.' . "\n\n" . 'Virhe: :message',
