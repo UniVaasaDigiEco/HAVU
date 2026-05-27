@@ -391,6 +391,15 @@ if (!$route) {
             return div.innerHTML;
         }
 
+        function triggerCheckpointPopupVibration() {
+            if (!('vibrate' in navigator)) {
+                return;
+            }
+
+            // Short, subtle haptic pulse when a nearby checkpoint popup is auto-opened.
+            navigator.vibrate(120);
+        }
+
         // Levenshtein similarity: 1 - (distance / max(len_a, len_b))
         function levenshteinSimilarity(a, b) {
             if (!a.length || !b.length) return 0;
@@ -748,6 +757,7 @@ if (!$route) {
                 const phoneSheetOpen = activeNodeId === nearestNode.id && isMobileNodeSheetVisible();
 
                 if (!desktopPopupOpen && !phoneSheetOpen) {
+                    triggerCheckpointPopupVibration();
                     openNodePresentation(nearestNode.id);
                 }
             }

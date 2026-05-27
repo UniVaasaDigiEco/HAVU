@@ -270,6 +270,15 @@ if (!$route) {
             return div.innerHTML;
         }
 
+        function triggerCheckpointPopupVibration() {
+            if (!('vibrate' in navigator)) {
+                return;
+            }
+
+            // Short, subtle haptic pulse when a nearby checkpoint popup is auto-opened.
+            navigator.vibrate(120);
+        }
+
         function getNodeLabel(node) {
             const nodeIndex = routeNodes.indexOf(node);
             return nodeIndex === 0 ? gameTranslations.start_label : (nodeIndex === routeNodes.length - 1 ? gameTranslations.finish_label : '');
@@ -627,6 +636,7 @@ if (!$route) {
                 const phoneSheetOpen = activeNodeId === nearestNode.id && isMobileNodeSheetVisible();
 
                 if (!desktopPopupOpen && !phoneSheetOpen) {
+                    triggerCheckpointPopupVibration();
                     openNodePresentation(nearestNode.id);
                 }
             }
