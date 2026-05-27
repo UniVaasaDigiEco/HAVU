@@ -271,7 +271,7 @@ return [
     'creator_routes' => [
         'title' => 'HAVU-trailgame - Routes by :creator',
         'heading' => ':creator',
-        'intro' => 'This page lists all routes created by :creator. Choose a route and start playing directly.',
+        'intro' => 'This page lists all routes created by :creator. Choose a route and start playing.',
         'route_count' => ':count routes',
         'last_updated' => 'Last updated',
         'empty_routes' => 'This route creator does not have any routes yet.',

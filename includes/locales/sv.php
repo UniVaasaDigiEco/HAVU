@@ -269,7 +269,7 @@ return [
     'creator_routes' => [
         'title' => 'HAVU-stigspelet - Rutter av :creator',
         'heading' => ':creator',
-        'intro' => 'Den här sidan visar alla rutter som :creator har skapat. Välj en rutt och börja spela direkt.',
+        'intro' => 'Den här sidan visar alla rutter som :creator har skapat. Välj en rutt och spela.',
         'route_count' => ':count rutter',
         'last_updated' => 'Senast uppdaterad',
         'empty_routes' => 'Den här ruttskaparen har inga rutter ännu.',
