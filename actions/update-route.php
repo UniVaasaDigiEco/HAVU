@@ -32,7 +32,7 @@ try {
         throw routeFormException('actions.route_form.user_not_authenticated');
     }
 
-    if (empty($route_public_id) || empty($_POST['route_title']) || empty($_POST['publication_date']) || empty($_POST['nodes_data'])) {
+    if (empty($route_public_id) || empty($_POST['route_title']) || empty($_POST['nodes_data'])) {
         throw routeFormException('actions.route_form.missing_required_fields');
     }
 
@@ -48,11 +48,7 @@ try {
     $gps_threshold = $gps_threshold_raw;
     $allow_route_line = isset($_POST['allow_route_line']) ? 1 : 0;
 
-    $publication_date = DateTime::createFromFormat('Y-m-d', $_POST['publication_date']);
-    if (!$publication_date) {
-        throw routeFormException('actions.route_form.invalid_publication_date');
-    }
-    $formatted_publication_date = $publication_date->format('Y-m-d');
+    $formatted_publication_date = (new DateTimeImmutable('now'))->format('Y-m-d');
 
     $nodes_data = json_decode($_POST['nodes_data']);
     if (json_last_error() !== JSON_ERROR_NONE) {

@@ -211,17 +211,6 @@ require_once '../../includes/_admin_nav.php';
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="publication_date" class="form-label"><?= htmlspecialchars(t('common.publication_date'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
-                            <input
-                                type="date"
-                                class="form-control"
-                                id="publication_date"
-                                name="publication_date"
-                                required
-                                value="<?= htmlspecialchars($route_data['publication_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                            >
-                        </div>
                     </div>
                 </div>
 
@@ -917,11 +906,6 @@ require_once '../../includes/_admin_nav.php';
 
         if (selectedRouteData) {
             loadSelectedRouteData();
-        } else {
-            const publicationDateInput = document.getElementById('publication_date');
-            if (publicationDateInput && !publicationDateInput.value) {
-                publicationDateInput.value = new Date().toISOString().split('T')[0];
-            }
         }
     });
 </script>

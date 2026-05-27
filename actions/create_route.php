@@ -24,7 +24,7 @@ function isWithinFinlandBounds(float $latitude, float $longitude): bool
 
 try {
     // Validate required POST data
-    if (empty($_POST['route_title']) || empty($_POST['route_description']) || empty($_POST['publication_date']) || empty($_POST['nodes_data'])) {
+    if (empty($_POST['route_title']) || empty($_POST['route_description']) || empty($_POST['nodes_data'])) {
         throw routeFormException('actions.route_form.missing_required_fields');
     }
 
@@ -35,12 +35,7 @@ try {
 
     $db = Tools::getDb();
 
-    // Validate and parse publication date
-    $publication_date = DateTime::createFromFormat('Y-m-d', $_POST['publication_date']);
-    if (!$publication_date) {
-        throw routeFormException('actions.route_form.invalid_publication_date');
-    }
-    $formatted_publication_date = $publication_date->format('Y-m-d');
+    $formatted_publication_date = (new DateTimeImmutable('now'))->format('Y-m-d');
 
     // Parse and validate nodes data
     $nodes_data = json_decode($_POST['nodes_data']);

@@ -137,11 +137,6 @@ require_once '../../includes/_admin_nav.php';
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="publication_date" class="form-label"><?= htmlspecialchars(t('common.publication_date_short'), ENT_QUOTES, 'UTF-8') ?></label>
-                            <input type="date" class="form-control" id="publication_date" name="publication_date" readonly>
-                            <small><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.publication_date_help'), ENT_QUOTES, 'UTF-8') ?></small>
-                        </div>
                     </div>
                 </div>
 
@@ -888,9 +883,6 @@ require_once '../../includes/_admin_nav.php';
         initMap();
         initEditor();
         setupSearch();
-
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('publication_date').value = today;
 
         // GPS threshold: sync slider and number input
         const gpsSlider = document.getElementById('gps_threshold_slider');
