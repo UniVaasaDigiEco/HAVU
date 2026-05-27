@@ -109,7 +109,6 @@ require_once '../../includes/_admin_nav.php';
                         <thead>
                         <tr>
                             <th><?= htmlspecialchars(t('admin_route_statistics.table_route'), ENT_QUOTES, 'UTF-8') ?></th>
-                            <th><?= htmlspecialchars(t('admin_route_statistics.table_status'), ENT_QUOTES, 'UTF-8') ?></th>
                             <th><?= htmlspecialchars(t('admin_route_statistics.table_total_nodes'), ENT_QUOTES, 'UTF-8') ?></th>
                             <th><?= htmlspecialchars(t('admin_route_statistics.table_started'), ENT_QUOTES, 'UTF-8') ?></th>
                             <th><?= htmlspecialchars(t('admin_route_statistics.table_finished'), ENT_QUOTES, 'UTF-8') ?></th>
@@ -121,17 +120,6 @@ require_once '../../includes/_admin_nav.php';
                         <?php foreach ($route_stats as $route_stat): ?>
                             <tr>
                                 <td class="fw-semibold"><?= htmlspecialchars($route_stat['title'], ENT_QUOTES, 'UTF-8') ?></td>
-                                <td>
-                                    <?php if ($route_stat['is_published']): ?>
-                                        <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">
-                                            <i class="bi bi-eye-fill me-1"></i><?= htmlspecialchars(t('common.public'), ENT_QUOTES, 'UTF-8') ?>
-                                        </span>
-                                    <?php else: ?>
-                                        <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">
-                                            <i class="bi bi-eye-slash-fill me-1"></i><?= htmlspecialchars(t('common.private'), ENT_QUOTES, 'UTF-8') ?>
-                                        </span>
-                                    <?php endif; ?>
-                                </td>
                                 <td><?= htmlspecialchars(formatStatisticsNumber((float)$route_stat['total_nodes']), ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars(formatStatisticsNumber((float)$route_stat['started_count']), ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars(formatStatisticsNumber((float)$route_stat['finished_count']), ENT_QUOTES, 'UTF-8') ?></td>

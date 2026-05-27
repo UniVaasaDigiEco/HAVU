@@ -108,8 +108,8 @@ require_once '../../includes/_admin_nav.php';
                         </div>
 
                         <div class="mb-3">
-                            <label for="route_description" class="form-label"><?= htmlspecialchars(t('common.route_description'), ENT_QUOTES, 'UTF-8') ?></label>
-                            <textarea class="form-control" id="route_description" aria-describedby="description_help" name="route_description" rows="4"></textarea>
+                            <label for="route_description" class="form-label"><?= htmlspecialchars(t('common.route_description'), ENT_QUOTES, 'UTF-8') ?> <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="route_description" aria-describedby="description_help" name="route_description" rows="4" required></textarea>
                             <small id="description_help"><i class="bi bi-info-circle me-1"></i><?= htmlspecialchars(t('route_editor.route_description_help'), ENT_QUOTES, 'UTF-8') ?></small>
                         </div>
                         <div class="mb-3">
