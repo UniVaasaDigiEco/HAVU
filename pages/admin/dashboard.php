@@ -27,6 +27,11 @@ $delete_route_confirmation = json_encode(
     t('route_editor.confirm_delete_route'),
     JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
 );
+
+function formatAdminRouteDate(DateTime $value): string
+{
+    return current_locale() === 'en' ? $value->format('Y-m-d') : $value->format('d.m.Y');
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -90,6 +95,7 @@ require_once '../../includes/_admin_nav.php';
                         <thead>
                             <tr>
                                 <th><?= htmlspecialchars(t('admin_dashboard.table_route'), ENT_QUOTES, 'UTF-8') ?></th>
+                                <th><?= htmlspecialchars(t('admin_dashboard.table_last_updated'), ENT_QUOTES, 'UTF-8') ?></th>
                                 <th><?= htmlspecialchars(t('admin_dashboard.table_actions'), ENT_QUOTES, 'UTF-8') ?></th>
                             </tr>
                         </thead>
@@ -97,6 +103,7 @@ require_once '../../includes/_admin_nav.php';
                             <?php foreach ($routes as $route): ?>
                             <tr>
                                 <td><?= htmlspecialchars($route->getTitle(), ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars(formatAdminRouteDate($route->getUpdatedAt()), ENT_QUOTES, 'UTF-8') ?></td>
                                 <td class="route-actions-cell">
                                     <!-- Desktop: full labelled buttons -->
                                     <div class="d-none d-md-flex gap-2 flex-wrap">

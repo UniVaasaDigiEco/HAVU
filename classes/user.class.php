@@ -72,7 +72,7 @@ class User{
 
             $this->created_routes = [];
 
-            $route_sql = "SELECT id FROM routes WHERE user_id = ?";
+            $route_sql = "SELECT id FROM routes WHERE user_id = ? ORDER BY title ASC";
             $route_stmt = $db->prepare($route_sql);
             $route_stmt->bind_param("s", $this->public_id);
             $route_stmt->execute();

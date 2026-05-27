@@ -30,7 +30,7 @@ if ($creator_public_id === '') {
             LEFT JOIN node_route_cross nrc ON nrc.route_id = r.id
             WHERE r.user_id = ?
             GROUP BY r.id, r.public_id, r.title, r.description, r.created_at
-            ORDER BY r.created_at DESC, r.id DESC
+            ORDER BY r.title ASC, r.id DESC
         ";
 
         $stmt = $db->prepare($sql);
@@ -218,7 +218,7 @@ function formatCreatorRouteDate(string $value): string
                                         <p class="text-muted creator-route-card__description mb-4"><?= htmlspecialchars($description_preview, ENT_QUOTES, 'UTF-8') ?></p>
                                         <div class="d-flex justify-content-between align-items-center gap-3 mt-auto">
                                             <small class="text-muted">
-                                                <i class="bi bi-calendar-event me-1"></i><?= htmlspecialchars(formatCreatorRouteDate($route['created_at']), ENT_QUOTES, 'UTF-8') ?>
+                                                <i class="bi bi-calendar-event me-1"></i><?= htmlspecialchars(t('creator_routes.last_updated'), ENT_QUOTES, 'UTF-8') ?>: <?= htmlspecialchars(formatCreatorRouteDate($route['created_at']), ENT_QUOTES, 'UTF-8') ?>
                                             </small>
                                             <a href="<?= htmlspecialchars(ROOT_DIR . 'pages/game.php?route=' . urlencode($route['public_id']), ENT_QUOTES, 'UTF-8') ?>" class="btn btn-success text-white btn-sm">
                                                 <i class="bi bi-play-fill me-1"></i><?= htmlspecialchars(t('creator_routes.open_route'), ENT_QUOTES, 'UTF-8') ?>
