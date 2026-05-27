@@ -350,6 +350,7 @@ if (!$route) {
                 node.challengeDone = true;
                 node.challengeError = false;
                 refreshNodePresentation(nodeId);
+                window.markAsVisited(nodeId);
             } else {
                 node.challengeError = true;
                 if (body) {
@@ -732,7 +733,7 @@ if (!$route) {
 
                 setTimeout(() => {
                     acornDiv.remove();
-                }, 3000);
+                }, 4000);
             }
         };
 
@@ -753,7 +754,7 @@ if (!$route) {
             $acornCount.text(visitedNodes);
 
             if (visitedNodes === totalNodes) {
-                setTimeout(() => showCompletionScreen(visitedNodes), 3500);
+                setTimeout(() => showCompletionScreen(visitedNodes), 4000);
             }
         }
 
