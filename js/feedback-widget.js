@@ -21,13 +21,20 @@
     const titleTextEl = document.getElementById('feedback-modal-title-text');
 
     let forcedFeedbackType = null;
-    const recaptcha = window.grecaptcha;
     const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY;
     const bootstrapApi = window.bootstrap;
 
     if (!form || !modal) return;
 
     const endpoint = modal.dataset.action;
+
+    function getRecaptchaApi() {
+        if (!window.grecaptcha || typeof window.grecaptcha.ready !== 'function') {
+            return null;
+        }
+
+        return window.grecaptcha;
+    }
 
     function resetTypeFieldLock() {
         if (!typeField) return;
@@ -92,14 +99,16 @@
 
         setLoading(true);
 
-        if (!recaptcha || !recaptchaSiteKey) {
+        const recaptchaApi = getRecaptchaApi();
+
+        if (!recaptchaApi || !recaptchaSiteKey) {
             setLoading(false);
             showAlert(i18n.genericError, true);
             return;
         }
 
-        recaptcha.ready(function () {
-            recaptcha.execute(recaptchaSiteKey, { action: 'feedback' })
+        recaptchaApi.ready(function () {
+            recaptchaApi.execute(recaptchaSiteKey, { action: 'feedback' })
                 .then(function (token) {
                     document.getElementById('recaptcha-token').value = token;
 
@@ -120,6 +129,10 @@
                             setLoading(false);
                             showAlert(i18n.networkError, true);
                         });
+                })
+                .catch(function () {
+                    setLoading(false);
+                    showAlert(i18n.genericError, true);
                 });
         });
     });
