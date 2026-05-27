@@ -183,7 +183,7 @@ function formatCreatorRouteDate(string $value): string
                 <div>
                     <!--<p class="text-uppercase small fw-semibold text-success mb-2"><?= htmlspecialchars(t('admin_dashboard.route_sharing'), ENT_QUOTES, 'UTF-8') ?></p>-->
                     <h1 class="display-6 fw-bold mb-3"><?= htmlspecialchars(t('creator_routes.heading', ['creator' => $creator_name]), ENT_QUOTES, 'UTF-8') ?></h1>
-                    <p class="lead mb-0"><?= htmlspecialchars(t('creator_routes.intro', ['creator' => $creator_name]), ENT_QUOTES, 'UTF-8') ?></p>
+                    <!--<p class="lead mb-0"><?= htmlspecialchars(t('creator_routes.intro', ['creator' => $creator_name]), ENT_QUOTES, 'UTF-8') ?></p>-->
                 </div>
                 <span class="badge rounded-pill text-bg-light border fs-6 px-3 py-2 align-self-start align-self-lg-center">
                     <i class="bi bi-signpost-split-fill me-2"></i><?= htmlspecialchars($route_count_label, ENT_QUOTES, 'UTF-8') ?>
