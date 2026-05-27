@@ -25,17 +25,54 @@
     const bootstrapApi = window.bootstrap;
     const feedbackModalZIndex = 11050;
     const feedbackBackdropZIndex = 11040;
+    let recaptchaLoadPromise = null;
 
     if (!form || !modal) return;
 
     const endpoint = modal.dataset.action;
 
     function getRecaptchaApi() {
-        if (!window.grecaptcha || typeof window.grecaptcha.ready !== 'function') {
-            return null;
+        return (window.grecaptcha && typeof window.grecaptcha.ready === 'function')
+            ? window.grecaptcha
+            : null;
+    }
+
+    function ensureRecaptchaApi() {
+        const existingApi = getRecaptchaApi();
+        if (existingApi) {
+            return Promise.resolve(existingApi);
         }
 
-        return window.grecaptcha;
+        if (!recaptchaSiteKey) {
+            return Promise.resolve(null);
+        }
+
+        if (recaptchaLoadPromise) {
+            return recaptchaLoadPromise;
+        }
+
+        recaptchaLoadPromise = new Promise(function (resolve) {
+            const resolveApi = function () {
+                resolve(getRecaptchaApi());
+            };
+
+            let script = document.querySelector('script[data-havu-recaptcha="true"]');
+            if (!script) {
+                script = document.createElement('script');
+                script.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(recaptchaSiteKey);
+                script.async = true;
+                script.defer = true;
+                script.dataset.havuRecaptcha = 'true';
+                document.head.appendChild(script);
+            }
+
+            script.addEventListener('load', resolveApi, { once: true });
+            script.addEventListener('error', function () { resolve(null); }, { once: true });
+
+            window.setTimeout(resolveApi, 3500);
+        });
+
+        return recaptchaLoadPromise;
     }
 
     function resetTypeFieldLock() {
@@ -128,41 +165,41 @@
 
         setLoading(true);
 
-        const recaptchaApi = getRecaptchaApi();
+        ensureRecaptchaApi().then(function (recaptchaApi) {
+            if (!recaptchaApi || !recaptchaSiteKey) {
+                setLoading(false);
+                showAlert(i18n.genericError, true);
+                return;
+            }
 
-        if (!recaptchaApi || !recaptchaSiteKey) {
-            setLoading(false);
-            showAlert(i18n.genericError, true);
-            return;
-        }
+            recaptchaApi.ready(function () {
+                recaptchaApi.execute(recaptchaSiteKey, { action: 'feedback' })
+                    .then(function (token) {
+                        document.getElementById('recaptcha-token').value = token;
 
-        recaptchaApi.ready(function () {
-            recaptchaApi.execute(recaptchaSiteKey, { action: 'feedback' })
-                .then(function (token) {
-                    document.getElementById('recaptcha-token').value = token;
-
-                    fetch(endpoint, { method: 'POST', body: new FormData(form) })
-                        .then(function (res) { return res.json(); })
-                        .then(function (json) {
-                            setLoading(false);
-                            if (json.ok) {
-                                showAlert(i18n.success, false);
-                                form.reset();
-                                form.classList.remove('was-validated');
-                                cancelBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>&nbsp;' + i18n.close;
-                            } else {
-                                showAlert(json.error || i18n.genericError, true);
-                            }
-                        })
-                        .catch(function () {
-                            setLoading(false);
-                            showAlert(i18n.networkError, true);
-                        });
-                })
-                .catch(function () {
-                    setLoading(false);
-                    showAlert(i18n.genericError, true);
-                });
+                        fetch(endpoint, { method: 'POST', body: new FormData(form) })
+                            .then(function (res) { return res.json(); })
+                            .then(function (json) {
+                                setLoading(false);
+                                if (json.ok) {
+                                    showAlert(i18n.success, false);
+                                    form.reset();
+                                    form.classList.remove('was-validated');
+                                    cancelBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>&nbsp;' + i18n.close;
+                                } else {
+                                    showAlert(json.error || i18n.genericError, true);
+                                }
+                            })
+                            .catch(function () {
+                                setLoading(false);
+                                showAlert(i18n.networkError, true);
+                            });
+                    })
+                    .catch(function () {
+                        setLoading(false);
+                        showAlert(i18n.genericError, true);
+                    });
+            });
         });
     });
 

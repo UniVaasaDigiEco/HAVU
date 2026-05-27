@@ -419,21 +419,8 @@ if (!$route) {
             return nodeIndex === 0 ? gameTranslations.start_label : (nodeIndex === routeNodes.length - 1 ? gameTranslations.finish_label : '');
         }
 
-        function buildCelebrationContent(node) {
-            return `
-                <div class="node-popup text-center" id="node-body-${node.id}">
-                    <h5>${gameTranslations.celebration_title}</h5>
-                    <p>${translate(gameTranslations.celebration_message, { name: `<strong>${escapeHtml(node.name)}</strong>` })}</p>
-                </div>
-            `;
-        }
-
         // Build node HTML for both desktop popups and the phone bottom sheet
         function buildNodeContent(node) {
-            if (node.visited) {
-                return buildCelebrationContent(node);
-            }
-
             const nodeLabel = getNodeLabel(node);
             const canCheckin = !REQUIRE_GPS_PROXIMITY || (node.inProximity && (!node.challenge_data || node.challengeDone));
 
@@ -834,11 +821,6 @@ if (!$route) {
                 setTimeout(() => {
                     acornDiv.remove();
                 }, 2000);
-
-                // Show celebration content after the acorn animation
-                setTimeout(() => {
-                    openNodePresentation(nodeId);
-                }, 2100);
             }
         };
 
