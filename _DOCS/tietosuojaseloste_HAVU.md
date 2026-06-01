@@ -19,7 +19,7 @@
 - **Osoite:** Wolffintie 34
 - **Postinumero:** 65200
 - **Postitoimipaikka:** Vaasa
-- **Puhelinnumero:** +358 39 449 8263
+- **Puhelinnumero:** +358 29 449 8263
 - **Sähköposti:** jyri.nieminen@uwasa.fi
 
 ## 3. Tietosuojavastaava
@@ -46,7 +46,7 @@ Henkilötietojen käsittely perustuu ensisijaisesti:
 
 - sopimuksen täytäntöönpanoon tai palvelun toimittamiseen silloin, kun käyttäjä luo tilin, kirjautuu palveluun ja käyttää rekisteröityneille käyttäjille tarkoitettuja toimintoja
 - rekisterinpitäjän oikeutettuun etuun palvelun tietoturvan, hallinnan ja toimivuuden varmistamiseksi
-- suostumukseen siltä osin kuin käyttäjä lähettää palautetta tai yhteydenottopyynnön tai käyttää valinnaisia toimintoja, kuten kieliasetuksen muistavaa evästettä
+- suostumukseen siltä osin kuin käyttäjä antaa henkilötietojaan palautteen tai yhteydenottopyynnön yhteydessä
 
 ## 6. Rekisterin tietosisältö
 
@@ -100,9 +100,9 @@ Henkilötietoja säilytetään vain niin kauan kuin niitä tarvitaan tässä sel
 
 Arvio tämän palvelun osalta:
 
-- käyttäjätilin tiedot säilytetään lähtökohtaisesti niin kauan kuin käyttäjätili on aktiivinen tai kunnes tiedot poistetaan rekisterinpitäjän prosessin mukaisesti
-- pelaamisen etenemistiedot säilytetään niin kauan kuin käyttäjätili on olemassa tai niitä tarvitaan palvelun toiminnallisuuksien toteuttamiseksi
-- palautelomakkeen tiedot säilytetään niin kauan kuin palautteen käsittely, mahdollinen jatkoviestintä ja palvelun kehittäminen sitä edellyttävät
+- käyttäjätilin tiedot säilytetään lähtökohtaisesti niin kauan kuin käyttäjätili on aktiivinen; tilin poistamisen jälkeen tiedot poistetaan tai anonymisoidaan ilman aiheetonta viivytystä, ellei säilyttäminen ole tarpeen lakisääteisen velvoitteen, oikeusvaateen laatimisen, esittämisen tai puolustamisen vuoksi
+- pelaamisen etenemistiedot säilytetään niin kauan kuin käyttäjätili on olemassa tai niitä tarvitaan palvelun toiminnallisuuksien toteuttamiseksi; tilin poistamisen yhteydessä tiedot poistetaan tai anonymisoidaan, ellei niiden säilyttäminen ole välttämätöntä edellä mainituista syistä
+- palautelomakkeen tiedot säilytetään niin kauan kuin palautteen käsittely ja mahdollinen jatkoviestintä sitä edellyttävät, minkä jälkeen tiedot poistetaan tai anonymisoidaan ilman aiheetonta viivytystä
 - palvelun tekniset istunto- ja evästetiedot säilyvät selaimessa evästeasetusten ja istunnon keston mukaisesti
 
 ## 8. Säännönmukaiset tietolähteet
@@ -119,7 +119,9 @@ Tietoja ei luovuteta säännönmukaisesti ulkopuolisille tahoille muuten kuin pa
 
 Palvelussa käytetään Google reCAPTCHA v3 -palvelua palautelomakkeen väärinkäytön estämiseksi. Tämän yhteydessä tietoja voi välittyä Googlelle sen omien ehtojen ja tietosuojakäytäntöjen mukaisesti. Google voi käsitellä tietoja myös Euroopan unionin tai Euroopan talousalueen ulkopuolella.
 
-Palautelomakkeen viestit lähetetään lisäksi palvelimen sähköpostijärjestelmän kautta palvelun tukiosoitteeseen. Viestejä pääsevät lukemaan vain rekisteriasioitavan henkilön hyväksymät Vaasan yliopiston työntekijät.
+Mahdollisissa EU-/ETA-alueen ulkopuolisissa siirroissa noudatetaan soveltuvan tietosuojalainsäädännön mukaisia suojatoimia, kuten Euroopan komission hyväksymiä vakiosopimuslausekkeita (SCC), tai muuta kulloinkin lain mukaan hyväksyttyä siirtoperustetta.
+
+Palautelomakkeen viestit lähetetään lisäksi palvelimen sähköpostijärjestelmän kautta palvelun tukiosoitteeseen. Viestejä pääsevät lukemaan vain rekisteriasioita hoitavan henkilön hyväksymät Vaasan yliopiston työntekijät.
 
 ## 10. Evästeiden (cookies) käyttö
 
@@ -158,6 +160,6 @@ Rekisteröidyllä on soveltuvan tietosuojalainsäädännön mukaisesti oikeus:
 - vastustaa henkilötietojensa käsittelyä soveltuvissa tilanteissa
 - saada antamansa tiedot siirrettyä järjestelmästä toiseen, jos oikeus soveltuu kyseiseen käsittelyyn
 - peruuttaa antamansa suostumus silloin, kun käsittely perustuu suostumukseen
-- tehdä valitus valvontaviranomaiselle
+- tehdä valitus valvontaviranomaiselle (Suomessa Tietosuojavaltuutetun toimisto, tietosuoja.fi)
 
 Tietopyynnöt ja muut henkilötietojen käsittelyä koskevat pyynnöt tulee osoittaa tämän selosteen kohdissa 1–3 mainituille yhteystahoille.
