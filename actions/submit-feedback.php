@@ -2,6 +2,7 @@
 require_once(__DIR__ . '/../config/constants.php');
 require_once(__DIR__ . '/../classes/tools.class.php');
 require_once(__DIR__ . '/../classes/security.class.php');
+require_once(__DIR__ . '/../classes/system_admin_messagecenter.class.php');
 
 Security::initSession();
 
@@ -73,7 +74,7 @@ if (!empty($_SESSION['user_public_id'])) {
     }
 }
 
-// Save to DB
+// Save feedback submission
 try {
     $db   = Tools::getDb();
     $stmt = $db->prepare(
@@ -96,33 +97,31 @@ try {
     jsonError(t('actions.submit_feedback.save_failed'));
 }
 
-// Send email (plain text — do NOT htmlspecialchars the body)
-$type_labels = ['contact' => 'Contact Request', 'bug' => 'Bug Report', 'feature' => 'Feature Suggestion'];
-$type_label  = $type_labels[$type];
-$time        = (new DateTime())->format('d.m.Y H:i');
-$logged_str  = $user_id !== null ? "Yes (user_id: {$user_id})" : 'No';
+// Save to system-admin inbox (shared view for allowlisted admins)
+try {
+    $type_labels = [
+        'contact' => 'Contact Request',
+        'bug' => 'Bug Report',
+        'feature' => 'Feature Suggestion',
+    ];
+    $type_label = $type_labels[$type] ?? 'Feedback';
+    $subject_preview = trim(preg_replace('/\s+/', ' ', $message));
+    if ($subject_preview === '') {
+        $subject_preview = 'No preview';
+    }
+    $subject = 'Feedback: ' . $type_label . ' - ' . mb_substr($subject_preview, 0, 80);
 
-$body = "Hi,\n\n"
-      . "A new message was submitted via the HAVU feedback form.\n\n"
-      . "Type:       {$type_label}\n"
-      . "Name:       {$name}\n"
-      . "Email:      {$email}\n"
-      . "Page:       {$page_url}\n"
-      . "Time:       {$time}\n"
-      . "Logged in:  {$logged_str}\n\n"
-      . "Message:\n"
-      . "-----------\n"
-      . "{$message}\n"
-      . "-----------\n\n"
-      . "---\nHAVU Platform";
-
-// Strip newlines from Reply-To to prevent header injection
-$safe_reply_to = str_replace(["\r", "\n"], '', $email);
-
-$headers = "From: noreply@havupeli.jansoftworks.fi\r\n"
-         . "Reply-To: {$safe_reply_to}\r\n"
-         . "Content-Type: text/plain; charset=UTF-8\r\n";
-
-mail('support@havupeli.jansoftworks.fi', "HAVU: New {$type_label} submission", $body, $headers);
+    SystemAdminMessageCenter::create(
+        $user_id,
+        $name,
+        $email,
+        $type,
+        $subject,
+        $message,
+        $page_url
+    );
+} catch (Exception $e) {
+    jsonError(t('actions.submit_feedback.save_failed'));
+}
 
 echo json_encode(['ok' => true]);

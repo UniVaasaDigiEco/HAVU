@@ -40,6 +40,19 @@ const SUCCESS_CODES = [
 const USER_TYPE_REGULAR = 1;
 const USER_TYPE_ADMIN = 0;
 
+$system_admin_allowlist_raw = $env['SYSTEM_ADMIN_ALLOWLIST'] ?? '';
+$system_admin_allowlist = [];
+if (is_string($system_admin_allowlist_raw) && trim($system_admin_allowlist_raw) !== '') {
+    foreach (explode(',', $system_admin_allowlist_raw) as $_saa_item) {
+        $_saa_trimmed = trim($_saa_item);
+        if ($_saa_trimmed !== '') {
+            $system_admin_allowlist[] = $_saa_trimmed;
+        }
+    }
+    unset($_saa_item, $_saa_trimmed);
+}
+define('SYSTEM_ADMIN_ALLOWLIST', $system_admin_allowlist);
+
 const HOME_URL = ROOT_DIR . "index.php";
 
 // Set to false to skip GPS proximity checks (useful for development/testing)

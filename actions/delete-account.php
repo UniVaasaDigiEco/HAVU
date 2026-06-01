@@ -2,6 +2,7 @@
 require_once(__DIR__ . '/../config/constants.php');
 require_once(__DIR__ . '/../classes/tools.class.php');
 require_once(__DIR__ . '/../classes/security.class.php');
+require_once(__DIR__ . '/../classes/system_admin_messagecenter.class.php');
 
 Security::initSession();
 
@@ -92,6 +93,8 @@ try {
     $stmt_feedback->bind_param('i', $user_id);
     $stmt_feedback->execute();
     $stmt_feedback->close();
+
+    SystemAdminMessageCenter::nullSenderReferences($user_id);
 
     $stmt_user = $db->prepare('DELETE FROM users WHERE id = ?');
     $stmt_user->bind_param('i', $user_id);

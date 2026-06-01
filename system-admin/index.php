@@ -2,8 +2,37 @@
 require_once(__DIR__ . '/../config/constants.php');
 require_once(__DIR__ . '/../classes/security.class.php');
 require_once(__DIR__ . '/../classes/message.class.php');
+require_once(__DIR__ . '/../classes/system_admin_messagecenter.class.php');
 
 Security::initSession();
+
+if (empty($_SESSION['user_public_id'])) {
+    $_SESSION['flash_messages'][] = [
+        'type' => 'error',
+        'code' => 0,
+        'message_key' => 'login.session_expired',
+    ];
+    header('Location: ' . ROOT_DIR . 'login.php');
+    exit;
+}
+
+if (!Security::isCurrentUserSystemAdmin()) {
+    $_SESSION['flash_messages'][] = [
+        'type' => 'error',
+        'code' => 0,
+        'message' => 'System admin access is required.',
+    ];
+    header('Location: ' . ROOT_DIR . 'pages/admin/dashboard.php');
+    exit;
+}
+
+$unread_feedback_count = 0;
+try {
+    $feedback_summary = SystemAdminMessageCenter::getPage(1, 1, 'all');
+    $unread_feedback_count = (int)($feedback_summary['counts']['unread'] ?? 0);
+} catch (Exception $e) {
+    $unread_feedback_count = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(current_locale(), ENT_QUOTES, 'UTF-8') ?>">
@@ -17,76 +46,79 @@ Security::initSession();
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="admin-dashboard has-site-footer">
+<nav class="navbar navbar-expand-lg admin-navbar" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand admin-navbar__brand" href="../system-admin/">
+            <span class="admin-navbar__badge">
+                <i class="bi bi-shield-lock-fill"></i>
+            </span>
+            <span>
+                HAVU System Administration
+                <small class="d-block">Internal control panel</small>
+            </span>
+        </a>
+        <div class="d-flex flex-column flex-lg-row gap-2 admin-navbar__actions ms-lg-auto">
+            <a href="../pages/admin/dashboard.php" class="btn btn-sm btn-outline-light">
+                <i class="bi bi-gear-fill me-1"></i>Regular admin panel
+            </a>
+        </div>
+    </div>
+</nav>
+
 <div class="container-fluid py-4 mx-2">
     <div class="admin-page-content">
         <div class="admin-page-hero p-4 p-lg-5 mb-4">
-            <div class="row align-items-center g-4">
-                <div class="col-12 col-lg-7">
+            <div class="row align-items-start g-4">
+                <div class="col-12 col-xl-8">
                     <span class="badge bg-dark text-white mb-3 px-3 py-2">Internal use only</span>
                     <h3 class="mb-3"><i class="bi bi-shield-lock-fill me-2"></i>System Administration</h3>
-                    <p class="lead mb-4">
-                        This area is reserved for your team. It will be used to manage users, routes, permissions,
-                        and other system-level actions that regular admins and players should never access.
+                    <p class="lead mb-0">
+                        System-level control panel for your team. Manage users, routes, permissions, and audit logs —
+                        separate from the regular admin panel.
                     </p>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a class="btn btn-primary text-white btn-lg" href="./dashboard.php">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Open dashboard
-                        </a>
-                        <a class="btn btn-outline-secondary btn-lg" href="../pages/admin/dashboard.php">
-                            <i class="bi bi-gear-fill me-2"></i>Open regular admin panel
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-5">
-                    <div class="admin-feature-panel p-4 h-100">
-                        <h4 class="mb-3"><i class="bi bi-info-circle-fill me-2"></i>Sign-in</h4>
-                        <p class="mb-4 text-muted">
-                            The browser will prompt for credentials when you open the protected dashboard. This page
-                            is the team entry point and a simple reminder of what the area is for.
-                        </p>
-                        <div class="d-grid gap-2">
-                            <div class="alert alert-success mb-0">
-                                <i class="bi bi-check2-circle me-2"></i>Only for you and your team
-                            </div>
-                            <div class="alert alert-success mb-0">
-                                <i class="bi bi-check2-circle me-2"></i>Separated from player and admin views
-                            </div>
-                            <div class="alert alert-success mb-0">
-                                <i class="bi bi-check2-circle me-2"></i>Ready for future expansion
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
+        <?= Message::displayFlashMessages(); ?>
+
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-3">
             <div class="col">
-                <div class="admin-feature-panel p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Users</h4>
-                        <span class="badge bg-secondary">Coming soon</span>
+                <a href="./user-management.php" class="text-decoration-none">
+                    <div class="admin-feature-panel p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Users</h4>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                        <p class="text-muted mb-0">List users, update account details, send password reset links, and deactivate or remove accounts.</p>
                     </div>
-                    <p class="text-muted mb-0">Remove users, adjust roles, and manage account lifecycles.</p>
-                </div>
+                </a>
             </div>
             <div class="col">
-                <div class="admin-feature-panel p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h4 class="mb-0"><i class="bi bi-map-fill me-2"></i>Routes</h4>
-                        <span class="badge bg-secondary">Coming soon</span>
+                <a href="./messages.php" class="text-decoration-none">
+                    <div class="admin-feature-panel p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="mb-0"><i class="bi bi-inbox-fill me-2"></i>Feedback inbox</h4>
+                            <?php if ($unread_feedback_count > 0): ?>
+                                <span class="badge bg-warning text-dark"><?= htmlspecialchars((string)$unread_feedback_count, ENT_QUOTES, 'UTF-8') ?> unread</span>
+                            <?php else: ?>
+                                <span class="badge bg-success">Active</span>
+                            <?php endif; ?>
+                        </div>
+                        <p class="text-muted mb-0">View and manage feedback form submissions as unread, read, and resolved items.</p>
                     </div>
-                    <p class="text-muted mb-0">Delete routes, verify ownership, and apply system-level fixes.</p>
-                </div>
+                </a>
             </div>
             <div class="col">
-                <div class="admin-feature-panel p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h4 class="mb-0"><i class="bi bi-shield-lock-fill me-2"></i>Permissions</h4>
-                        <span class="badge bg-secondary">Coming soon</span>
+                <a href="./bulk-message.php" class="text-decoration-none">
+                    <div class="admin-feature-panel p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="mb-0"><i class="bi bi-envelope-fill me-2"></i>Bulk messaging</h4>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                        <p class="text-muted mb-0">Send a mass e-mail to all or selected users. Includes confirmation safeguards for large sends.</p>
                     </div>
-                    <p class="text-muted mb-0">Change system admin and admin permissions in a controlled way.</p>
-                </div>
+                </a>
             </div>
             <div class="col">
                 <div class="admin-feature-panel p-4 h-100">

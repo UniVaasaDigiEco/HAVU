@@ -4,6 +4,81 @@ require_once(__DIR__ .'/../vendor/autoload.php');
 use Ramsey\Uuid\Uuid;
 
 class Security{
+    /**
+     * @return array<int, string>
+     */
+    public static function getSystemAdminAllowlist(): array
+    {
+        if (!defined('SYSTEM_ADMIN_ALLOWLIST') || !is_array(SYSTEM_ADMIN_ALLOWLIST)) {
+            return [];
+        }
+
+        $result = [];
+        foreach (SYSTEM_ADMIN_ALLOWLIST as $item) {
+            $trimmed = is_string($item) ? trim($item) : '';
+            if ($trimmed !== '') {
+                $result[] = $trimmed;
+            }
+        }
+        return $result;
+    }
+
+    public static function isSystemAdminPublicId(string $public_id): bool
+    {
+        $target = trim(mb_strtolower($public_id));
+        if ($target === '') {
+            return false;
+        }
+
+        foreach (self::getSystemAdminAllowlist() as $allowed_public_id) {
+            if ($target === mb_strtolower($allowed_public_id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function isCurrentUserSystemAdmin(): bool
+    {
+        self::initSession();
+
+        $public_id = $_SESSION['user_public_id'] ?? '';
+        if (!is_string($public_id) || trim($public_id) === '') {
+            return false;
+        }
+
+        return self::isSystemAdminPublicId($public_id);
+    }
+
+    public static function getActiveSystemAdminCount(): int
+    {
+        $allowlist = self::getSystemAdminAllowlist();
+        if ($allowlist === []) {
+            return 0;
+        }
+
+        $active_count = 0;
+        $db = Tools::getDb();
+
+        try {
+            $stmt = $db->prepare('SELECT public_id FROM users WHERE is_active = 1');
+            $stmt->execute();
+            $stmt->bind_result($public_id);
+
+            while ($stmt->fetch()) {
+                if (is_string($public_id) && self::isSystemAdminPublicId($public_id)) {
+                    $active_count++;
+                }
+            }
+
+            $stmt->close();
+            return $active_count;
+        } finally {
+            $db->close();
+        }
+    }
+
     public static function getCsrfToken(string $context = 'default'): string{
         self::initSession();
 

@@ -1,6 +1,17 @@
 <?php
+require_once __DIR__ . '/../classes/security.class.php';
+
 $admin_nav_current = $admin_nav_current ?? '';
 $admin_route_nav_active = in_array($admin_nav_current, ['dashboard', 'new-route', 'edit-route', 'delete-route'], true);
+$show_system_admin_link = false;
+
+try {
+    if (!empty($_SESSION['user_public_id']) && Security::isCurrentUserSystemAdmin()) {
+        $show_system_admin_link = true;
+    }
+} catch (Exception $e) {
+    $show_system_admin_link = false;
+}
 ?>
 <nav class="navbar navbar-expand-lg admin-navbar" data-bs-theme="dark">
     <div class="container-fluid">
@@ -48,6 +59,13 @@ $admin_route_nav_active = in_array($admin_nav_current, ['dashboard', 'new-route'
                         ?>
                     </a>
                 </li>
+                <?php if ($show_system_admin_link): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../system-admin/">
+                            <i class="bi bi-shield-lock-fill me-2"></i>System admin
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <div class="d-flex flex-column flex-lg-row gap-2 admin-navbar__actions">
                 <a href="../player/dashboard.php" class="btn btn-sm btn-outline-light">

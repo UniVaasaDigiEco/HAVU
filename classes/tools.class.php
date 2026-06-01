@@ -154,6 +154,135 @@ class Tools{
         return $user_id;
     }
 
+    /**
+     * Load a paginated user list for system-admin management.
+     *
+     * @param string $search
+     * @param string $status all|active|inactive
+     * @param int $page
+     * @param int $per_page
+     * @return array{users: array<int, array<string, mixed>>, total: int, page: int, per_page: int, total_pages: int}
+     */
+    public static function getSystemAdminUserPage(string $search = '', string $status = 'all', int $page = 1, int $per_page = 25): array
+    {
+        $search = trim($search);
+        $status = in_array($status, ['all', 'active', 'inactive'], true) ? $status : 'all';
+        $page = max(1, $page);
+        $per_page = max(1, min(100, $per_page));
+        $offset = ($page - 1) * $per_page;
+
+        $db = self::getDb();
+
+        try {
+            $status_clause = '';
+            if ($status === 'active') {
+                $status_clause = ' AND is_active = 1';
+            } elseif ($status === 'inactive') {
+                $status_clause = ' AND is_active = 0';
+            }
+
+            if ($search !== '') {
+                $search_like = '%' . $search . '%';
+
+                $count_sql = 'SELECT COUNT(*) FROM users WHERE (full_name LIKE ? OR email LIKE ?)' . $status_clause;
+                $count_stmt = $db->prepare($count_sql);
+                $count_stmt->bind_param('ss', $search_like, $search_like);
+                $count_stmt->execute();
+                $count_stmt->bind_result($total);
+                $count_stmt->fetch();
+                $count_stmt->close();
+
+                $sql = 'SELECT id, public_id, email, full_name, is_active, user_type, last_login, created_at'
+                    . ' FROM users WHERE (full_name LIKE ? OR email LIKE ?)' . $status_clause
+                    . ' ORDER BY created_at DESC, id DESC LIMIT ? OFFSET ?';
+                $stmt = $db->prepare($sql);
+                $stmt->bind_param('ssii', $search_like, $search_like, $per_page, $offset);
+            } else {
+                $count_sql = 'SELECT COUNT(*) FROM users WHERE 1=1' . $status_clause;
+                $count_stmt = $db->prepare($count_sql);
+                $count_stmt->execute();
+                $count_stmt->bind_result($total);
+                $count_stmt->fetch();
+                $count_stmt->close();
+
+                $sql = 'SELECT id, public_id, email, full_name, is_active, user_type, last_login, created_at'
+                    . ' FROM users WHERE 1=1' . $status_clause
+                    . ' ORDER BY created_at DESC, id DESC LIMIT ? OFFSET ?';
+                $stmt = $db->prepare($sql);
+                $stmt->bind_param('ii', $per_page, $offset);
+            }
+
+            $stmt->execute();
+            $stmt->bind_result($id, $public_id, $email, $full_name, $is_active, $user_type, $last_login, $created_at);
+
+            $users = [];
+            while ($stmt->fetch()) {
+                $users[] = [
+                    'id' => (int)$id,
+                    'public_id' => (string)$public_id,
+                    'email' => (string)$email,
+                    'full_name' => (string)$full_name,
+                    'is_active' => (int)$is_active,
+                    'user_type' => (int)$user_type,
+                    'last_login' => $last_login,
+                    'created_at' => (string)$created_at,
+                ];
+            }
+            $stmt->close();
+
+            $total = (int)$total;
+            $total_pages = max(1, (int)ceil($total / $per_page));
+
+            return [
+                'users' => $users,
+                'total' => $total,
+                'page' => $page,
+                'per_page' => $per_page,
+                'total_pages' => $total_pages,
+            ];
+        } finally {
+            $db->close();
+        }
+    }
+
+    /**
+     * @param string $public_id
+     * @return array{id:int, public_id:string, email:string, full_name:string, is_active:int, user_type:int}
+     * @throws Exception
+     */
+    public static function getSystemAdminUserByPublicId(string $public_id): array
+    {
+        $db = self::getDb();
+
+        try {
+            $sql = 'SELECT id, public_id, email, full_name, is_active, user_type FROM users WHERE public_id = ? LIMIT 1';
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param('s', $public_id);
+            $stmt->execute();
+            $stmt->bind_result($id, $db_public_id, $email, $full_name, $is_active, $user_type);
+            $stmt->store_result();
+
+            if ($stmt->num_rows === 0) {
+                $stmt->close();
+                throw new Exception('User not found');
+            }
+
+            $stmt->fetch();
+            $stmt->close();
+
+            return [
+                'id' => (int)$id,
+                'public_id' => (string)$db_public_id,
+                'email' => (string)$email,
+                'full_name' => (string)$full_name,
+                'is_active' => (int)$is_active,
+                'user_type' => (int)$user_type,
+            ];
+        } finally {
+            $db->close();
+        }
+    }
+
     /** Get all routes created by a specific user, ordered by title
      * @param int $user_id
      * @return array Array of associative arrays with 'id', 'public_id', and 'title' keys
