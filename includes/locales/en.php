@@ -330,6 +330,7 @@ return [
         'challenge_correct_answer' => 'Correct answer',
         'challenge_correct_answer_placeholder' => 'Correct answer...',
         'challenge_add_option' => '+ Add option',
+        'challenge_multiple_choice_help' => 'Remember to select which one of the added choices is the correct answer.',
         'challenge_similarity_hint' => 'Answers are checked using automatic similarity (~70%).',
         'save_node' => 'Save checkpoint',
         'create_ready' => 'Ready to create the route?',

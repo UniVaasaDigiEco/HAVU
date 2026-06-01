@@ -330,6 +330,7 @@ return [
         'challenge_correct_answer' => 'Oikea vastaus',
         'challenge_correct_answer_placeholder' => 'Oikea vastaus...',
         'challenge_add_option' => '+ Lisää vaihtoehto',
+        'challenge_multiple_choice_help' => 'Muista valita lisätyistä vaihtoehdoista oikea vastaus.',
         'challenge_similarity_hint' => 'Vastaukset tarkistetaan automaattisella samanlaistuksella (~70 %).',
         'save_node' => 'Tallenna rasti',
         'create_ready' => 'Valmis luomaan reitin?',

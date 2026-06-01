@@ -297,6 +297,7 @@ require_once '../../includes/_admin_nav.php';
                                 </div>
                                 <div id="challengeOptions"></div>
                                 <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()"><?= htmlspecialchars(t('route_editor.challenge_add_option'), ENT_QUOTES, 'UTF-8') ?></button>
+                                <small class="text-muted d-block mt-2"><?= htmlspecialchars(t('route_editor.challenge_multiple_choice_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                             <div id="challengeTextFields" class="route-editor-challenge-fields">
                                 <div class="mb-2">

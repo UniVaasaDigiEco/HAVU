@@ -19,7 +19,7 @@ Security::initSession();
 <?php require_once 'includes/_language_switcher.php'; ?>
 <div class="container-fluid min-vh-100 d-flex flex-column">
     <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center text-center py-4">
-        <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4" style="max-width: 400px;">
+        <img src="images/havu_logo.png" alt="HAVU Logo" class="mb-4 img-fluid w-100" style="max-width: 400px;">
         <h1 class="mb-4"><?= htmlspecialchars(t('index.heading'), ENT_QUOTES, 'UTF-8') ?></h1>
         <?php if (MAINTENANCE_MODE): ?>
             <div class="card shadow-sm border-warning-subtle" style="max-width: 42rem;">

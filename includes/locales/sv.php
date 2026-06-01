@@ -328,6 +328,7 @@ return [
         'challenge_correct_answer' => 'Rätt svar',
         'challenge_correct_answer_placeholder' => 'Rätt svar...',
         'challenge_add_option' => '+ Lägg till alternativ',
+        'challenge_multiple_choice_help' => 'Välj vilket av de tillagda alternativen som är rätt svar.',
         'challenge_similarity_hint' => 'Svaren kontrolleras med automatisk likhetsjämförelse (~70 %).',
         'save_node' => 'Spara kontrollpunkt',
         'create_ready' => 'Redo att skapa rutten?',
