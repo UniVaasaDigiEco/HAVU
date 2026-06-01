@@ -1,6 +1,6 @@
 # Tietosuojaseloste
 
-**HAVU-trailgame / HAVU-polkupeli / HAVU-stigspelet**
+## HAVU-polkupeli / HAVU-trailgame / HAVU-stigspelet
 
 ## 1. Rekisterinpitäjä
 
@@ -10,7 +10,7 @@
 - **Postinumero:** 65200
 - **Postitoimipaikka:** Vaasa
 - **Puhelinnumero:** 0503449726
-- **Sähköpostiosoite:** support@havupeli.jansoftworks.fi
+- **Sähköpostiosoite:** <support@havupeli.jansoftworks.fi>
 
 ## 2. Rekisteriasioita hoitava henkilö
 
@@ -20,13 +20,13 @@
 - **Postinumero:** 65200
 - **Postitoimipaikka:** Vaasa
 - **Puhelinnumero:** +358 29 449 8263
-- **Sähköposti:** jyri.nieminen@uwasa.fi
+- **Sähköposti:** <jyri.nieminen@uwasa.fi>
 
 ## 3. Tietosuojavastaava
 
 - **Organisaatio:** Vaasan yliopisto
 - **Nimi:** Sami Kinnunen
-- **Sähköposti:** tietosuojavastaava@uwasa.fi
+- **Sähköposti:** <tietosuojavastaava@uwasa.fi>
 - **Puhelin:** 0443248761
 
 ## 4. Rekisterin käyttötarkoitus
