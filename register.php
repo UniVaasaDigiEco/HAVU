@@ -79,8 +79,13 @@ $return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) :
                 <?= htmlspecialchars(t('register.has_account'), ENT_QUOTES, 'UTF-8') ?>
                 <a href="login.php<?= htmlspecialchars($return_to_query, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?></a>
             </p>
+            <p class="mb-2">
+                <a href="<?= htmlspecialchars(ROOT_DIR . 'HAVUpeli_tietosuojaseloste.pdf', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="text-muted small">
+                    <?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?>
+                </a>
+            </p>
             <p>
-                <a href="#" class="text-muted small" onclick="event.preventDefault(); window.history.back();">
+                <a href="index.php" class="btn btn-warning">
                     <i class="bi bi-arrow-left"></i> <?= htmlspecialchars(t('common.back'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             </p>
