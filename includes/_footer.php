@@ -3,6 +3,11 @@
         <div class="site-footer__content">
             <div class="site-footer__summary">
                 <h2 class="site-footer__title"><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?></h2>
+                <p class="site-footer__text mt-2 mb-0">
+                    <a href="<?= htmlspecialchars(ROOT_DIR . 'HAVUpeli_tietosuojaseloste.pdf', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
+                        <?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                </p>
             </div>
             <?php if (!empty($_SESSION['user_public_id'])): ?>
                 <div class="site-footer__actions">

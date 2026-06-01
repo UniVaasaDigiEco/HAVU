@@ -10,10 +10,22 @@ vendor/
 .vscode/
 .idea/
 *.sublime-*
+*.code-workspace
+
+# AI / agent instruction files and local agent state
 CLAUDE.md
 .claude/
 .superpowers/
-.github/
+.cursor/
+.windsurf/
+.roo/
+.aider*
+AGENTS.md
+copilot-instructions.md
+.github/copilot-instructions.md
+
+# Local / hosting artifacts
+.ftpquota
 
 # OS
 .DS_Store
