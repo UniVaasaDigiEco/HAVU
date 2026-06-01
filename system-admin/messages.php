@@ -152,11 +152,11 @@ function feedbackTypeBadgeClass(string $type): string
 
         <?= Message::displayFlashMessages(); ?>
 
-        <div class="d-flex flex-wrap gap-2 mb-3">
+        <div class="d-flex flex-wrap gap-2 mb-3 p-3 admin-page-hero">
             <a href="?filter=all" class="btn btn-sm <?= $current_filter === 'all' ? 'btn-primary' : 'btn-outline-primary' ?>">All (<?= (int)$counts['all'] ?>)</a>
-            <a href="?filter=unread" class="btn btn-sm <?= $current_filter === 'unread' ? 'btn-warning text-dark' : 'btn-outline-warning' ?>">Unread (<?= (int)$counts['unread'] ?>)</a>
-            <a href="?filter=read" class="btn btn-sm <?= $current_filter === 'read' ? 'btn-secondary' : 'btn-outline-secondary' ?>">Read (<?= (int)$counts['read'] ?>)</a>
-            <a href="?filter=resolved" class="btn btn-sm <?= $current_filter === 'resolved' ? 'btn-success' : 'btn-outline-success' ?>">Resolved (<?= (int)$counts['resolved'] ?>)</a>
+            <a href="?filter=unread" class="btn btn-sm <?= $current_filter === 'unread' ? 'btn-warning text-dark' : 'btn-warning' ?>">Unread (<?= (int)$counts['unread'] ?>)</a>
+            <a href="?filter=read" class="btn btn-sm <?= $current_filter === 'read' ? 'btn-secondary' : 'btn-secondary' ?>">Read (<?= (int)$counts['read'] ?>)</a>
+            <a href="?filter=resolved" class="btn btn-sm <?= $current_filter === 'resolved' ? 'btn-success' : 'btn-success' ?>">Resolved (<?= (int)$counts['resolved'] ?>)</a>
         </div>
 
         <?php if (empty($messages)): ?>

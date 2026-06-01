@@ -1,4 +1,4 @@
-<footer class="site-footer mt-5">
+<footer class="site-footer">
     <div class="container-fluid site-footer__inner">
         <div class="site-footer__content">
             <div class="site-footer__summary">

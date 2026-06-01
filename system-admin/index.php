@@ -65,7 +65,7 @@ try {
     </div>
 </nav>
 
-<div class="container-fluid py-4 mx-2">
+<div class="container-fluid py-4">
     <div class="admin-page-content">
         <div class="admin-page-hero p-4 p-lg-5 mb-4">
             <div class="row align-items-start g-4">

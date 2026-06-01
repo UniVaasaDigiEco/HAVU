@@ -52,6 +52,16 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
+.has-site-footer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.has-site-footer > .site-footer {
+  margin-top: auto !important;
+}
+
 .has-site-footer .grecaptcha-badge {
   visibility: hidden;
 }
