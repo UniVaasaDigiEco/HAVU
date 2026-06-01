@@ -92,7 +92,7 @@ Palvelussa voidaan käsitellä seuraavia tietoja:
 
 - selain pyytää käyttäjän laitteen sijaintitietoa reitin pelaamista varten
 - palvelu käyttää sijaintia rastien läheisyyden tarkistamiseen pelin aikana
-- nykyisen toteutuksen perusteella käyttäjän jatkuvaa GPS-sijaintia ei tallenneta palvelimen tietokantaan
+- käyttäjän jatkuvaa GPS-sijaintia ei tallenneta palvelimen tietokantaan
 
 ## 7. Tietojen säilytysaika
 

@@ -6,11 +6,13 @@
 | --- | --- | --- |
 | Install PHP dependencies | `composer install` | Required for `ramsey/uuid` and autoloading. |
 | Install frontend dependencies | `npm install` | `node_modules` is committed, but this is still the setup command for fresh environments. |
+| Import database schema | Manual SQL import | Import `_SQL/havu-sql-structure.sql` and then `_SQL/add_messages_table.sql` on fresh setups. |
 | Compile SCSS once | `npm run scss-compile` | Builds `css/scss` into `css/bs-custom.css`. |
 | Watch SCSS | `npm run scss-watch` | Rebuilds on file changes. |
 
 Lint and tests status:
 - No runnable lint script exists in `package.json` or `composer.json`.
+- Run lint manually with `npx eslint .` when needed.
 - No automated test suite exists.
 - `npm test` is intentionally a placeholder and always exits with an error.
 
@@ -42,6 +44,8 @@ Primary flows:
 - There are two similarly named update endpoints: `actions/update-route.php` (current, localized message keys, richer validation) and `actions/update_route.php` (older legacy file). Prefer the hyphenated file for new work.
 - Proximity behavior is controlled by both route-level threshold and global `REQUIRE_GPS_PROXIMITY` in `config/constants.php`.
 - JSON endpoints are exceptions to redirect-with-flash patterns (`actions/track-visit.php`, `actions/upload-media.php`, `actions/submit-feedback.php`).
+- The messages feature depends on `_SQL/add_messages_table.sql`; this table is not created by the base schema import alone.
+- `.env.example` contains `HOME_URL`, but runtime home URL is derived in `config/constants.php`; do not depend on `.env` `HOME_URL` for new logic.
 
 ## Link, do not duplicate docs
 
@@ -49,3 +53,4 @@ Primary flows:
 - End-user/admin manuals: [_DOCS/_MANUALS](../_DOCS/_MANUALS)
 - GPS behavior notes: [_DOCS/GPS_Threshold_Testing.md](../_DOCS/GPS_Threshold_Testing.md)
 - Message widget integration checklist: [_DOCS/message_widget_integration_checklist.md](../_DOCS/message_widget_integration_checklist.md)
+- Superpowers implementation notes/plans: [docs/superpowers](../docs/superpowers)
