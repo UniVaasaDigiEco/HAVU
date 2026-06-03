@@ -60,22 +60,13 @@ require_once '../../includes/_admin_nav.php';
                 echo Message::displayFlashMessages();
                 ?>
                 <p class="lead"><?= htmlspecialchars(t('admin_dashboard.route_management_intro'), ENT_QUOTES, 'UTF-8') ?></p>
-                <!-- TODO: Remove these alerts when they're no longer relevant -->
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <i class="bi bi-info-circle-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.routes_private_update_notice'), ENT_QUOTES, 'UTF-8') ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
-                </div>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <i class="bi bi-info-circle-fill me-2"></i><?= htmlspecialchars(t('admin_dashboard.routes_guides_update_notice'), ENT_QUOTES, 'UTF-8') ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="<?= htmlspecialchars(t('common.close'), ENT_QUOTES, 'UTF-8') ?>"></button>
-                </div>
                 <p>
                     <?= htmlspecialchars(t('admin_dashboard.manuals_intro'), ENT_QUOTES, 'UTF-8') ?><br>
-                    <a target="_blank" href="files/HAVU_reitinluojan_opas.pdf"><?= htmlspecialchars(t('admin_dashboard.route_creator_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                    <a target="_blank" href="../files/HAVUpolkupeli_yllapitajanopas.pdf"><?= htmlspecialchars(t('admin_dashboard.route_creator_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                     <br>
-                    <a target="_blank" href="files/HAVU_pelaajanopas.pdf"><?= htmlspecialchars(t('admin_dashboard.player_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                    <a target="_blank" href="../files/HAVUpolkupeli_pelaajanopas.pdf"><?= htmlspecialchars(t('admin_dashboard.player_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                     <br>
-                    <a target="_blank" href="files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('admin_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                    <a target="_blank" href="../files/HAVUpolkupeli_pikaopas.pdf"><?= htmlspecialchars(t('admin_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                 </p>
                 <p>
                     <a href="files/user_guide_FI.docx" download><?= htmlspecialchars(t('admin_dashboard.download_old_guide'), ENT_QUOTES, 'UTF-8') ?></a>

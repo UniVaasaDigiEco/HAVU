@@ -169,9 +169,9 @@ try {
             <div class="bg-primary-subtle rounded-3 p-3 mb-3">
                 <h4><i class="bi bi-book me-2"></i><?= htmlspecialchars(t('player_dashboard.instructions'), ENT_QUOTES, 'UTF-8') ?></h4>
                 <p>
-                    <a href="../files/Pikaopas_HAVUpelaaminen.pdf"><?= htmlspecialchars(t('player_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                    <a target="_blank" href="../files/HAVUpolkupeli_pikaopas.pdf"><?= htmlspecialchars(t('player_dashboard.quick_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                     <br>
-                    <a href="../files/HAVU_pelaajanopas.pdf"><?= htmlspecialchars(t('player_dashboard.full_guide'), ENT_QUOTES, 'UTF-8') ?></a>
+                    <a target="_blank" href="../files/HAVUpolkupeli_pelaajanopas.pdf"><?= htmlspecialchars(t('player_dashboard.full_guide'), ENT_QUOTES, 'UTF-8') ?></a>
                 </p>
             </div>
 
