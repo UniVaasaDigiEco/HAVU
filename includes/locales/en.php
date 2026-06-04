@@ -206,6 +206,7 @@ return [
         'checkpoint_found_message' => 'Congratulations!' . "\n" . 'You found a checkpoint!',
         'progress_label' => 'Progress',
         'progress_text' => ':visited/:total checkpoints',
+        'recenter_map' => 'My location',
         'gps_error' => 'GPS error: Your location could not be determined. Make sure location services are enabled and that the browser has permission to use them.' . "\n\n" . 'Error: :message',
         'gps_unsupported' => 'GPS services are not supported by this browser. Make sure you are using a modern browser and that your device supports GPS.',
         'completion_title' => 'Congratulations! 🎉',

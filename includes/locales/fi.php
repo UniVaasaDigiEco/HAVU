@@ -206,6 +206,7 @@ return [
         'checkpoint_found_message' => 'Onneksi olkoon!' . "\n" . 'Löysit rastin!',
         'progress_label' => 'Eteneminen',
         'progress_text' => ':visited/:total rastia',
+        'recenter_map' => 'Sijaintini',
         'gps_error' => 'GPS-virhe: Sijaintiasi ei voida määrittää. Varmista, että sijaintipalvelut ovat päällä ja että selaimella on lupa käyttää niitä.' . "\n\n" . 'Virhe: :message',
         'gps_unsupported' => 'GPS-palvelut eivät ole tuettuja tällä selaimella. Varmista, että käytät modernia selainta ja että laitteesi tukee GPS:ää.',
         'completion_title' => 'Onneksi olkoon! 🎉',

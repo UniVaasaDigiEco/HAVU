@@ -202,6 +202,7 @@ if (!$route) {
             syncMarkerPresentationBindings();
             initializeGpsRestrictionToggle();
             updateProgressBarHeightVariable();
+            bindRecenterMapButton();
             updateProgress();
             initGPS();
 
@@ -526,6 +527,34 @@ if (!$route) {
             document.documentElement.style.setProperty('--progress-bar-height', `${progressContainer.offsetHeight}px`);
         }
 
+        function updateRecenterButtonState() {
+            const button = document.getElementById('recenter-map-btn');
+            if (!button) {
+                return;
+            }
+
+            const hasUserPosition = !!userPosition;
+            button.disabled = !hasUserPosition;
+            button.setAttribute('aria-disabled', hasUserPosition ? 'false' : 'true');
+        }
+
+        function bindRecenterMapButton() {
+            const button = document.getElementById('recenter-map-btn');
+            if (!button) {
+                return;
+            }
+
+            button.addEventListener('click', function() {
+                if (!map || !userPosition) {
+                    return;
+                }
+
+                map.setView([userPosition.lat, userPosition.lng], Math.max(map.getZoom(), 16), { animate: true });
+            });
+
+            updateRecenterButtonState();
+        }
+
         function handleViewportChange() {
             const activeElement = document.activeElement;
             const isTypingInChallengeInput = !!activeElement
@@ -712,6 +741,7 @@ if (!$route) {
                 }).addTo(map);
             }
 
+            updateRecenterButtonState();
             checkProximity(lat, lng);
         }
 
@@ -915,6 +945,53 @@ if (!$route) {
             max-width: min(90vw, 320px);
         }
 
+        .progress-container__content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-container__status {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .progress-container__meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .progress-container__meta span:last-child {
+            white-space: nowrap;
+        }
+
+        .progress-container__recenter {
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 575.98px) {
+            .progress-container__recenter .btn {
+                padding: 0.35rem 0.5rem;
+            }
+
+            .progress-container__recenter .btn .progress-container__recenter-label {
+                display: none;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .mobile-node-sheet__card {
+                pointer-events: none;
+            }
+
+            .mobile-node-sheet.visible .mobile-node-sheet__card {
+                pointer-events: auto;
+            }
+        }
+
         #completion-screen {
             display: none;
             position: fixed;
@@ -1022,12 +1099,21 @@ if (!$route) {
     </div>
 
     <div class="progress-container">
-        <div class="d-flex justify-content-between mb-2">
-            <span><strong><?= htmlspecialchars(t('game.progress_label'), ENT_QUOTES, 'UTF-8') ?></strong></span>
-            <span id="progress-text"><?= htmlspecialchars(t('game.progress_text', ['visited' => 0, 'total' => 0]), ENT_QUOTES, 'UTF-8') ?></span>
-        </div>
-        <div class="progress">
-            <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>
+        <div class="progress-container__content">
+            <div class="progress-container__status">
+                <div class="progress-container__meta">
+                    <span><strong><?= htmlspecialchars(t('game.progress_label'), ENT_QUOTES, 'UTF-8') ?></strong></span>
+                    <span id="progress-text"><?= htmlspecialchars(t('game.progress_text', ['visited' => 0, 'total' => 0]), ENT_QUOTES, 'UTF-8') ?></span>
+                </div>
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>
+                </div>
+            </div>
+            <div class="progress-container__recenter">
+                <button type="button" class="btn btn-sm btn-outline-primary" id="recenter-map-btn" title="<?= htmlspecialchars(t('game.recenter_map'), ENT_QUOTES, 'UTF-8') ?>" aria-label="<?= htmlspecialchars(t('game.recenter_map'), ENT_QUOTES, 'UTF-8') ?>" disabled>
+                    <i class="bi bi-crosshair"></i>
+                </button>
+            </div>
         </div>
     </div>
 

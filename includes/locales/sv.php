@@ -204,6 +204,7 @@ return [
         'checkpoint_found_message' => 'Grattis!' . "\n" . 'Du hittade en kontrollpunkt!',
         'progress_label' => 'Framsteg',
         'progress_text' => ':visited/:total kontrollpunkter',
+        'recenter_map' => 'Min plats',
         'gps_error' => 'GPS-fel: Din plats kunde inte bestämmas. Kontrollera att platstjänster är aktiverade och att webbläsaren har tillstånd att använda dem.' . "\n\n" . 'Fel: :message',
         'gps_unsupported' => 'GPS stöds inte av den här webbläsaren. Kontrollera att du använder en modern webbläsare och att din enhet har GPS.',
         'completion_title' => 'Grattis! 🎉',
