@@ -239,6 +239,16 @@ require_once '../../includes/_admin_nav.php';
                         <h5 class="mb-0"><i class="bi bi-map me-2"></i><?= htmlspecialchars(t('common.map'), ENT_QUOTES, 'UTF-8') ?></h5>
                     </div>
                     <div class="card-body">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" id="locationSearch" class="form-control" placeholder="<?= htmlspecialchars(t('route_editor.search_location_placeholder'), ENT_QUOTES, 'UTF-8') ?>" autocomplete="off">
+                                <button class="btn btn-outline-secondary" type="button" id="locationSearchBtn">
+                                    <?= htmlspecialchars(t('common.search'), ENT_QUOTES, 'UTF-8') ?>
+                                </button>
+                            </div>
+                            <div id="searchResults" class="list-group mt-1 route-editor-search-results"></div>
+                        </div>
                         <div id="map"></div>
                         <div class="mt-2 text-muted small">
                             <i class="bi bi-info-circle"></i> <?= htmlspecialchars(t('route_editor.map_help'), ENT_QUOTES, 'UTF-8') ?>
@@ -363,6 +373,7 @@ require_once '../../includes/_admin_nav.php';
     const translations = <?= HavuLocale::jsonNamespace('common', 'route_editor') ?>;
     const commonTranslations = translations.common;
     const routeEditorTranslations = translations.route_editor;
+    const activeLocale = <?= json_encode(current_locale(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     const FINLAND_BOUNDS = {
         minLat: <?= json_encode(FINLAND_MIN_LAT, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
         maxLat: <?= json_encode(FINLAND_MAX_LAT, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
@@ -525,6 +536,82 @@ require_once '../../includes/_admin_nav.php';
 
     function showFinlandOnlyAlert() {
         alert(routeEditorTranslations.finland_only_coordinates);
+    }
+
+    let searchMarker = null;
+
+    function searchLocation() {
+        const query = document.getElementById('locationSearch').value.trim();
+        if (!query) return;
+
+        const btn = document.getElementById('locationSearchBtn');
+        btn.disabled = true;
+        btn.textContent = routeEditorTranslations.searching;
+
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=fi`, {
+            headers: { 'Accept-Language': activeLocale }
+        })
+        .then(r => r.json())
+        .then(results => {
+            const container = document.getElementById('searchResults');
+            if (!results.length) {
+                container.innerHTML = `<div class="list-group-item text-muted">${commonTranslations.no_results}</div>`;
+                container.style.display = 'block';
+                return;
+            }
+
+            container.innerHTML = results.map((r, i) =>
+                `<button type="button" class="list-group-item list-group-item-action" data-idx="${i}" data-lat="${r.lat}" data-lon="${r.lon}">
+                    <i class="bi bi-geo-alt me-1"></i>${r.display_name}
+                </button>`
+            ).join('');
+            container.style.display = 'block';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.textContent = commonTranslations.search;
+        });
+    }
+
+    function setupSearch() {
+        document.getElementById('locationSearchBtn').addEventListener('click', searchLocation);
+        document.getElementById('locationSearch').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchLocation();
+            }
+        });
+
+        document.getElementById('searchResults').addEventListener('click', function(e) {
+            const btn = e.target.closest('button[data-lat]');
+            if (!btn) return;
+
+            const lat = parseFloat(btn.dataset.lat);
+            const lon = parseFloat(btn.dataset.lon);
+
+            if (!isWithinFinland(lat, lon)) {
+                showFinlandOnlyAlert();
+                return;
+            }
+
+            map.setView([lat, lon], 16);
+
+            if (searchMarker) {
+                map.removeLayer(searchMarker);
+            }
+
+            searchMarker = L.marker([lat, lon], { opacity: 0.6 }).addTo(map)
+                .bindPopup(btn.textContent.trim()).openPopup();
+
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('locationSearch').value = '';
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#locationSearch') && !e.target.closest('#locationSearchBtn') && !e.target.closest('#searchResults')) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
     }
 
     function onMapClick(e) {
@@ -873,6 +960,7 @@ require_once '../../includes/_admin_nav.php';
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
         initEditor();
+        setupSearch();
 
         const gpsSlider = document.getElementById('gps_threshold_slider');
         const gpsNumber = document.getElementById('gps_threshold');
