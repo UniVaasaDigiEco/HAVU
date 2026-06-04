@@ -76,8 +76,8 @@ return [
         ],
         'success_codes' => [
             1 => 'Käyttäjä luotu onnistuneesti.',
-            2 => 'Reitti luotu onnistuneesti.',
-            3 => 'Reitti päivitetty onnistuneesti.',
+            2 => 'Reitti on nyt luotu.',
+            3 => 'Muutokset reittiin ja sen rasteihin tallennettu.',
         ],
     ],
     'index' => [
@@ -451,8 +451,8 @@ return [
             'invalid_coordinates' => 'Rastin koordinaatit ovat virheelliset kohdassa :index.',
             'coordinates_outside_finland' => 'Rastin koordinaattien täytyy olla Suomessa kohdassa :index.',
             'route_not_found_or_denied' => 'Reittiä ei löydy tai sinulla ei ole oikeutta muokata sitä.',
-            'create_success' => 'Reitti luotiin onnistuneesti. Rasteja: :count.',
-            'update_success' => 'Muutokset reittiin ja sen rasteihin tallennettu onnistuneesti. Rasteja: :count.',
+            'create_success' => 'Rasteja: :count.',
+            'update_success' => 'Rasteja: :count.',
             'create_failed' => 'Reitin luominen epäonnistui.',
             'update_failed' => 'Reitin päivittäminen epäonnistui.',
             'invalid_gps_threshold' => 'GPS-läheisyyskynnyksen on oltava kokonaisluku välillä 15–50.',
