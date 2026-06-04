@@ -89,6 +89,26 @@ require_once '../../includes/_admin_nav.php';
         </div>
     </div>
 
+    <div class="modal fade" id="safetyNoticeModal" tabindex="-1" aria-labelledby="safetyNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="safetyNoticeModalLabel">
+                        <i class="bi bi-shield-check me-2"></i><?= htmlspecialchars(t('admin_new_route.heading'), ENT_QUOTES, 'UTF-8') ?>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0"><?= nl2br(htmlspecialchars(t('admin_new_route.safety_notice'), ENT_QUOTES, 'UTF-8')) ?></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <?= htmlspecialchars(t('admin_new_route.safety_notice_agree'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form id="routeForm" method="POST" action="../../actions/create_route.php">
         <input type="hidden" name="action" value="create_route">
         <input type="hidden" name="nodes_data" id="nodesData">
@@ -881,6 +901,15 @@ require_once '../../includes/_admin_nav.php';
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
+        const safetyNoticeModalElement = document.getElementById('safetyNoticeModal');
+        if (safetyNoticeModalElement) {
+            const safetyNoticeModal = new bootstrap.Modal(safetyNoticeModalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+            safetyNoticeModal.show();
+        }
+
         initMap();
         initEditor();
         setupSearch();

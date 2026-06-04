@@ -192,6 +192,7 @@ if (!$route) {
         let routeLine = null;
         let routeLineVisible = false; // Default OFF
         let activeNodeId = null;
+        const PLAYER_SAFETY_NOTICE_KEY = `player-safety-notice-dismissed-${routeData.public_id || 'default'}`;
 
         // Numbered marker badges: blue for unvisited, green for visited.
         function createNodeIcon(number, visited = false) {
@@ -229,6 +230,42 @@ if (!$route) {
                 infoPanel.style.display = locked ? 'none' : '';
                 infoPanel.setAttribute('aria-hidden', locked ? 'true' : 'false');
             }
+        }
+
+        function hasAnyVisitedCheckpoints() {
+            return routeNodes.some(node => !!node.visited);
+        }
+
+        function shouldShowPlayerSafetyNotice() {
+            try {
+                return !hasAnyVisitedCheckpoints() && sessionStorage.getItem(PLAYER_SAFETY_NOTICE_KEY) !== '1';
+            } catch (error) {
+                return !hasAnyVisitedCheckpoints();
+            }
+        }
+
+        function showPlayerSafetyNotice() {
+            const modalElement = document.getElementById('playerSafetyNoticeModal');
+            if (!modalElement) {
+                return;
+            }
+
+            const modal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            modalElement.addEventListener('hide.bs.modal', function handleSafetyNoticeClose() {
+                try {
+                    sessionStorage.setItem(PLAYER_SAFETY_NOTICE_KEY, '1');
+                } catch (error) {
+                    // Ignore storage failures.
+                }
+
+                modalElement.removeEventListener('hide.bs.modal', handleSafetyNoticeClose);
+            });
+
+            modal.show();
         }
 
         function initializeGame() {
@@ -293,6 +330,10 @@ if (!$route) {
             setTimeout(syncLayout, 250);
             window.addEventListener('load', syncLayout, { once: true });
             window.addEventListener('pageshow', syncLayout);
+
+            if (shouldShowPlayerSafetyNotice()) {
+                setTimeout(showPlayerSafetyNotice, 250);
+            }
         }
 
         function bindInfoPanelActions() {
@@ -862,6 +903,11 @@ if (!$route) {
 
                 node.visited = true;
                 trackVisit(nodeId);
+                try {
+                    sessionStorage.setItem(PLAYER_SAFETY_NOTICE_KEY, '1');
+                } catch (error) {
+                    // Ignore storage failures.
+                }
                 const markerIndex = routeNodes.findIndex(n => n.id === nodeId);
                 const markerNumber = markerIndex >= 0 ? markerIndex + 1 : '?';
                 markers[nodeId].setIcon(createNodeIcon(markerNumber, true));
@@ -1155,6 +1201,26 @@ if (!$route) {
         </div>
     </div>
     <?php endif; ?>
+
+    <div class="modal fade" id="playerSafetyNoticeModal" tabindex="-1" aria-labelledby="playerSafetyNoticeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="playerSafetyNoticeModalLabel">
+                        <i class="bi bi-shield-exclamation me-2"></i><?= htmlspecialchars(t('game.safety_notice_title'), ENT_QUOTES, 'UTF-8') ?>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0"><?= nl2br(htmlspecialchars(t('game.safety_notice'), ENT_QUOTES, 'UTF-8')) ?></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <?= htmlspecialchars(t('game.safety_notice_ok'), ENT_QUOTES, 'UTF-8') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Route Completion Screen -->
     <div id="completion-screen">

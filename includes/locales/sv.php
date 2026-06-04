@@ -189,6 +189,7 @@ return [
         'route_not_found' => 'Fel: Rutten hittades inte: :message<br>Kontrollera ruttens identifierare och försök igen.',
         'default_route_not_found' => 'Fel: Standardrutten hittades inte: :message<br>Kontrollera standardruttens identifierare och försök igen.',
         'route_data_error' => 'Fel vid laddning av ruttdata. Kontrollera webbläsarkonsolen.',
+        'safety_notice_title' => 'Säkerhetsmeddelande',
         'start_label' => '🚀 START',
         'finish_label' => '🏁 MÅL',
         'challenge_completed' => '✅ Utmaningen klar!',
@@ -223,6 +224,8 @@ return [
         'testing_gps_toggle_label' => 'GPS-begränsning i testläge',
         'testing_gps_toggle_enabled' => 'På: en kontrollpunkt kan markeras som besökt först när du är tillräckligt nära.',
         'testing_gps_toggle_disabled' => 'Av: en kontrollpunkt kan markeras som besökt varifrån som helst.',
+        'safety_notice' => 'Kom ihåg att hålla blicken uppe medan du spelar - låt inte skärmen ta all din uppmärksamhet! Se var du sätter fötterna, var uppmärksam på trafiken och använd sunt förnuft i all terräng. Spelet är till för att ta dig ut i naturen, så ta dig tid att njuta av den — på ett tryggt och säkert sätt.',
+        'safety_notice_ok' => 'Okej',
     ],
     'admin_dashboard' => [
         'title' => 'HAVU-stigspelet - Adminpanel',
@@ -374,6 +377,8 @@ return [
         'title' => 'HAVU-stigspelet - Skapa rutt',
         'heading' => 'Skapa en ny rutt',
         'subheading' => 'Ge rutten ett namn och en beskrivning, definiera inställningarna och lägg till kontrollpunkter med deras innehåll.',
+        'safety_notice' => 'När du skapar en rutt ansvarar du för att alla kontrollpunkter placeras på platser som är säkra och tillgängliga för spelare i alla åldrar och med olika fysisk kondition. Undvik att placera kontrollpunkter på farliga platser, såsom nära vattendrag, i brant terräng, längs hårt trafikerade vägar eller på privat mark. Finlands allemansrätt ger rätt till fri rörlighet i naturen, men medför också ansvar — placera inte kontrollpunkter på ett sätt som uppmuntrar till att trampa ner vegetation, störa djurlivet eller beträda odlad mark eller privata tomter. Om du vill placera en kontrollpunkt på mark som du inte äger ber vi dig vänligen att i förväg inhämta tillstånd från markägaren — en liten artighet som betyder mycket. Se till att din rutt är tydligt beskriven så att spelarna vet vilken typ av terräng de kan förvänta sig. Du ansvarar för att hålla din rutt aktuell — om förhållandena förändras ska du uppdatera eller ta bort kontrollpunkter på lämpligt sätt.',
+        'safety_notice_agree' => 'Jag godkänner',
     ],
     'admin_edit_route' => [
         'title' => 'HAVU - Redigera rutt',

@@ -191,6 +191,7 @@ return [
         'route_not_found' => 'Virhe: Reittiä ei löytynyt: :message<br>Tarkista reitin tunniste ja yritä uudelleen.',
         'default_route_not_found' => 'Virhe: Oletusreittiä ei löytynyt: :message<br>Tarkista oletusreitin tunniste ja yritä uudelleen.',
         'route_data_error' => 'Virhe reittidatan lataamisessa. Tarkista selaimen konsoli.',
+        'safety_notice_title' => 'Turvallisuusilmoitus',
         'start_label' => '🚀 LÄHTÖ',
         'finish_label' => '🏁 MAALI',
         'challenge_completed' => '✅ Haaste suoritettu!',
@@ -225,6 +226,8 @@ return [
         'testing_gps_toggle_label' => 'GPS-rajoitus testauksessa',
         'testing_gps_toggle_enabled' => 'Päällä: rastin voi merkitä käydyksi vasta, kun olet riittävän lähellä.',
         'testing_gps_toggle_disabled' => 'Pois päältä: rastin voi merkitä käydyksi mistä tahansa.',
+        'safety_notice' => 'Muista pitää katse välillä ylhäällä pelaamisen lomassa - älä anna ruudun viedä kaikkea huomiotasi! Katso mihin astut, huomioi liikenne ja käytä tervettä järkeä kaikessa maastossa. Peli on tarkoitettu viemään sinut ulos luontoon, joten nauti siitä rauhassa ja turvallisesti.',
+        'safety_notice_ok' => 'Selvä',
     ],
     'admin_dashboard' => [
         'title' => 'HAVU-polkupeli - Ylläpitäjän hallintapaneeli',
@@ -376,6 +379,8 @@ return [
         'title' => 'HAVU-polkupeli - Luo uusi reitti',
         'heading' => 'Luo uusi reitti',
         'subheading' => 'Anna reitille nimi, sisältökuvaus sekä määrittele käyttöehtoja. Lisää myös rastit sisältöineen.',
+        'safety_notice' => 'Reittejä luodessasi olet vastuussa siitä, että kaikki rastit sijoitetaan turvallisiin ja saavutettaviin paikkoihin, jotka soveltuvat kaiken ikäisille ja kuntoisille pelaajille. Vältä rastien sijoittamista vaarallisiin paikkoihin, kuten veden äärelle, jyrkille rinteille, vilkasliikenteisten teiden läheisyyteen tai yksityisalueille. Suomen jokamiehenoikeudet sallivat vapaan liikkumisen luonnossa, mutta niihin liittyy myös velvollisuuksia — älä sijoita rasteja siten, että ne houkuttelevat tallomaan kasvillisuutta, häiritsemään eläimistöä tai liikkumaan viljellyillä mailla tai piha-alueilla. Jos haluat sijoittaa rastin maalle, jota et omista, pyydämme sinua ystävällisesti kysymään asianomaisen maanomistajan lupaa etukäteen — pieni ele, jolla on suuri merkitys. Huolehdi, että reittisi on kuvattu selkeästi, jotta pelaajat tietävät, millaista maastoa on odotettavissa. Olet vastuussa reittisi ajantasaisuudesta — jos olosuhteet muuttuvat, päivitä tai poista rastit tarpeen mukaan.',
+        'safety_notice_agree' => 'Hyväksyn',
     ],
     'admin_edit_route' => [
         'title' => 'HAVU - Muokkaa reittiä',
