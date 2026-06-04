@@ -267,6 +267,7 @@ return [
         'share_modal_intro' => 'Jaa tämä linkki tai QR-koodi pelaajille — he pääsevät reitille suoraan, myös ilman kirjautumista.',
         'share_modal_intro_generic' => 'Jaa tämä linkki tai QR-koodi pelaajille. Jaettu kohde avautuu suoraan myös ilman kirjautumista.',
         'copy_link' => 'Kopioi linkki',
+        'copy_link_success' => 'Kopioitu!',
         'download_qr' => 'Lataa QR-koodi',
         'qr_info' => 'QR-koodi vie suoraan jaettuun näkymään',
     ],

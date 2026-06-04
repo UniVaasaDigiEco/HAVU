@@ -27,6 +27,10 @@ $delete_route_confirmation = json_encode(
     t('route_editor.confirm_delete_route'),
     JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
 );
+$copy_link_success_message = json_encode(
+    t('admin_dashboard.copy_link_success'),
+    JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+);
 
 function formatAdminRouteDate(DateTime $value): string
 {
@@ -186,6 +190,10 @@ require_once '../../includes/_admin_nav.php';
     </div>
 </div>
 
+<div id="copyLinkToast" class="toast border-0 shadow-sm bg-success text-white position-fixed" role="status" aria-live="polite" aria-atomic="true" style="z-index: 1080; min-width: 0; width: auto; white-space: nowrap;">
+    <div class="toast-body py-1 px-2 small fw-semibold" id="copyLinkToastBody"></div>
+</div>
+
 <!-- Copy Route Modal -->
 <div class="modal fade" id="copyRouteModal" tabindex="-1" aria-labelledby="copyRouteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -268,7 +276,40 @@ require_once '../../includes/_admin_nav.php';
     });
     const copyNamePrefix = 'Copy of ';
     const deleteRouteConfirmation = <?= $delete_route_confirmation ?>;
+    const copyLinkSuccessMessage = <?= $copy_link_success_message ?>;
     const shareQrUrlBase = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=';
+    const copyLinkToastElement = document.getElementById('copyLinkToast');
+    const copyLinkToastBody = document.getElementById('copyLinkToastBody');
+    const copyLinkToast = new bootstrap.Toast(copyLinkToastElement, {
+        autohide: true,
+        delay: 1200
+    });
+
+    function positionCopyLinkToast(clickX, clickY) {
+        const margin = 12;
+        const wasShown = copyLinkToastElement.classList.contains('show');
+
+        if (!wasShown) {
+            copyLinkToastElement.style.visibility = 'hidden';
+            copyLinkToastElement.style.display = 'block';
+        }
+
+        const toastRect = copyLinkToastElement.getBoundingClientRect();
+
+        if (!wasShown) {
+            copyLinkToastElement.style.display = '';
+            copyLinkToastElement.style.visibility = '';
+        }
+
+        const maxX = window.innerWidth - toastRect.width - margin;
+        const maxY = window.innerHeight - toastRect.height - margin;
+
+        const x = Math.max(margin, Math.min(clickX + 10, maxX));
+        const y = Math.max(margin, Math.min(clickY + 10, maxY));
+
+        copyLinkToastElement.style.left = `${x}px`;
+        copyLinkToastElement.style.top = `${y}px`;
+    }
 
     // Mobile dropdowns: use fixed positioning so they overflow the table-responsive container
     document.querySelectorAll('.d-md-none [data-bs-toggle="dropdown"]').forEach(function(el) {
@@ -319,9 +360,12 @@ require_once '../../includes/_admin_nav.php';
         });
     });
 
-    document.getElementById('btnCopyUrl').addEventListener('click', function() {
+    document.getElementById('btnCopyUrl').addEventListener('click', function(event) {
         navigator.clipboard.writeText(document.getElementById('shareUrl').value).then(() => {
             this.innerHTML = '<i class="bi bi-check text-success"></i>';
+            copyLinkToastBody.textContent = copyLinkSuccessMessage;
+            positionCopyLinkToast(event.clientX, event.clientY);
+            copyLinkToast.show();
             setTimeout(() => { this.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
         });
     });

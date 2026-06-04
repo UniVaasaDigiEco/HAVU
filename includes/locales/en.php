@@ -267,6 +267,7 @@ return [
         'share_modal_intro' => 'Share this link or QR code with players — they can open the route directly, even without logging in.',
         'share_modal_intro_generic' => 'Share this link or QR code with players. The shared destination opens directly, even without logging in.',
         'copy_link' => 'Copy link',
+        'copy_link_success' => 'Copied!',
         'download_qr' => 'Download QR code',
         'qr_info' => 'The QR code opens the shared page directly',
     ],

@@ -265,6 +265,7 @@ return [
         'share_modal_intro' => 'Dela den här länken eller QR-koden med spelare — de kan öppna rutten direkt, även utan inloggning.',
         'share_modal_intro_generic' => 'Dela den här länken eller QR-koden med spelare. Den delade destinationen öppnas direkt även utan inloggning.',
         'copy_link' => 'Kopiera länk',
+        'copy_link_success' => 'Kopierat!',
         'download_qr' => 'Ladda ner QR-kod',
         'qr_info' => 'QR-koden öppnar den delade sidan direkt',
     ],
