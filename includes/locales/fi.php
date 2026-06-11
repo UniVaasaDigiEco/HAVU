@@ -226,7 +226,7 @@ return [
         'testing_gps_toggle_label' => 'GPS-rajoitus testauksessa',
         'testing_gps_toggle_enabled' => 'Päällä: rastin voi merkitä käydyksi vasta, kun olet riittävän lähellä.',
         'testing_gps_toggle_disabled' => 'Pois päältä: rastin voi merkitä käydyksi mistä tahansa.',
-        'safety_notice' => 'Muista pitää katse välillä ylhäällä pelaamisen lomassa - älä anna ruudun viedä kaikkea huomiotasi! Katso mihin astut, huomioi liikenne ja käytä tervettä järkeä kaikessa maastossa. Peli on tarkoitettu viemään sinut ulos luontoon, joten nauti siitä rauhassa ja turvallisesti.',
+        'safety_notice' => 'Muista katsoa ympärillesi pelaamisen lomassa - älä anna ruudun viedä kaikkea huomiotasi! Katso mihin astut, huomioi mahdollinen liikenne, käytä tervettä järkeä maastossa. Peli on tarkoitettu viemään sinut ulos luontoon, joten nauti siitä rauhassa ja turvallisesti.',
         'safety_notice_ok' => 'Selvä',
     ],
     'admin_dashboard' => [
@@ -379,7 +379,7 @@ return [
         'title' => 'HAVU-polkupeli - Luo uusi reitti',
         'heading' => 'Luo uusi reitti',
         'subheading' => 'Anna reitille nimi, sisältökuvaus sekä määrittele käyttöehtoja. Lisää myös rastit sisältöineen.',
-        'safety_notice' => 'Reittejä luodessasi olet vastuussa siitä, että kaikki rastit sijoitetaan turvallisiin ja saavutettaviin paikkoihin, jotka soveltuvat kaiken ikäisille ja kuntoisille pelaajille. Vältä rastien sijoittamista vaarallisiin paikkoihin, kuten veden äärelle, jyrkille rinteille, vilkasliikenteisten teiden läheisyyteen tai yksityisalueille. Suomen jokamiehenoikeudet sallivat vapaan liikkumisen luonnossa, mutta niihin liittyy myös velvollisuuksia — älä sijoita rasteja siten, että ne houkuttelevat tallomaan kasvillisuutta, häiritsemään eläimistöä tai liikkumaan viljellyillä mailla tai piha-alueilla. Jos haluat sijoittaa rastin maalle, jota et omista, pyydämme sinua ystävällisesti kysymään asianomaisen maanomistajan lupaa etukäteen — pieni ele, jolla on suuri merkitys. Huolehdi, että reittisi on kuvattu selkeästi, jotta pelaajat tietävät, millaista maastoa on odotettavissa. Olet vastuussa reittisi ajantasaisuudesta — jos olosuhteet muuttuvat, päivitä tai poista rastit tarpeen mukaan.',
+        'safety_notice' => "Reittejä luodessasi olet vastuussa siitä, että kaikki rastit sijoitetaan turvallisiin ja saavutettaviin paikkoihin, ja että ne soveltuvat kaikenikäisille ja -kuntoisille pelaajille.\n\nVältä rastien sijoittamista yksityisalueille tai vaarallisiin paikkoihin, kuten vesistöihin, jyrkille rinteille tai vilkasliikenteisten teiden läheisyyteen.\n\nReittikuvailussa kerro selkeästi reitistäsi, jotta pelaajat tietävät, millaista maastoa on odotettavissa. Myös rastien kuvailutekstejä voi kirjoittaa siten, että pelaaja kiinnittää huomionsa relevantteihin asioihin ympäristössä.\n\nSuomessa jokaisenoikeudet sallivat vapaan liikkumisen luonnossa, mutta niihin liittyy myös velvollisuuksia — älä sijoita rasteja siten, että ne houkuttelevat tallomaan kasvillisuutta, häiritsemään eläimistöä tai liikkumaan viljellyillä mailla tai piha-alueilla.\n\nJos haluat sijoittaa rastin maalle, jota et omista, pyydämme sinua ystävällisesti kysymään asianomaisen maanomistajan lupaa etukäteen — pieni ele, jolla on suuri merkitys.\n\nOlet vastuussa reittisi ajantasaisuudesta — jos olosuhteet muuttuvat, päivitä tai poista rastit tarpeen mukaan.",
         'safety_notice_agree' => 'Hyväksyn',
     ],
     'admin_edit_route' => [
