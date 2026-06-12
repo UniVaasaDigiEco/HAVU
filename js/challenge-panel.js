@@ -22,11 +22,11 @@ function setChallengeType(type) {
     document.getElementById('challengeTextFields').style.display = type === 'text' ? 'block' : 'none';
 
     document.getElementById('challengeTypeNone').className = type === 'none'
-        ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-warning';
+        ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-warning';
     document.getElementById('challengeTypeMC').className = type === 'multiple_choice'
-        ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-warning';
+        ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-warning';
     document.getElementById('challengeTypeText').className = type === 'text'
-        ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-outline-warning';
+        ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-warning';
 }
 
 function addChallengeOption(text) {
@@ -53,7 +53,7 @@ function addChallengeOption(text) {
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
-    removeBtn.className = 'btn btn-sm btn-outline-danger flex-shrink-0';
+    removeBtn.className = 'btn btn-sm btn-danger flex-shrink-0';
     removeBtn.title = challengePanelI18n.deleteTitle;
     removeBtn.textContent = '✕';
     removeBtn.onclick = function() { removeChallengeOption(this); };

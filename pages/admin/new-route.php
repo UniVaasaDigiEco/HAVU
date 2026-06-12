@@ -193,7 +193,7 @@ require_once '../../includes/_admin_nav.php';
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                                 <input type="text" id="locationSearch" class="form-control" placeholder="<?= htmlspecialchars(t('route_editor.search_location_placeholder'), ENT_QUOTES, 'UTF-8') ?>" autocomplete="off">
-                                <button class="btn btn-outline-secondary" type="button" id="locationSearchBtn">
+                                <button class="btn btn-secondary" type="button" id="locationSearchBtn">
                                     <?= htmlspecialchars(t('common.search'), ENT_QUOTES, 'UTF-8') ?>
                                 </button>
                             </div>
@@ -251,8 +251,8 @@ require_once '../../includes/_admin_nav.php';
                             <label class="form-label fw-semibold mb-2"><?= htmlspecialchars(t('route_editor.challenge'), ENT_QUOTES, 'UTF-8') ?></label>
                             <div class="d-flex gap-2 mb-3 flex-wrap">
                                 <button type="button" class="btn btn-sm btn-warning" id="challengeTypeNone" onclick="setChallengeType('none')"><?= htmlspecialchars(t('route_editor.challenge_none'), ENT_QUOTES, 'UTF-8') ?></button>
-                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')"><?= htmlspecialchars(t('route_editor.challenge_multiple_choice'), ENT_QUOTES, 'UTF-8') ?></button>
-                                <button type="button" class="btn btn-sm btn-outline-warning" id="challengeTypeText" onclick="setChallengeType('text')"><?= htmlspecialchars(t('route_editor.challenge_text'), ENT_QUOTES, 'UTF-8') ?></button>
+                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeMC" onclick="setChallengeType('multiple_choice')"><?= htmlspecialchars(t('route_editor.challenge_multiple_choice'), ENT_QUOTES, 'UTF-8') ?></button>
+                                <button type="button" class="btn btn-sm btn-warning" id="challengeTypeText" onclick="setChallengeType('text')"><?= htmlspecialchars(t('route_editor.challenge_text'), ENT_QUOTES, 'UTF-8') ?></button>
                             </div>
                             <div id="challengeMCFields" class="route-editor-challenge-fields">
                                 <div class="mb-2">
@@ -260,7 +260,7 @@ require_once '../../includes/_admin_nav.php';
                                     <input type="text" class="form-control form-control-sm" id="challengeQuestion" placeholder="<?= htmlspecialchars(t('route_editor.challenge_question_placeholder'), ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                                 <div id="challengeOptions"></div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()"><?= htmlspecialchars(t('route_editor.challenge_add_option'), ENT_QUOTES, 'UTF-8') ?></button>
+                                <button type="button" class="btn btn-sm btn-secondary mt-1" id="addOptionBtn" onclick="addChallengeOption()"><?= htmlspecialchars(t('route_editor.challenge_add_option'), ENT_QUOTES, 'UTF-8') ?></button>
                                 <small class="text-muted d-block mt-2"><?= htmlspecialchars(t('route_editor.challenge_multiple_choice_help'), ENT_QUOTES, 'UTF-8') ?></small>
                             </div>
                             <div id="challengeTextFields" class="route-editor-challenge-fields">
@@ -280,7 +280,7 @@ require_once '../../includes/_admin_nav.php';
                             <button type="button" class="btn btn-primary" onclick="saveNodeEdit()">
                                 <i class="bi bi-check-lg"></i> <?= htmlspecialchars(t('route_editor.save_node'), ENT_QUOTES, 'UTF-8') ?>
                             </button>
-                            <button type="button" class="btn btn-outline-secondary" onclick="cancelNodeEdit()">
+                            <button type="button" class="btn btn-secondary" onclick="cancelNodeEdit()">
                                 <?= htmlspecialchars(t('common.cancel'), ENT_QUOTES, 'UTF-8') ?>
                             </button>
                         </div>
@@ -758,16 +758,16 @@ require_once '../../includes/_admin_nav.php';
                         </small>
                     </div>
                     <div class="d-flex flex-column gap-1">
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNode(${index})" title="${routeEditorTranslations.node_action_edit}">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="editNode(${index})" title="${routeEditorTranslations.node_action_edit}">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteNode(${index})" title="${routeEditorTranslations.node_action_delete}">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteNode(${index})" title="${routeEditorTranslations.node_action_delete}">
                             <i class="bi bi-trash"></i>
                         </button>
-                        ${index > 0 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeUp(${index})" title="${routeEditorTranslations.node_action_move_up}">
+                        ${index > 0 ? `<button type="button" class="btn btn-sm btn-secondary" onclick="moveNodeUp(${index})" title="${routeEditorTranslations.node_action_move_up}">
                             <i class="bi bi-arrow-up"></i>
                         </button>` : ''}
-                        ${index < nodes.length - 1 ? `<button type="button" class="btn btn-sm btn-outline-secondary" onclick="moveNodeDown(${index})" title="${routeEditorTranslations.node_action_move_down}">
+                        ${index < nodes.length - 1 ? `<button type="button" class="btn btn-sm btn-secondary" onclick="moveNodeDown(${index})" title="${routeEditorTranslations.node_action_move_down}">
                             <i class="bi bi-arrow-down"></i>
                         </button>` : ''}
                     </div>

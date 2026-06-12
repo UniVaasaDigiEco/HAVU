@@ -85,7 +85,7 @@ There is no automated test suite in this repository. `npm test` is a placeholder
 
 ## Authors
 
-Jyri Nieminen & Vaiva Stanisauskaite
+Jyri Nieminen, Vaiva Stanisauskaite and Heli Siirilä
 
 ## License
 
