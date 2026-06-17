@@ -86,6 +86,7 @@ return [
         'maintenance_heading' => 'Peli on tilapäisesti huollossa',
         'maintenance_message' => 'HAVU-polkupeli ei ole tällä hetkellä käytettävissä. Teemme parhaillaan huolto- tai korjaustöitä.',
         'maintenance_retry' => 'Yritä myöhemmin uudelleen.',
+        'test_game' => 'Kokeile peliä!',
     ],
     'login' => [
         'title' => 'HAVU-polkupeli - Kirjaudu sisään',

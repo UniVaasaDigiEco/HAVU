@@ -84,6 +84,7 @@ return [
         'maintenance_heading' => 'Spelet är tillfälligt under underhåll',
         'maintenance_message' => 'HAVU-stigspelet är för närvarande inte tillgänglig medan underhålls- eller återställningsarbete pågår.',
         'maintenance_retry' => 'Försök igen senare.',
+        'test_game' => 'Prova spelet!',
     ],
     'login' => [
         'title' => 'HAVU-stigspelet - Logga in',

@@ -41,6 +41,11 @@ Security::initSession();
                     <i class="bi bi-person-plus-fill me-1"></i> <?= htmlspecialchars(t('common.create_account'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             </div>
+            <div class="d-flex flex-row gap-3 flex-wrap justify-content-center mt-4">
+                <a href="https://havupeli.jansoftworks.fi/pages/game.php?route=1bcf5a18-cb65-4fda-b841-134dce683b47" class="btn btn-success btn-lg text-white fw-bold" target="_blank" rel="noopener">
+                    <i class="bi bi-joystick"></i> <?= htmlspecialchars(t('index.test_game'), ENT_QUOTES, 'UTF-8') ?>
+                </a>
+            </div>
         <?php endif; ?>
     </div>
     <div id="logoContainer" class="mt-auto">

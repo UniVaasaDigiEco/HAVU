@@ -86,6 +86,7 @@ return [
         'maintenance_heading' => 'Game temporarily under maintenance',
         'maintenance_message' => 'HAVU-trailgame is currently unavailable while maintenance or recovery work is in progress.',
         'maintenance_retry' => 'Please try again later.',
+        'test_game' => 'Try the game!',
     ],
     'login' => [
         'title' => 'HAVU-trailgame - Log in',
