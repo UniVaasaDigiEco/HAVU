@@ -1,122 +1,91 @@
-# Terms of Service
+# Käyttöehdot
 
-## HAVU-trailgame (HAVU-polkupeli / HAVU-stigspelet)
+## HAVU-polkupeli (HAVU-trailgame / HAVU-stigspelet)
 
-**Service URL:** https://havupeli.jansoftworks.fi
-**Last updated:** June 2026
+**Palvelun URL:** <https://havupeli.jansoftworks.fi>
 
----
+**Päivitetty viimeksi:** Kesäkuu 2026
 
-## 1. General
+1. **Yleistä**
 
-HAVU-trailgame is a location-based outdoor game developed as part of the HAVU project ("Hyvinvointia ja elämyksiä yksityismetsistä uusien teknologioiden avulla") at the University of Vaasa. The service is a publicly funded research and demonstration project showcasing the use of digital technologies in nature-based experiences and local tourism.
+    HAVU-polkupeli on paikkatietopohjainen ulkoilupeli, joka on kehitetty osana HAVU-hanketta ("Hyvinvointia ja elämyksiä yksityismetsistä uusien teknologioiden avulla") Vaasan yliopistossa. Palvelu on julkisrahoitteinen tutkimus- ja demonstraatiohanke, joka esittelee digitaalisten teknologioiden käyttöä luontoelämyksissä ja paikallisessa matkailussa.
 
-The service is provided by the University of Vaasa (business ID: 0209599-8), Wolffintie 34, 65200 Vaasa, Finland.
+    Palvelun tarjoaa Vaasan yliopisto (y-tunnus: 0209599-8), Wolffintie 34, 65200 Vaasa, Suomi.
 
-By using HAVU-trailgame, you agree to these Terms of Service. If you do not agree, please do not use the service.
+    Käyttämällä HAVU-polkupeli-palvelua hyväksyt nämä käyttöehdot. Mikäli et hyväksy ehtoja, älä käytä palvelua.
 
----
+2. **Palvelun luonne**
 
-## 2. Nature of the Service
+    HAVU-polkupeli on tarjolla demonstraatioalustana. Palvelu on maksuton eikä se sisällä takuita jatkuvasta saatavuudesta, täydellisyydestä tai soveltuvuudesta mihinkään tiettyyn tarkoitukseen. Vaasan yliopisto pidättää oikeuden muuttaa, keskeyttää tai lopettaa palvelun milloin tahansa ilman ennakkoilmoitusta.
 
-HAVU-trailgame is provided as a demonstration platform. The service is offered free of charge and without any guarantees of continuous availability, completeness, or fitness for any particular purpose. The University of Vaasa reserves the right to modify, suspend, or discontinue the service at any time without prior notice.
+3. **Käyttäjätilit ja anonyymi pelaaminen**
 
----
+    Palvelua voi käyttää luomalla rekisteröidyn käyttäjätilin tai pelaamalla anonyymisti.
 
-## 3. User Accounts and Anonymous Play
+    Rekisteröityneet käyttäjät voivat tallentaa edistymisensä, luoda reittejä ja käyttää lisäominaisuuksia. Tilin luomalla sitoudut antamaan oikeat tiedot ja pitämään kirjautumistietosi turvassa. Olet vastuussa kaikesta tilisi kautta tapahtuvasta toiminnasta.
 
-You may use the service by creating a registered account or by playing anonymously.
+    Anonyymit käyttäjät voivat pelata olemassa olevia reittejä ilman käyttäjätiliä. Anonyymi pelaaminen ei edellytä henkilötietoja. Ainoat anonyymistä pelaamisesta tallennettavat tiedot ovat reitin suorittaminen, joka sisältyy reitin luojalle näkyviin koostetilastoihin. Anonyymiltä käyttäjältä ei kerätä sijaintitietoja, IP-osoitteita tai muita tunnistetietoja.
 
-Registered users can save their progress, create routes, and access additional features. By creating an account you agree to provide accurate information and to keep your login credentials secure. You are responsible for all activity carried out under your account.
+4. **Käyttäjien tuottama sisältö ja reittien luominen**
 
-Anonymous users may play existing routes without creating an account. Anonymous play does not require any personal information. The only data recorded from anonymous play is the completion of a route, which is included in aggregate statistics available to the route creator. No location data, IP addresses, or other identifying information is collected from anonymous users.
+    Kaikki rekisteröityneet käyttäjät voivat luoda ja jakaa reittejä palvelussa. Reitin luomalla vahvistat, että:
+    - Kaikki tarkastuspisteet on sijoitettu turvallisiin ja kohtuullisesti saavutettaviin paikkoihin.
+    - Reittisi noudattaa Suomen jokaisenoikeuksia eikä kannusta luvattomaan liikkumiseen yksityispihoilla, viljelyksillä tai muilla rajoitetuilla alueilla.
+    - Olet hankkinut asianomaisen maanomistajan luvan ennen tarkastuspisteiden sijoittamista yksityisomistuksessa olevalle maalle, mikäli se on tarpeen.
+    - Reittisi ei sisällä laitonta, haitallista, loukkaavaa tai harhaanjohtavaa sisältöä.
 
----
+    Vaasan yliopisto ei tarkista reittejä ennen niiden julkaisemista eikä ole vastuussa käyttäjien luomien reittien sisällöstä, oikeellisuudesta tai turvallisuudesta. Reitin luojat kantavat täyden vastuun omista reiteistään ja niiden soveltuvuudesta pelaajille.
 
-## 4. User-Generated Content and Route Creation
+    Vaasan yliopisto pidättää oikeuden poistaa reitin tai sisällön, josta on tehty ilmoitus tai joka todetaan näiden ehtojen vastaiseksi.
 
-Any registered user may create and share routes within the service. By creating a route you confirm that:
+5. **Turvallisuus ja henkilökohtainen vastuu**
 
-- All checkpoints are placed in locations that are safe and reasonably accessible.
-- Your route complies with Finland's Everyman's Rights (*jokamiehenoikeudet*) and does not encourage trespassing on private yards, cultivated land, or other restricted areas.
-- You have obtained permission from the relevant landowner where required before placing checkpoints on privately owned land.
-- Your route does not contain content that is unlawful, harmful, offensive, or misleading.
+    HAVU-polkupeli on ulkoiluaktiviteetti, joka tapahtuu todellisissa ympäristöissä. Palvelua käyttämällä tunnustat, että:
 
-The University of Vaasa does not review routes before they are published and is not responsible for the content, accuracy, or safety of user-created routes. Route creators bear full responsibility for their own routes and their suitability for players.
+    - Osallistuminen tapahtuu täysin omalla vastuullasi.
+    - Olet vastuussa reitin tai maaston soveltuvuuden arvioinnista itsellesi ja huolenpidossasi oleville henkilöille, mukaan lukien lapsille.
+    - Sinun tulee käyttää tervettä järkeä, kiinnittää huomiota ympäristöösi sekä huomioida sää- ja maasto-olosuhteet kaikissa tilanteissa.
+    - Palvelu ei tarjoa reaaliaikaista turvallisuustietoa eikä pysty varoittamaan reiteillä mahdollisesti esiintyvistä vaaroista.
 
-The University of Vaasa reserves the right to remove any route or content that is reported as problematic or that is found to be in violation of these terms.
+    Käyttäjien, joilla on liikuntarajoitteita, terveydellisiä tiloja tai muita erityisiä huomioitavia seikkoja, tulee arvioida reittien soveltuvuus huolellisesti ennen liikkeelle lähtemistä.
 
----
+6. **Vastuunrajoitus**
 
-## 5. Safety and Personal Responsibility
+    Sovellettavan lain sallimissa rajoissa Vaasan yliopisto ja HAVU-hanketiimi eivät vastaa:
 
-HAVU-trailgame is an outdoor activity that takes place in real-world environments. By using the service you acknowledge that:
+    - Mistään loukkaantumisesta, onnettomuudesta, menetyksestä tai vahingosta, joka aiheutuu pelin pelaamisesta tai palvelun käyttämisestä.
+    - Mistään haitasta, joka johtuu käyttäjien luomien reittien sisällöstä tai tarkastuspisteiden sijoittelusta.
+    - Palvelun käyttökatkoista, virheistä tai saatavuusongelmista.
+    - Tietojen tai edistymisen menetyksestä.
 
-- Participation is entirely at your own risk.
-- You are responsible for assessing the suitability of any route or terrain for yourself and any persons in your care, including children.
-- You should exercise common sense, pay attention to your surroundings, and take weather and ground conditions into account at all times.
-- The service does not provide real-time safety information and cannot warn you of hazards that may exist along any route.
+    Palvelu tarjotaan sellaisenaan ilman minkäänlaista nimenomaista tai hiljaista takuuta.
 
-Players with limited mobility, health conditions, or other special considerations should assess the suitability of routes carefully before setting out.
+7. **Immateriaalioikeudet**
 
----
+    HAVU-polkupeli-alusta, sen suunnittelu ja taustalla oleva koodi ovat Vaasan yliopiston omaisuutta. Käyttäjien luoma reittisisältö pysyy kyseisten luojien immateriaalioikeutena.
 
-## 6. Limitation of Liability
+    Luomalla reitin ja julkaisemalla sen palvelussa annat Vaasan yliopistolle ei-yksinoikeudellisen oikeuden käyttää ja näyttää kyseistä sisältöä palvelussa alustan käyttämistä ja demonstrointia varten.
 
-To the fullest extent permitted by applicable law, the University of Vaasa and the HAVU project team accept no liability for:
+8. **Tietosuoja**
 
-- Any injury, accident, loss, or damage arising from participation in the game or use of the service.
-- Any harm resulting from the content or placement of user-created routes.
-- Any interruption, error, or unavailability of the service.
-- Any loss of data or progress.
+    Palveluun liittyvien henkilötietojen käsittely on kuvattu erillisessä tietosuojailmoituksessa, joka on osa näitä käyttöehtoja. Tietosuojailmoitus on saatavilla palvelun verkkosivustolla.
 
-The service is provided as-is and without warranty of any kind, whether express or implied.
+9. **Ehtojen muutokset**
 
----
+    Vaasan yliopisto pidättää oikeuden päivittää näitä käyttöehtoja milloin tahansa. Palvelun jatkaminen muutosten julkaisemisen jälkeen katsotaan uusien ehtojen hyväksymiseksi. Käyttäjiä tiedotetaan merkittävistä muutoksista mahdollisuuksien mukaan.
 
-## 7. Intellectual Property
+10. **Sovellettava laki**
 
-The HAVU-trailgame platform, its design, and its underlying code are the property of the University of Vaasa. Route content created by users remains the intellectual property of the respective creators.
+    Näihin ehtoihin sovelletaan Suomen lakia. Palvelun käytöstä aiheutuvat riidat ratkaistaan ensisijaisesti toimivaltaisessa suomalaisessa tuomioistuimessa.
 
-By creating a route and publishing it within the service, you grant the University of Vaasa a non-exclusive right to display and use that content within the service for the purposes of operating and demonstrating the platform.
+11. **Yhteystiedot**
 
----
+    Näitä ehtoja tai palvelua koskevissa kysymyksissä ota yhteyttä:
 
-## 8. Privacy
+    Jyri Nieminen
 
-The handling of personal data in connection with this service is described in the separate Privacy Notice, which forms part of these terms. The Privacy Notice is available at the service website.
+    Vaasan yliopisto / Tekniikan ja innovaatiojohtamisen tiedekunta / Tietotekniikka
 
----
+    <jyri.nieminen@uwasa.fi>
 
-## 9. Changes to These Terms
-
-The University of Vaasa reserves the right to update these Terms of Service at any time. Continued use of the service after changes have been published constitutes acceptance of the revised terms. Users will be notified of significant changes where reasonably practicable.
-
----
-
-## 10. Governing Law
-
-These terms are governed by the laws of Finland. Any disputes arising from the use of the service shall be resolved in the first instance by the competent courts of Finland.
-
----
-
-## 11. Contact
-
-For questions regarding these terms or the service in general, please contact:
-
-**Jyri Nieminen**
-University of Vaasa / Faculty of Technology and Innovation Management / Information Technology
-jyri.nieminen@uwasa.fi
-+358 29 449 8263
-
----
-
-*This document is a preliminary draft intended for review by the University of Vaasa legal department prior to publication.*
-
----
-
-A few things worth flagging for your legal team specifically:
-
-- **Section 4** on user-generated content is probably the most important one to scrutinize, given that anyone can publish routes.
-- **Section 6** (limitation of liability) may need adjusting depending on what Finnish consumer protection law actually allows you to disclaim — there are limits on liability waivers in Finnish law that a lawyer will know better than I do.
-- The reference to the URL in the introduction should be updated once the domain changes.
+    +358 29 449 8263
