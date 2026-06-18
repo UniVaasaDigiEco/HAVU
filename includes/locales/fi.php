@@ -277,7 +277,7 @@ return [
         'qr_info' => 'QR-koodi vie suoraan jaettuun näkymään',
     ],
     'creator_routes' => [
-        'title' => 'HAVU-polkupeli - :creatorin reitit',
+        'title' => 'HAVU-polkupeli - Kaikki reitit käyttäjältä :creator',
         'heading' => ':creator',
         'intro' => 'Tältä sivulta löydät kaikki reitit, jotka :creator on luonut. Valitse reitti ja aloita pelaaminen.',
         'route_count' => ':count reittiä',
