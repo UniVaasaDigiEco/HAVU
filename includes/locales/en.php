@@ -87,6 +87,7 @@ return [
         'maintenance_message' => 'HAVU-trailgame is currently unavailable while maintenance or recovery work is in progress.',
         'maintenance_retry' => 'Please try again later.',
         'test_game' => 'Try the game!',
+        'contact_link' => 'Contact us',
     ],
     'login' => [
         'title' => 'HAVU-trailgame - Log in',
@@ -127,6 +128,15 @@ return [
         'password_confirm_label' => 'Confirm password',
         'password_hint' => 'At least 8 characters',
         'has_account' => 'Already have an account?',
+        'tos_label' => 'I have read and accept the <a href=":url" target="_blank" rel="noopener">terms of service</a>.',
+    ],
+    'tos_modal' => [
+        'title' => 'Terms of service updated',
+        'body' => 'We have updated our terms of service. Please read the :link and accept them to continue using the service.',
+        'tos_link_text' => 'terms of service',
+        'contact_notice' => 'If you wish to delete your account or download your data, you can send a contact request via the feedback form.',
+        'accept' => 'Accept',
+        'decline' => 'Log out',
     ],
     'feedback' => [
         'button_title' => 'Send feedback',
@@ -410,6 +420,7 @@ return [
             'password_mismatch' => 'Passwords do not match.',
             'email_in_use' => 'Email address is already in use.',
             'create_failed' => 'Failed to create the account. Please try again.',
+            'tos_not_accepted' => 'You must accept the terms of service.',
         ],
         'password_reset' => [
             'invalid_request' => 'Invalid request.',

@@ -1,5 +1,6 @@
 <?php
 require_once('config/constants.php');
+require_once('classes/tools.class.php');
 require_once('classes/security.class.php');
 
 Security::initSession();
@@ -48,6 +49,11 @@ Security::initSession();
             </div>
         <?php endif; ?>
     </div>
+    <p class="text-center mb-3">
+        <a href="#" class="text-muted small" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+            <i class="bi bi-envelope me-1"></i><?= htmlspecialchars(t('index.contact_link'), ENT_QUOTES, 'UTF-8') ?>
+        </a>
+    </p>
     <div id="logoContainer" class="mt-auto">
         <div class="logo-row logo-row--primary">
             <img id="co-funded-eu-logo" alt="Logo, Co-Funded by the European Union" src="images/logos/cofunded-eu.png">
@@ -60,5 +66,6 @@ Security::initSession();
         </div>
     </div>
 </div>
+<?php require_once 'includes/_feedback_widget.php'; ?>
 </body>
 </html>

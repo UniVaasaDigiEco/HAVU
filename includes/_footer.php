@@ -4,7 +4,7 @@
             <div class="site-footer__summary">
                 <h2 class="site-footer__title"><?= htmlspecialchars(t('common.app_name'), ENT_QUOTES, 'UTF-8') ?></h2>
                 <p class="site-footer__text mt-2 mb-0">
-                    <a href="<?= htmlspecialchars(ROOT_DIR . 'HAVUpeli_tietosuojaseloste.pdf', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
+                    <a href="<?= htmlspecialchars(ROOT_DIR . 'privacy_notice_' . current_locale() . '.pdf', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">
                         <?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </p>
@@ -24,3 +24,4 @@
     </div>
 </footer>
 <?php if (!empty($_SESSION['user_public_id'])) require __DIR__ . '/_feedback_widget.php'; ?>
+<?php require __DIR__ . '/_tos_modal.php'; ?>

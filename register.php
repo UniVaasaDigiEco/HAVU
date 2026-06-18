@@ -67,6 +67,16 @@ $return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) :
                         <input id="password_confirm" name="password_confirm" type="password" class="form-control"
                                required autocomplete="new-password">
                     </div>
+                    <?php
+                        $tos_locale_map = ['fi' => 'tos_fi', 'en' => 'tos_en', 'sv' => 'tos_sv'];
+                        $tos_file = $tos_locale_map[current_locale()] ?? 'tos_fi';
+                        $tos_url = ROOT_DIR . 'tos/' . $tos_file . '.pdf';
+                        $tos_label = str_replace(':url', htmlspecialchars($tos_url, ENT_QUOTES, 'UTF-8'), t('register.tos_label'));
+                    ?>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="tos_accepted" name="tos_accepted" value="1" required>
+                        <label class="form-check-label" for="tos_accepted"><?= $tos_label ?></label>
+                    </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-success text-white w-100">
                             <i class="bi bi-person-plus-fill me-1"></i> <?= htmlspecialchars(t('common.create_account'), ENT_QUOTES, 'UTF-8') ?>
@@ -80,7 +90,7 @@ $return_to_query = $return_to !== '' ? ('?return_to=' . urlencode($return_to)) :
                 <a href="login.php<?= htmlspecialchars($return_to_query, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(t('common.log_in'), ENT_QUOTES, 'UTF-8') ?></a>
             </p>
             <p class="mb-2">
-                <a href="<?= htmlspecialchars(ROOT_DIR . 'HAVUpeli_tietosuojaseloste.pdf', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="text-muted small">
+                <a href="<?= htmlspecialchars(ROOT_DIR . 'privacy_notice_' . current_locale() . '.pdf', ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="text-muted small">
                     <?= htmlspecialchars(t('feedback.privacy'), ENT_QUOTES, 'UTF-8') ?>
                 </a>
             </p>

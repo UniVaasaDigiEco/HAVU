@@ -87,6 +87,7 @@ return [
         'maintenance_message' => 'HAVU-polkupeli ei ole tällä hetkellä käytettävissä. Teemme parhaillaan huolto- tai korjaustöitä.',
         'maintenance_retry' => 'Yritä myöhemmin uudelleen.',
         'test_game' => 'Kokeile peliä!',
+        'contact_link' => 'Ota yhteyttä',
     ],
     'login' => [
         'title' => 'HAVU-polkupeli - Kirjaudu sisään',
@@ -127,6 +128,15 @@ return [
         'password_confirm_label' => 'Vahvista salasana',
         'password_hint' => 'Vähintään 8 merkkiä',
         'has_account' => 'Onko sinulla jo tunnus?',
+        'tos_label' => 'Olen lukenut ja hyväksyn <a href=":url" target="_blank" rel="noopener">käyttöehdot</a>.',
+    ],
+    'tos_modal' => [
+        'title' => 'Käyttöehdot päivitetty',
+        'body' => 'Olemme päivittäneet käyttöehtomme. Lue :link ja hyväksy ne jatkaaksesi palvelun käyttöä.',
+        'tos_link_text' => 'käyttöehdot',
+        'contact_notice' => 'Jos haluat poistaa tilisi tai ladata tietosi, voit lähettää yhteydenottopyynnön palautelomakkeen kautta.',
+        'accept' => 'Hyväksy',
+        'decline' => 'Kirjaudu ulos',
     ],
     'feedback' => [
         'button_title' => 'Lähetä palaute',
@@ -410,6 +420,7 @@ return [
             'password_mismatch' => 'Salasanat eivät täsmää.',
             'email_in_use' => 'Sähköpostiosoite on jo käytössä.',
             'create_failed' => 'Tunnuksen luominen epäonnistui. Yritä uudelleen.',
+            'tos_not_accepted' => 'Sinun on hyväksyttävä käyttöehdot.',
         ],
         'password_reset' => [
             'invalid_request' => 'Virheellinen pyyntö.',

@@ -46,12 +46,18 @@ if (!empty($_SESSION['user_public_id'])) {
 
 $return_to = resolveSafeReturnTo($_POST['return_to'] ?? null);
 
-$full_name = trim($_POST['full_name'] ?? '');
-$email     = trim($_POST['email'] ?? '');
-$password  = $_POST['password'] ?? '';
-$password2 = $_POST['password_confirm'] ?? '';
+$full_name     = trim($_POST['full_name'] ?? '');
+$email         = trim($_POST['email'] ?? '');
+$password      = $_POST['password'] ?? '';
+$password2     = $_POST['password_confirm'] ?? '';
+$tos_accepted  = ($_POST['tos_accepted'] ?? '') === '1';
 
 // Validate
+if (!$tos_accepted) {
+    header('Location: ' . registerErrorUrl('actions.register.tos_not_accepted', $return_to));
+    exit;
+}
+
 if (empty($full_name) || mb_strlen($full_name) < 2) {
     header('Location: ' . registerErrorUrl('actions.register.name_required', $return_to));
     exit;
@@ -89,7 +95,7 @@ if ($exists) {
 }
 
 try {
-    Security::addUser($email, $password, $full_name, USER_TYPE_ADMIN);
+    Security::addUser($email, $password, $full_name, USER_TYPE_ADMIN, $tos_accepted);
 } catch (Exception $e) {
     header('Location: ' . registerErrorUrl('actions.register.create_failed', $return_to));
     exit;

@@ -85,6 +85,7 @@ return [
         'maintenance_message' => 'HAVU-stigspelet är för närvarande inte tillgänglig medan underhålls- eller återställningsarbete pågår.',
         'maintenance_retry' => 'Försök igen senare.',
         'test_game' => 'Prova spelet!',
+        'contact_link' => 'Kontakta oss',
     ],
     'login' => [
         'title' => 'HAVU-stigspelet - Logga in',
@@ -125,6 +126,15 @@ return [
         'password_confirm_label' => 'Bekräfta lösenord',
         'password_hint' => 'Minst 8 tecken',
         'has_account' => 'Har du redan ett konto?',
+        'tos_label' => 'Jag har läst och godkänner <a href=":url" target="_blank" rel="noopener">användarvillkoren</a>.',
+    ],
+    'tos_modal' => [
+        'title' => 'Användarvillkoren har uppdaterats',
+        'body' => 'Vi har uppdaterat våra användarvillkor. Vänligen läs :link och godkänn dem för att fortsätta använda tjänsten.',
+        'tos_link_text' => 'användarvillkoren',
+        'contact_notice' => 'Om du vill radera ditt konto eller ladda ner dina uppgifter kan du skicka en kontaktförfrågan via feedbackformuläret.',
+        'accept' => 'Godkänn',
+        'decline' => 'Logga ut',
     ],
     'feedback' => [
         'button_title' => 'Skicka feedback',
@@ -408,6 +418,7 @@ return [
             'password_mismatch' => 'Lösenorden matchar inte.',
             'email_in_use' => 'E-postadressen används redan.',
             'create_failed' => 'Det gick inte att skapa kontot. Försök igen.',
+            'tos_not_accepted' => 'Du måste godkänna användarvillkoren.',
         ],
         'password_reset' => [
             'invalid_request' => 'Ogiltig begäran.',

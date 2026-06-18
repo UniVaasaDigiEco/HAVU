@@ -115,21 +115,22 @@ class Security{
      * @param $userType
      * @return void
      */
-    public static function addUser($email, $password, $fullName, $userType): void{
+    public static function addUser($email, $password, $fullName, $userType, bool $tosAccepted = false): void{
         try{
             $db = Tools::getDb();
 
             $public_id = Uuid::uuid4()->toString();
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $tosValue = $tosAccepted ? 1 : 0;
 
-            $sql = "INSERT INTO users (public_id, email, password_hash, full_name, user_type) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO users (public_id, email, password_hash, full_name, user_type, tos_accepted) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $db->prepare($sql);
 
             if(!$stmt){
                 throw new RuntimeException("Failed to prepare statement: " . $db->error);
             }
 
-            $stmt->bind_param("ssssi", $public_id, $email, $passwordHash, $fullName, $userType);
+            $stmt->bind_param("ssssii", $public_id, $email, $passwordHash, $fullName, $userType, $tosValue);
 
             if(!$stmt->execute()){
                 throw new RuntimeException("Failed to execute statement: " . $stmt->error);

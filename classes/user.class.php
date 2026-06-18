@@ -16,6 +16,7 @@ class User{
     private DateTime $created_at;
     private DateTime $updated_at;
     private int $user_type;
+    private int $tos_accepted;
 
     private array $created_routes;
 
@@ -29,7 +30,7 @@ class User{
         }
 
         $db = Tools::getDb();
-        $sql = "SELECT id, public_id, email, password_hash, full_name, is_active, last_login, created_at, updated_at, user_type FROM users WHERE id = ?";
+        $sql = "SELECT id, public_id, email, password_hash, full_name, is_active, last_login, created_at, updated_at, user_type, tos_accepted FROM users WHERE id = ?";
         $stmt = $db->prepare($sql);
 
         try{
@@ -46,8 +47,9 @@ class User{
              * @var string $created_at
              * @var string $updated_at
              * @var int $user_type
+             * @var int $tos_accepted
              */
-            $stmt->bind_result($user_id, $public_id, $email, $password_hash, $full_name, $is_active, $last_login, $created_at, $updated_at, $user_type);
+            $stmt->bind_result($user_id, $public_id, $email, $password_hash, $full_name, $is_active, $last_login, $created_at, $updated_at, $user_type, $tos_accepted);
             $stmt->store_result();
             if($stmt->num_rows === 0){
                 throw new Exception("User not found");
@@ -69,6 +71,7 @@ class User{
             $this->created_at = Tools::parseDateTime($created_at);
             $this->updated_at = Tools::parseDateTime($updated_at);
             $this->user_type = $user_type;
+            $this->tos_accepted = $tos_accepted;
 
             $this->created_routes = [];
 
@@ -190,5 +193,10 @@ class User{
     public function getCreatedRoutes(): array
     {
         return $this->created_routes;
+    }
+
+    public function getTosAccepted(): int
+    {
+        return $this->tos_accepted;
     }
 }
