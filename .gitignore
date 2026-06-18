@@ -16,6 +16,7 @@ vendor/
 CLAUDE.md
 .claude/
 .superpowers/
+docs/superpowers/
 .cursor/
 .windsurf/
 .roo/
