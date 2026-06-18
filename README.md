@@ -84,15 +84,15 @@ The `tos/` directory contains the TOS PDFs served to users, one per locale (`tos
 
 Templates are provided for both documents:
 
-- Terms of service: [_DOCS/tos_template.md](_DOCS/tos_template.md)
-- Privacy notice: [_DOCS/privacy_notice_template.md](_DOCS/privacy_notice_template.md)
+- Terms of service: [tos/tos_template.md](tos/tos_template.md)
+- Privacy notice: [privacy/privacy_notice_template.md](privacy/privacy_notice_template.md)
 
 To use them:
 
 1. Fill in the placeholders (organization name, contact details, jurisdiction, etc.).
 2. Translate or adapt as needed for your supported locales.
 3. Export the TOS to PDF and place the files in `tos/` as `tos_fi.pdf`, `tos_en.pdf`, and `tos_sv.pdf`.
-4. Export the privacy notice to PDF and place the files in the project root as `privacy_notice_fi.pdf`, `privacy_notice_en.pdf`, and `privacy_notice_sv.pdf`.
+4. Export the privacy notice to PDF and place the files in `privacy/` as `privacy_notice_fi.pdf`, `privacy_notice_en.pdf`, and `privacy_notice_sv.pdf`.
 
 ## Documentation
 
@@ -100,8 +100,8 @@ To use them:
 - End-user and admin manuals: [_DOCS/_MANUALS](_DOCS/_MANUALS)
 - GPS threshold behavior: [_DOCS/GPS_Threshold_Testing.md](_DOCS/GPS_Threshold_Testing.md)
 - Message widget integration checklist: [_DOCS/message_widget_integration_checklist.md](_DOCS/message_widget_integration_checklist.md)
-- Terms of service template: [_DOCS/tos_template.md](_DOCS/tos_template.md)
-- Privacy notice template: [_DOCS/privacy_notice_template.md](_DOCS/privacy_notice_template.md)
+- Terms of service template: [tos/tos_template.md](tos/tos_template.md)
+- Privacy notice template: [privacy/privacy_notice_template.md](privacy/privacy_notice_template.md)
 
 ## Authors
 

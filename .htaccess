@@ -4,6 +4,7 @@ RewriteEngine On
 # Disable directory listing (prevents browsing folder contents like /cron/)
 <IfModule mod_autoindex.c>
   Options -Indexes
+  Options -MultiViews
 </IfModule>
 
 # If the request is not HTTPS, redirect to the same URL on HTTPS

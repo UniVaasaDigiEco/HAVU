@@ -50,6 +50,11 @@ build/
 # Data Backups
 _SQL-BACKUP/
 
+# Internal documentation and legal PDFs (templates are tracked instead)
+_DOCS/
+tos/*.pdf
+privacy/*.pdf
+
 # Temporary files
 *.tmp
 *.temp
