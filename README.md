@@ -97,9 +97,7 @@ To use them:
 ## Documentation
 
 - Product and setup overview: this README
-- End-user and admin manuals: [_DOCS/_MANUALS](_DOCS/_MANUALS)
-- GPS threshold behavior: [_DOCS/GPS_Threshold_Testing.md](_DOCS/GPS_Threshold_Testing.md)
-- Message widget integration checklist: [_DOCS/message_widget_integration_checklist.md](_DOCS/message_widget_integration_checklist.md)
+- End-user and admin manuals (Finnish only): [pages/files/](pages/files/)
 - Terms of service template: [tos/tos_template.md](tos/tos_template.md)
 - Privacy notice template: [privacy/privacy_notice_template.md](privacy/privacy_notice_template.md)
 
